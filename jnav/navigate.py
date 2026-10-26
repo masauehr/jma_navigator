@@ -89,15 +89,23 @@ def build_url(item, values):
     return url, []
 
 
-def guide(question):
-    """質問に対するガイド結果を辞書で返す。status: ok / need_place / need_more / no_match"""
-    item = select_item(question)
+def guide(question, item_id=None, place_text=None):
+    """質問に対するガイド結果を辞書で返す。status: ok / need_place / need_more / no_match
+
+    item_id / place_text を渡すと、項目選択・地名抽出をその値で置き換える（LLM版が使う）。
+    項目の選択以外（地域解決・URL組み立て）は常に決定論的で、LLMはURLを作らない。
+    """
+    if item_id is not None:
+        item = next((i for i in load_catalog() if i["id"] == item_id), None)
+    else:
+        item = select_item(question)
     if item is None:
         return {"status": "no_match", "question": question}
+    place_q = place_text or question
     result = {"item": item["id"], "title": item["title"], "category": item["category"]}
     values = {}
     if "office_code" in item["params"]:
-        cands = extract_place(question)
+        cands = extract_place(place_q)
         offices = {c["office_code"] for c in cands}
         if len(offices) != 1:
             return {**result, "status": "need_place", "candidates": [
@@ -106,7 +114,7 @@ def guide(question):
         values["office_code"] = cands[0]["office_code"]
         result["place"] = f'{cands[0]["office_name"]}'
     if "amdno" in item["params"]:
-        sts = find_stations(question)
+        sts = find_stations(place_q)
         if not sts:
             return {**result, "status": "need_place", "hint": "アメダス観測所名（例: 石垣島、伊是名）が必要です"}
         if len(sts) > 1:
@@ -115,7 +123,7 @@ def guide(question):
         values["amdno"] = sts[0]["amdno"]
         result["place"] = sts[0]["name"]
     if "prec_no" in item["params"]:
-        st = find_station(question)
+        st = find_station(place_q)
         if st is None:
             return {**result, "status": "need_place", "hint": "気象官署の地点名（例: 那覇、東京）が必要です。アメダス地点は未対応"}
         year, month = parse_year_month(question)

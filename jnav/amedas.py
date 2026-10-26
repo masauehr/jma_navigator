@@ -13,9 +13,13 @@ def _load():
     global _cache
     if _cache is None:
         raw = json.loads(_DATA.read_text(encoding="utf-8"))
-        # 積雪専用(雪)の地点は、同名・同管内に気温などを観測する地点があれば除く
-        keep = {(s["name"], s["subprefecture"]) for s in raw if s["kind"] != "雪"}
-        _cache = [s for s in raw if s["kind"] != "雪" or (s["name"], s["subprefecture"]) not in keep]
+        # 積雪の深さ用の観測所（種類が雪、または番号下3桁が900以上）は、
+        # 同名・同管内に気温などを観測する地点があれば除く（同じ地名が二重に出るのを防ぐ）
+        def is_snow(x):
+            return x["kind"] == "雪" or int(x["amdno"][2:]) >= 900
+
+        keep = {(x["name"], x["subprefecture"]) for x in raw if not is_snow(x)}
+        _cache = [x for x in raw if not is_snow(x) or (x["name"], x["subprefecture"]) not in keep]
     return _cache
 
 

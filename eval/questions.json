@@ -1,0 +1,363 @@
+[
+ {
+  "q": "明日の那覇の天気を教えて",
+  "item": "forecast_short",
+  "status": "ok",
+  "office_code": "471000"
+ },
+ {
+  "q": "東京の天気予報",
+  "item": "forecast_short",
+  "status": "ok",
+  "office_code": "130000"
+ },
+ {
+  "q": "大阪は明日雨降る？",
+  "item": "forecast_short",
+  "status": "ok",
+  "office_code": "270000"
+ },
+ {
+  "q": "名古屋の降水確率が知りたい",
+  "item": "forecast_short",
+  "status": "ok",
+  "office_code": "230000"
+ },
+ {
+  "q": "福岡の明日の最高気温は？",
+  "item": "forecast_short",
+  "status": "ok",
+  "office_code": "400000"
+ },
+ {
+  "q": "札幌の天気は",
+  "item": "forecast_short",
+  "status": "ok",
+  "office_code": "016000"
+ },
+ {
+  "q": "仙台の明後日の天気",
+  "item": "forecast_short",
+  "status": "ok",
+  "office_code": "040000"
+ },
+ {
+  "q": "石垣島の天気予報を見たい",
+  "item": "forecast_short",
+  "status": "ok",
+  "office_code": "474000"
+ },
+ {
+  "q": "広島のお天気",
+  "item": "forecast_short",
+  "status": "ok",
+  "office_code": "340000"
+ },
+ {
+  "q": "週間予報を見たい 東京",
+  "item": "forecast_weekly",
+  "status": "ok",
+  "office_code": "130000"
+ },
+ {
+  "q": "来週の大阪の天気",
+  "item": "forecast_weekly",
+  "status": "ok",
+  "office_code": "270000"
+ },
+ {
+  "q": "1週間の天気 福岡",
+  "item": "forecast_weekly",
+  "status": "ok",
+  "office_code": "400000"
+ },
+ {
+  "q": "週末の那覇の天気は？来週も知りたい",
+  "item": "forecast_weekly",
+  "status": "ok",
+  "office_code": "471000"
+ },
+ {
+  "q": "大阪に警報は出てる？",
+  "item": "warning_map",
+  "status": "ok",
+  "office_code": "270000"
+ },
+ {
+  "q": "札幌の注意報を確認したい",
+  "item": "warning_map",
+  "status": "ok",
+  "office_code": "016000"
+ },
+ {
+  "q": "今、東京に大雨警報は出ていますか",
+  "item": "warning_map",
+  "status": "ok",
+  "office_code": "130000"
+ },
+ {
+  "q": "沖縄本島の警報・注意報",
+  "item": "warning_map",
+  "status": "ok",
+  "office_code": "471000"
+ },
+ {
+  "q": "警報はいつまで続く？",
+  "item": "warning_timeline",
+  "status": "ok"
+ },
+ {
+  "q": "警報の見通しを知りたい",
+  "item": "warning_timeline",
+  "status": "ok"
+ },
+ {
+  "q": "警報級の可能性を知りたい 福岡",
+  "item": "early_warning",
+  "status": "ok",
+  "office_code": "400000"
+ },
+ {
+  "q": "数日先の大雨の可能性 東京",
+  "item": "early_warning",
+  "status": "ok",
+  "office_code": "130000"
+ },
+ {
+  "q": "気象情報を見たい 沖縄本島",
+  "item": "information",
+  "status": "ok",
+  "office_code": "471000"
+ },
+ {
+  "q": "大雨に関する情報 愛知県",
+  "item": "information",
+  "status": "ok",
+  "office_code": "230000"
+ },
+ {
+  "q": "台風の進路が知りたい",
+  "item": "typhoon",
+  "status": "ok"
+ },
+ {
+  "q": "今の台風情報",
+  "item": "typhoon",
+  "status": "ok"
+ },
+ {
+  "q": "津波警報は出てますか",
+  "item": "tsunami",
+  "status": "ok"
+ },
+ {
+  "q": "津波の情報",
+  "item": "tsunami",
+  "status": "ok"
+ },
+ {
+  "q": "1か月予報を見たい",
+  "item": "monthly_forecast",
+  "status": "ok"
+ },
+ {
+  "q": "来月の天候の見通し",
+  "item": "monthly_forecast",
+  "status": "ok"
+ },
+ {
+  "q": "3か月予報",
+  "item": "three_month_forecast",
+  "status": "ok"
+ },
+ {
+  "q": "今年の冬の見通しは",
+  "item": "three_month_forecast",
+  "status": "ok"
+ },
+ {
+  "q": "石垣島の今の気温",
+  "item": "amedas_now",
+  "status": "ok",
+  "amdno": "94081"
+ },
+ {
+  "q": "伊是名の現在の気温を知りたい",
+  "item": "amedas_now",
+  "status": "ok",
+  "amdno": "91011"
+ },
+ {
+  "q": "那覇のアメダス",
+  "item": "amedas_now",
+  "status": "ok",
+  "amdno": "91197"
+ },
+ {
+  "q": "東京の今何度？",
+  "item": "amedas_now",
+  "status": "ok",
+  "amdno": "44132"
+ },
+ {
+  "q": "札幌の最新の観測",
+  "item": "amedas_now",
+  "status": "ok",
+  "amdno": "14163"
+ },
+ {
+  "q": "大阪の現在の風速",
+  "item": "amedas_now",
+  "status": "ok",
+  "amdno": "62078"
+ },
+ {
+  "q": "2025年8月の那覇の気温",
+  "item": "past_data_search",
+  "status": "ok",
+  "block_no": "47936",
+  "year": 2025,
+  "month": 8
+ },
+ {
+  "q": "2024年3月の東京の降水量",
+  "item": "past_data_search",
+  "status": "ok",
+  "block_no": "47662",
+  "year": 2024,
+  "month": 3
+ },
+ {
+  "q": "2023年7月の札幌の気温を知りたい",
+  "item": "past_data_search",
+  "status": "ok",
+  "block_no": "47412",
+  "year": 2023,
+  "month": 7
+ },
+ {
+  "q": "去年の8月の那覇の気温",
+  "item": "past_data_search",
+  "status": "ok",
+  "block_no": "47936",
+  "year": "LY",
+  "month": 8
+ },
+ {
+  "q": "2022年12月の福岡の降水量",
+  "item": "past_data_search",
+  "status": "ok",
+  "block_no": "47807",
+  "year": 2022,
+  "month": 12
+ },
+ {
+  "q": "2025年1月の仙台の気温",
+  "item": "past_data_search",
+  "status": "ok",
+  "block_no": "47590",
+  "year": 2025,
+  "month": 1
+ },
+ {
+  "q": "2024年9月の石垣島の降水量",
+  "item": "past_data_search",
+  "status": "ok",
+  "block_no": "47918",
+  "year": 2024,
+  "month": 9
+ },
+ {
+  "q": "2021年6月の名古屋の気温",
+  "item": "past_data_search",
+  "status": "ok",
+  "block_no": "47636",
+  "year": 2021,
+  "month": 6
+ },
+ {
+  "q": "過去の天気データを調べたい",
+  "item": "past_data_menu",
+  "status": "ok"
+ },
+ {
+  "q": "観測所を探したい",
+  "item": "past_data_menu",
+  "status": "ok"
+ },
+ {
+  "q": "歴代1位の記録を知りたい",
+  "item": "record_ranking",
+  "status": "ok"
+ },
+ {
+  "q": "観測史上最高気温は？",
+  "item": "record_ranking",
+  "status": "ok"
+ },
+ {
+  "q": "今日の全国の気温ランキング",
+  "item": "mdrr_latest",
+  "status": "ok"
+ },
+ {
+  "q": "今日の最高気温ランキングを見たい",
+  "item": "mdrr_latest",
+  "status": "ok"
+ },
+ {
+  "q": "潮位を知りたい",
+  "item": "tide",
+  "status": "need_more"
+ },
+ {
+  "q": "潮位の現在値",
+  "item": "tide",
+  "status": "need_more"
+ },
+ {
+  "q": "府中の天気予報",
+  "item": "forecast_short",
+  "status": "need_place"
+ },
+ {
+  "q": "伊達の天気は",
+  "item": "forecast_short",
+  "status": "need_place"
+ },
+ {
+  "q": "北海道の天気予報",
+  "item": "forecast_short",
+  "status": "need_place"
+ },
+ {
+  "q": "府中の今の気温",
+  "item": "amedas_now",
+  "status": "need_place"
+ },
+ {
+  "q": "去年の8月の気温",
+  "item": "past_data_search",
+  "status": "need_place"
+ },
+ {
+  "q": "今の気温を知りたい",
+  "item": "amedas_now",
+  "status": "need_place"
+ },
+ {
+  "q": "ラーメンの作り方",
+  "item": "",
+  "status": "no_match"
+ },
+ {
+  "q": "今日のランチのおすすめ",
+  "item": "",
+  "status": "no_match"
+ },
+ {
+  "q": "株価を知りたい",
+  "item": "",
+  "status": "no_match"
+ }
+]
