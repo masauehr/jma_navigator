@@ -29,6 +29,19 @@ class TestGuide(unittest.TestCase):
         self.assertEqual(r["status"], "ok")
         self.assertIn("daily_s1.php?prec_no=91&block_no=47936&year=2025&month=8", r["url"])
 
+    def test_アメダス現在値(self):
+        r = guide("石垣島の今の気温は")
+        self.assertEqual(r["status"], "ok")
+        self.assertIn("amdno=94081", r["url"])
+
+    def test_アメダス_同名は聞き返し(self):
+        r = guide("府中の今の気温")
+        self.assertEqual(r["status"], "need_place")
+        self.assertEqual({c["area"] for c in r["candidates"]}, {"東京", "広島"})
+
+    def test_沖縄の離島はprec_no91(self):
+        self.assertIn("prec_no=91&block_no=47918", guide("2025年8月の石垣島の気温")["url"])
+
     def test_年月の解析(self):
         t = date(2026, 10, 27)
         self.assertEqual(parse_year_month("去年の8月", t), (2025, 8))

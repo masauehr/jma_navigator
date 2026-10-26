@@ -291,6 +291,33 @@
       "note": "etrnトップのバナーから確認（相対パス ../data/mdrr/index.html）",
       "verified": "confirmed",
       "static": true
+    },
+    {
+      "id": "amedas_now",
+      "category": "観測",
+      "title": "アメダス観測（直近の1時間ごと一覧表）",
+      "intents": [
+        "今の気温",
+        "現在の気温",
+        "今何度",
+        "最新の観測",
+        "アメダス",
+        "今の風",
+        "今の降水",
+        "いまの気温",
+        "現在の風速"
+      ],
+      "url": "https://www.jma.go.jp/bosai/amedas/#amdno={amdno}&format=table1h",
+      "params": {
+        "amdno": {
+          "type": "amedas_station",
+          "resolver": "amedas_stations.json (地域気象観測所一覧PDF由来)"
+        }
+      },
+      "note": "観測所番号5桁だけで開く（area_codeは自動補完）。伊是名91011・石垣島94081で確認。直近の観測のみ。過去は past_data_search",
+      "verified": "confirmed",
+      "verified_date": "2026-10-27",
+      "static": false
     }
   ]
 }

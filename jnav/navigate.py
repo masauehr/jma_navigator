@@ -8,6 +8,7 @@ import re
 from datetime import date
 from pathlib import Path
 
+from .amedas import find_stations
 from .areas import resolve
 from .stations import find_station
 
@@ -104,6 +105,15 @@ def guide(question):
                 for c in cands[:6]]}
         values["office_code"] = cands[0]["office_code"]
         result["place"] = f'{cands[0]["office_name"]}'
+    if "amdno" in item["params"]:
+        sts = find_stations(question)
+        if not sts:
+            return {**result, "status": "need_place", "hint": "アメダス観測所名（例: 石垣島、伊是名）が必要です"}
+        if len(sts) > 1:
+            return {**result, "status": "need_place", "candidates": [
+                {"amdno": x["amdno"], "place": x["name"], "area": x["subprefecture"]} for x in sts[:6]]}
+        values["amdno"] = sts[0]["amdno"]
+        result["place"] = sts[0]["name"]
     if "prec_no" in item["params"]:
         st = find_station(question)
         if st is None:
