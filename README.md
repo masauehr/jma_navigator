@@ -6,5 +6,5 @@
 詳しくは [jma-navigator.md](jma-navigator.md) を参照。
 
 - 開始日: 2026-10-27
-- 状態: 構想・設計フェーズ（Phase 0 のページカタログ作成から）
+- 状態: Phase 0 進行中（カタログ15件）・Phase 1 ベースライン実装済み（`python3 -m jnav "質問"`）
 - 参考: `~/projects/tonari_no_mago`（Chrome拡張＋プロキシ＋評価セット方式）

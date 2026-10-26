@@ -11,7 +11,8 @@
         "明日の天気",
         "天気予報",
         "降水確率",
-        "最高気温"
+        "最高気温",
+        "天気"
       ],
       "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code={office_code}",
       "params": {
@@ -211,7 +212,11 @@
       "intents": [
         "去年の気温",
         "過去の降水量",
-        "昨日の最高気温"
+        "昨日の最高気温",
+        "気温",
+        "降水量",
+        "去年",
+        "昨年"
       ],
       "url": "https://www.data.jma.go.jp/stats/etrn/index.php?prec_no={prec_no}&block_no={block_no}&year={year}&month={month}&day={day}&view=",
       "params": {

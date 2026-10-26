@@ -1,6 +1,6 @@
 # jma_navigator（気象庁ナビ）設計メモ
 
-開始日: 2026-10-27 / 状態: **Phase 0 進行中（カタログ15件登録済み）**
+開始日: 2026-10-27 / 状態: **Phase 0 進行中 / Phase 1 ベースライン（LLMなし）実装済み**
 
 「知りたい情報」を日本語で伝えると、気象庁HPの**どのページを開けばよいか**を案内するアシスタント。
 「となりの孫」（`~/projects/tonari_no_mago`）の考え方を土台にしつつ、気象庁HP向けに方式を見直す。
@@ -106,9 +106,24 @@
 - 分かったこと: `area.json`（`/bosai/common/const/area.json`）に offices / class10s / class15s / class20s がある（地域解決に使える）。`bosai` 系はハッシュ付きSPAのため、サーバー側のHTTP取得ではリンクの有効性を検査できない（→Phase 3では静的URLのみHTTP検査し、ハッシュ付きはブラウザ実機かJSON側で確認する）。
 - 未整備: 過去データの観測所辞書（prec_no/block_no）、潮位の class30 コード。
 
-## 9. 次の一手
+## 9. Phase 1 ベースライン（2026-10-27）
+
+実行: `python3 -m jnav "明日の那覇の天気を知りたい"`（標準ライブラリのみ）。テスト: `python3 -m unittest discover -s tests`（9件OK）。
+
+| モジュール | 役割 |
+|-----------|------|
+| `jnav/areas.py` | 地名→office_code。`data/area.json`（気象庁 area.json の写し）の市町村・細分・予報区を照合。同じ予報区なら確定、複数なら `pick()` が None を返し聞き返す |
+| `jnav/navigate.py` | キーワード照合で項目選択 → 地名抽出 → テンプレートからURL組み立て。status は ok / need_place / need_more / no_match |
+
+分かったこと・設計判断:
+- `jma_mcp/areas.py` の地域表は主要エリアのみで、北海道のコード名も実際の予報区とずれているため**参考にせず**、完全版の `common/area.json` を自己完結のため `data/` に複製した（他リポジトリと部品を共有しない方針）。
+- 市町村(class20s)に `kana` と `parent` があり、市町村→細分→予報区をたどれる。「那覇」「石垣」「広島」は確定、「府中」「伊達」「北海道」は聞き返しになる。
+- 現状は LLM なし。Phase 2 の評価セットで、LLM(Haiku/Sonnet)による項目選択・言い換え吸収と比較する。キーワード照合は「気温」「天気」など広い語に弱い。
+- 過去データ(`past_data_search`)は観測所辞書(prec_no/block_no)が未整備のため `need_more` を返す。
+
+## 10. 次の一手
 
 1. `table` の12件をブラウザ実機（Chrome）で開き、`confirmed` に更新する。
-2. 地域名→office_code の解決（`area.json` から辞書化。曖昧な地名の聞き返し規則）を試作する。
-3. 質問例を30件集める（評価セットの種）。
-4. Phase 1: 質問→カタログ項目選択→URL組み立ての最小版（CLI）。
+2. 過去データの観測所辞書（prec_no/block_no）を作る。`common/stations.json` の intl_id が block_no に使える見込み、prec_no は etrn の地点選択ページから取得する。
+3. 質問60件程度と正解ページの評価セットを作る（Phase 2）。
+4. LLM による項目選択（カタログからの選択のみ）を追加してベースラインと比較。
