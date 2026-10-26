@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-27",
+  "note": "verified: confirmed=ページ内容を実際に確認 / table=出典対応表(~/.claude/CLAUDE.md)由来で未再確認。static=パラメータなしでリンク検査できる",
+  "items": [
+    {
+      "id": "forecast_short",
+      "category": "天気",
+      "title": "天気予報（今日・明日・明後日）",
+      "intents": [
+        "明日の天気",
+        "天気予報",
+        "降水確率",
+        "最高気温"
+      ],
+      "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code={office_code}",
+      "params": {
+        "office_code": {
+          "type": "area_office",
+          "resolver": "area.json:offices",
+          "example": "471000"
+        }
+      },
+      "note": "",
+      "verified": "table",
+      "static": false
+    },
+    {
+      "id": "forecast_weekly",
+      "category": "天気",
+      "title": "週間天気予報",
+      "intents": [
+        "週間予報",
+        "来週の天気",
+        "1週間の天気"
+      ],
+      "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code={office_code}",
+      "params": {
+        "office_code": {
+          "type": "area_office",
+          "resolver": "area.json:offices",
+          "example": "471000"
+        }
+      },
+      "note": "短期と同じページ内の週間欄",
+      "verified": "table",
+      "static": false
+    },
+    {
+      "id": "warning_map",
+      "category": "防災",
+      "title": "警報・注意報（レベル付き）",
+      "intents": [
+        "警報",
+        "注意報",
+        "大雨警報は出ている"
+      ],
+      "url": "https://www.jma.go.jp/bosai/map.html#contents=warning&areaCode={office_code}",
+      "params": {
+        "office_code": {
+          "type": "area_office",
+          "resolver": "area.json:offices",
+          "example": "471000"
+        }
+      },
+      "note": "防災情報は公式ページを先に示す",
+      "verified": "table",
+      "static": false
+    },
+    {
+      "id": "warning_timeline",
+      "category": "防災",
+      "title": "警報等の時系列（見通し）",
+      "intents": [
+        "警報はいつまで",
+        "警報の見通し"
+      ],
+      "url": "https://www.jma.go.jp/bosai/warning_timeline/",
+      "params": {},
+      "note": "",
+      "verified": "table",
+      "static": true
+    },
+    {
+      "id": "early_warning",
+      "category": "防災",
+      "title": "早期注意情報（警報級の可能性）",
+      "intents": [
+        "警報級の可能性",
+        "数日先の大雨の可能性"
+      ],
+      "url": "https://www.jma.go.jp/bosai/probability/#area_type=offices&area_code={office_code}&lang=ja",
+      "params": {
+        "office_code": {
+          "type": "area_office",
+          "resolver": "area.json:offices",
+          "example": "471000"
+        }
+      },
+      "note": "",
+      "verified": "table",
+      "static": false
+    },
+    {
+      "id": "information",
+      "category": "防災",
+      "title": "府県気象情報など",
+      "intents": [
+        "気象情報",
+        "大雨に関する情報"
+      ],
+      "url": "https://www.jma.go.jp/bosai/information/#area_type=offices&area_code={office_code}&format=table",
+      "params": {
+        "office_code": {
+          "type": "area_office",
+          "resolver": "area.json:offices",
+          "example": "471000"
+        }
+      },
+      "note": "",
+      "verified": "table",
+      "static": false
+    },
+    {
+      "id": "typhoon",
+      "category": "防災",
+      "title": "台風情報（実況・進路予報）",
+      "intents": [
+        "台風",
+        "台風の進路"
+      ],
+      "url": "https://www.jma.go.jp/bosai/information/typhoon.html#",
+      "params": {},
+      "note": "",
+      "verified": "table",
+      "static": true
+    },
+    {
+      "id": "tsunami",
+      "category": "防災",
+      "title": "津波情報",
+      "intents": [
+        "津波",
+        "津波警報は出ている"
+      ],
+      "url": "https://www.jma.go.jp/bosai/map.html#5/38.411/143.987/&elem=info&contents=tsunami",
+      "params": {},
+      "note": "",
+      "verified": "table",
+      "static": true
+    },
+    {
+      "id": "tide",
+      "category": "海",
+      "title": "潮位観測（現在値・推移）",
+      "intents": [
+        "潮位",
+        "潮位の現在値"
+      ],
+      "url": "https://www.jma.go.jp/bosai/tidelevel/#area_type=class20s&area_code={area_code}&point_code={station_code}&filter=0&class30s={class30_code}",
+      "params": {
+        "area_code": {
+          "type": "class20",
+          "resolver": "area.json:class20s"
+        },
+        "station_code": {
+          "type": "tide_station",
+          "resolver": "search_tide_stations"
+        },
+        "class30_code": {
+          "type": "class30",
+          "resolver": "area.json"
+        }
+      },
+      "note": "パラメータが多い。観測所は検索ツールで引く",
+      "verified": "table",
+      "static": false
+    },
+    {
+      "id": "monthly_forecast",
+      "category": "長期予報",
+      "title": "1か月予報",
+      "intents": [
+        "1か月予報",
+        "来月の天候"
+      ],
+      "url": "https://www.data.jma.go.jp/cpd/longfcst/kaisetsu/?term=P1M",
+      "params": {},
+      "note": "",
+      "verified": "table",
+      "static": true
+    },
+    {
+      "id": "three_month_forecast",
+      "category": "長期予報",
+      "title": "3か月予報",
+      "intents": [
+        "3か月予報",
+        "今年の冬の見通し"
+      ],
+      "url": "https://www.data.jma.go.jp/cpd/longfcst/kaisetsu/?term=P3M",
+      "params": {},
+      "note": "",
+      "verified": "table",
+      "static": true
+    },
+    {
+      "id": "past_data_search",
+      "category": "過去データ",
+      "title": "過去の気象データ検索（地点・日・月）",
+      "intents": [
+        "去年の気温",
+        "過去の降水量",
+        "昨日の最高気温"
+      ],
+      "url": "https://www.data.jma.go.jp/stats/etrn/index.php?prec_no={prec_no}&block_no={block_no}&year={year}&month={month}&day={day}&view=",
+      "params": {
+        "prec_no": {
+          "type": "int",
+          "resolver": "etrn_stations"
+        },
+        "block_no": {
+          "type": "int",
+          "resolver": "etrn_stations"
+        },
+        "year": {
+          "type": "int"
+        },
+        "month": {
+          "type": "int"
+        },
+        "day": {
+          "type": "int",
+          "optional": true
+        }
+      },
+      "note": "URLパターンは既知。観測所辞書は未整備（Phase1で作成）。1976年以前を含む検索はview=h0/np0で確認",
+      "verified": "table",
+      "static": false
+    },
+    {
+      "id": "past_data_menu",
+      "category": "過去データ",
+      "title": "過去の気象データ検索（地点を選ぶ入口）",
+      "intents": [
+        "過去の天気データ",
+        "観測所を探す"
+      ],
+      "url": "https://www.data.jma.go.jp/stats/etrn/select/prefecture00.php",
+      "params": {},
+      "note": "入口。地点が決まらないときの代替",
+      "verified": "confirmed",
+      "static": true
+    },
+    {
+      "id": "record_ranking",
+      "category": "過去データ",
+      "title": "歴代全国ランキング",
+      "intents": [
+        "歴代1位",
+        "記録",
+        "観測史上"
+      ],
+      "url": "https://www.data.jma.go.jp/stats/etrn/view/rankall.php",
+      "params": {},
+      "note": "",
+      "verified": "confirmed",
+      "static": true
+    },
+    {
+      "id": "mdrr_latest",
+      "category": "過去データ",
+      "title": "最新の統計データ（現在の気象状況）",
+      "intents": [
+        "今日の最高気温ランキング",
+        "今日の全国の気温"
+      ],
+      "url": "https://www.data.jma.go.jp/stats/data/mdrr/index.html",
+      "params": {},
+      "note": "etrnトップのバナーから確認（相対パス ../data/mdrr/index.html）",
+      "verified": "confirmed",
+      "static": true
+    }
+  ]
+}
