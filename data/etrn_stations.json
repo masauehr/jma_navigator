@@ -1,0 +1,1226 @@
+[
+ {
+  "name": "稚内",
+  "kana": "ワッカナイ",
+  "prefecture": "北海道宗谷地方",
+  "prec_no": 11,
+  "block_no": "47401",
+  "verified": false
+ },
+ {
+  "name": "北見枝幸",
+  "kana": "キタミエサシ",
+  "prefecture": "北海道宗谷地方",
+  "prec_no": 11,
+  "block_no": "47402",
+  "verified": false
+ },
+ {
+  "name": "旭川",
+  "kana": "アサヒカワ",
+  "prefecture": "北海道上川地方",
+  "prec_no": 12,
+  "block_no": "47407",
+  "verified": false
+ },
+ {
+  "name": "羽幌",
+  "kana": "ハボロ",
+  "prefecture": "北海道留萌地方",
+  "prec_no": 13,
+  "block_no": "47404",
+  "verified": false
+ },
+ {
+  "name": "留萌",
+  "kana": "ルモイ",
+  "prefecture": "北海道留萌地方",
+  "prec_no": 13,
+  "block_no": "47406",
+  "verified": false
+ },
+ {
+  "name": "札幌",
+  "kana": "サッポロ",
+  "prefecture": "北海道石狩地方",
+  "prec_no": 14,
+  "block_no": "47412",
+  "verified": false
+ },
+ {
+  "name": "岩見沢",
+  "kana": "イワミザワ",
+  "prefecture": "北海道空知地方",
+  "prec_no": 15,
+  "block_no": "47413",
+  "verified": false
+ },
+ {
+  "name": "小樽",
+  "kana": "オタル",
+  "prefecture": "北海道後志地方",
+  "prec_no": 16,
+  "block_no": "47411",
+  "verified": false
+ },
+ {
+  "name": "倶知安",
+  "kana": "クッチャン",
+  "prefecture": "北海道後志地方",
+  "prec_no": 16,
+  "block_no": "47433",
+  "verified": false
+ },
+ {
+  "name": "寿都",
+  "kana": "スッツ",
+  "prefecture": "北海道後志地方",
+  "prec_no": 16,
+  "block_no": "47421",
+  "verified": false
+ },
+ {
+  "name": "雄武",
+  "kana": "オウム",
+  "prefecture": "北海道網走・北見・紋別地方",
+  "prec_no": 17,
+  "block_no": "47405",
+  "verified": false
+ },
+ {
+  "name": "紋別",
+  "kana": "モンベツ",
+  "prefecture": "北海道網走・北見・紋別地方",
+  "prec_no": 17,
+  "block_no": "47435",
+  "verified": false
+ },
+ {
+  "name": "網走",
+  "kana": "アバシリ",
+  "prefecture": "北海道網走・北見・紋別地方",
+  "prec_no": 17,
+  "block_no": "47409",
+  "verified": false
+ },
+ {
+  "name": "根室",
+  "kana": "ネムロ",
+  "prefecture": "北海道根室地方",
+  "prec_no": 18,
+  "block_no": "47420",
+  "verified": false
+ },
+ {
+  "name": "釧路",
+  "kana": "クシロ",
+  "prefecture": "北海道釧路地方",
+  "prec_no": 19,
+  "block_no": "47418",
+  "verified": false
+ },
+ {
+  "name": "帯広",
+  "kana": "オビヒロ",
+  "prefecture": "北海道十勝地方",
+  "prec_no": 20,
+  "block_no": "47417",
+  "verified": false
+ },
+ {
+  "name": "広尾",
+  "kana": "ヒロオ",
+  "prefecture": "北海道十勝地方",
+  "prec_no": 20,
+  "block_no": "47440",
+  "verified": false
+ },
+ {
+  "name": "苫小牧",
+  "kana": "トマコマイ",
+  "prefecture": "北海道胆振地方",
+  "prec_no": 21,
+  "block_no": "47424",
+  "verified": false
+ },
+ {
+  "name": "室蘭",
+  "kana": "ムロラン",
+  "prefecture": "北海道胆振地方",
+  "prec_no": 21,
+  "block_no": "47423",
+  "verified": false
+ },
+ {
+  "name": "浦河",
+  "kana": "ウラカワ",
+  "prefecture": "北海道日高地方",
+  "prec_no": 22,
+  "block_no": "47426",
+  "verified": false
+ },
+ {
+  "name": "函館",
+  "kana": "ハコダテ",
+  "prefecture": "北海道渡島地方",
+  "prec_no": 23,
+  "block_no": "47430",
+  "verified": false
+ },
+ {
+  "name": "江差",
+  "kana": "エサシ",
+  "prefecture": "北海道檜山地方",
+  "prec_no": 24,
+  "block_no": "47428",
+  "verified": true
+ },
+ {
+  "name": "むつ",
+  "kana": "ムツ",
+  "prefecture": "青森県",
+  "prec_no": 31,
+  "block_no": "47576",
+  "verified": false
+ },
+ {
+  "name": "青森",
+  "kana": "アオモリ",
+  "prefecture": "青森県",
+  "prec_no": 31,
+  "block_no": "47575",
+  "verified": false
+ },
+ {
+  "name": "深浦",
+  "kana": "フカウラ",
+  "prefecture": "青森県",
+  "prec_no": 31,
+  "block_no": "47574",
+  "verified": false
+ },
+ {
+  "name": "八戸",
+  "kana": "ハチノヘ",
+  "prefecture": "青森県",
+  "prec_no": 31,
+  "block_no": "47581",
+  "verified": false
+ },
+ {
+  "name": "秋田",
+  "kana": "アキタ",
+  "prefecture": "秋田県",
+  "prec_no": 32,
+  "block_no": "47582",
+  "verified": false
+ },
+ {
+  "name": "盛岡",
+  "kana": "モリオカ",
+  "prefecture": "岩手県",
+  "prec_no": 33,
+  "block_no": "47584",
+  "verified": false
+ },
+ {
+  "name": "宮古",
+  "kana": "ミヤコ",
+  "prefecture": "岩手県",
+  "prec_no": 33,
+  "block_no": "47585",
+  "verified": false
+ },
+ {
+  "name": "大船渡",
+  "kana": "オオフナト",
+  "prefecture": "岩手県",
+  "prec_no": 33,
+  "block_no": "47512",
+  "verified": false
+ },
+ {
+  "name": "石巻",
+  "kana": "イシノマキ",
+  "prefecture": "宮城県",
+  "prec_no": 34,
+  "block_no": "47592",
+  "verified": false
+ },
+ {
+  "name": "仙台",
+  "kana": "センダイ",
+  "prefecture": "宮城県",
+  "prec_no": 34,
+  "block_no": "47590",
+  "verified": false
+ },
+ {
+  "name": "酒田",
+  "kana": "サカタ",
+  "prefecture": "山形県",
+  "prec_no": 35,
+  "block_no": "47587",
+  "verified": false
+ },
+ {
+  "name": "新庄",
+  "kana": "シンジョウ",
+  "prefecture": "山形県",
+  "prec_no": 35,
+  "block_no": "47520",
+  "verified": false
+ },
+ {
+  "name": "山形",
+  "kana": "ヤマガタ",
+  "prefecture": "山形県",
+  "prec_no": 35,
+  "block_no": "47588",
+  "verified": false
+ },
+ {
+  "name": "福島",
+  "kana": "フクシマ",
+  "prefecture": "福島県",
+  "prec_no": 36,
+  "block_no": "47595",
+  "verified": false
+ },
+ {
+  "name": "若松",
+  "kana": "ワカマツ",
+  "prefecture": "福島県",
+  "prec_no": 36,
+  "block_no": "47570",
+  "verified": false
+ },
+ {
+  "name": "白河",
+  "kana": "シラカワ",
+  "prefecture": "福島県",
+  "prec_no": 36,
+  "block_no": "47597",
+  "verified": false
+ },
+ {
+  "name": "小名浜",
+  "kana": "オナハマ",
+  "prefecture": "福島県",
+  "prec_no": 36,
+  "block_no": "47598",
+  "verified": false
+ },
+ {
+  "name": "水戸",
+  "kana": "ミト",
+  "prefecture": "茨城県",
+  "prec_no": 40,
+  "block_no": "47629",
+  "verified": false
+ },
+ {
+  "name": "つくば",
+  "kana": "ツクバ）(館野（タテノ",
+  "prefecture": "茨城県",
+  "prec_no": 40,
+  "block_no": "47646",
+  "verified": false
+ },
+ {
+  "name": "奥日光",
+  "kana": "オクニッコウ）(日光（ニツコウ",
+  "prefecture": "栃木県",
+  "prec_no": 41,
+  "block_no": "47690",
+  "verified": false
+ },
+ {
+  "name": "宇都宮",
+  "kana": "ウツノミヤ",
+  "prefecture": "栃木県",
+  "prec_no": 41,
+  "block_no": "47615",
+  "verified": false
+ },
+ {
+  "name": "前橋",
+  "kana": "マエバシ",
+  "prefecture": "群馬県",
+  "prec_no": 42,
+  "block_no": "47624",
+  "verified": false
+ },
+ {
+  "name": "熊谷",
+  "kana": "クマガヤ",
+  "prefecture": "埼玉県",
+  "prec_no": 43,
+  "block_no": "47626",
+  "verified": false
+ },
+ {
+  "name": "秩父",
+  "kana": "チチブ",
+  "prefecture": "埼玉県",
+  "prec_no": 43,
+  "block_no": "47641",
+  "verified": false
+ },
+ {
+  "name": "東京",
+  "kana": "トウキョウ",
+  "prefecture": "東京都",
+  "prec_no": 44,
+  "block_no": "47662",
+  "verified": false
+ },
+ {
+  "name": "大島",
+  "kana": "オオシマ",
+  "prefecture": "東京都",
+  "prec_no": 44,
+  "block_no": "47675",
+  "verified": false
+ },
+ {
+  "name": "三宅島",
+  "kana": "ミヤケジマ",
+  "prefecture": "東京都",
+  "prec_no": 44,
+  "block_no": "47677",
+  "verified": false
+ },
+ {
+  "name": "八丈島",
+  "kana": "ハチジョウジマ",
+  "prefecture": "東京都",
+  "prec_no": 44,
+  "block_no": "47678",
+  "verified": false
+ },
+ {
+  "name": "父島",
+  "kana": "チチジマ",
+  "prefecture": "東京都",
+  "prec_no": 44,
+  "block_no": "47971",
+  "verified": false
+ },
+ {
+  "name": "銚子",
+  "kana": "チョウシ",
+  "prefecture": "千葉県",
+  "prec_no": 45,
+  "block_no": "47648",
+  "verified": false
+ },
+ {
+  "name": "千葉",
+  "kana": "チバ",
+  "prefecture": "千葉県",
+  "prec_no": 45,
+  "block_no": "47682",
+  "verified": false
+ },
+ {
+  "name": "勝浦",
+  "kana": "カツウラ",
+  "prefecture": "千葉県",
+  "prec_no": 45,
+  "block_no": "47674",
+  "verified": false
+ },
+ {
+  "name": "館山",
+  "kana": "タテヤマ",
+  "prefecture": "千葉県",
+  "prec_no": 45,
+  "block_no": "47672",
+  "verified": false
+ },
+ {
+  "name": "横浜",
+  "kana": "ヨコハマ",
+  "prefecture": "神奈川県",
+  "prec_no": 46,
+  "block_no": "47670",
+  "verified": false
+ },
+ {
+  "name": "長野",
+  "kana": "ナガノ",
+  "prefecture": "長野県",
+  "prec_no": 48,
+  "block_no": "47610",
+  "verified": false
+ },
+ {
+  "name": "軽井沢",
+  "kana": "カルイザワ",
+  "prefecture": "長野県",
+  "prec_no": 48,
+  "block_no": "47622",
+  "verified": false
+ },
+ {
+  "name": "松本",
+  "kana": "マツモト",
+  "prefecture": "長野県",
+  "prec_no": 48,
+  "block_no": "47618",
+  "verified": false
+ },
+ {
+  "name": "諏訪",
+  "kana": "スワ",
+  "prefecture": "長野県",
+  "prec_no": 48,
+  "block_no": "47620",
+  "verified": false
+ },
+ {
+  "name": "飯田",
+  "kana": "イイダ",
+  "prefecture": "長野県",
+  "prec_no": 48,
+  "block_no": "47637",
+  "verified": false
+ },
+ {
+  "name": "甲府",
+  "kana": "コウフ",
+  "prefecture": "山梨県",
+  "prec_no": 49,
+  "block_no": "47638",
+  "verified": false
+ },
+ {
+  "name": "河口湖",
+  "kana": "カワグチコ",
+  "prefecture": "山梨県",
+  "prec_no": 49,
+  "block_no": "47640",
+  "verified": false
+ },
+ {
+  "name": "三島",
+  "kana": "ミシマ",
+  "prefecture": "静岡県",
+  "prec_no": 50,
+  "block_no": "47657",
+  "verified": false
+ },
+ {
+  "name": "網代",
+  "kana": "アジロ",
+  "prefecture": "静岡県",
+  "prec_no": 50,
+  "block_no": "47668",
+  "verified": false
+ },
+ {
+  "name": "静岡",
+  "kana": "シズオカ",
+  "prefecture": "静岡県",
+  "prec_no": 50,
+  "block_no": "47656",
+  "verified": false
+ },
+ {
+  "name": "浜松",
+  "kana": "ハママツ",
+  "prefecture": "静岡県",
+  "prec_no": 50,
+  "block_no": "47654",
+  "verified": false
+ },
+ {
+  "name": "御前崎",
+  "kana": "オマエザキ",
+  "prefecture": "静岡県",
+  "prec_no": 50,
+  "block_no": "47655",
+  "verified": false
+ },
+ {
+  "name": "石廊崎",
+  "kana": "イロウザキ",
+  "prefecture": "静岡県",
+  "prec_no": 50,
+  "block_no": "47666",
+  "verified": false
+ },
+ {
+  "name": "名古屋",
+  "kana": "ナゴヤ",
+  "prefecture": "愛知県",
+  "prec_no": 51,
+  "block_no": "47636",
+  "verified": false
+ },
+ {
+  "name": "伊良湖",
+  "kana": "イラコ",
+  "prefecture": "愛知県",
+  "prec_no": 51,
+  "block_no": "47653",
+  "verified": false
+ },
+ {
+  "name": "高山",
+  "kana": "タカヤマ",
+  "prefecture": "岐阜県",
+  "prec_no": 52,
+  "block_no": "47617",
+  "verified": false
+ },
+ {
+  "name": "岐阜",
+  "kana": "ギフ",
+  "prefecture": "岐阜県",
+  "prec_no": 52,
+  "block_no": "47632",
+  "verified": false
+ },
+ {
+  "name": "四日市",
+  "kana": "ヨッカイチ",
+  "prefecture": "三重県",
+  "prec_no": 53,
+  "block_no": "47684",
+  "verified": false
+ },
+ {
+  "name": "上野",
+  "kana": "ウエノ",
+  "prefecture": "三重県",
+  "prec_no": 53,
+  "block_no": "47649",
+  "verified": false
+ },
+ {
+  "name": "津",
+  "kana": "ツ",
+  "prefecture": "三重県",
+  "prec_no": 53,
+  "block_no": "47651",
+  "verified": false
+ },
+ {
+  "name": "尾鷲",
+  "kana": "オワセ",
+  "prefecture": "三重県",
+  "prec_no": 53,
+  "block_no": "47663",
+  "verified": false
+ },
+ {
+  "name": "相川",
+  "kana": "アイカワ",
+  "prefecture": "新潟県",
+  "prec_no": 54,
+  "block_no": "47602",
+  "verified": false
+ },
+ {
+  "name": "新潟",
+  "kana": "ニイガタ",
+  "prefecture": "新潟県",
+  "prec_no": 54,
+  "block_no": "47604",
+  "verified": false
+ },
+ {
+  "name": "高田",
+  "kana": "タカダ",
+  "prefecture": "新潟県",
+  "prec_no": 54,
+  "block_no": "47612",
+  "verified": false
+ },
+ {
+  "name": "伏木",
+  "kana": "フシキ",
+  "prefecture": "富山県",
+  "prec_no": 55,
+  "block_no": "47606",
+  "verified": false
+ },
+ {
+  "name": "富山",
+  "kana": "トヤマ",
+  "prefecture": "富山県",
+  "prec_no": 55,
+  "block_no": "47607",
+  "verified": false
+ },
+ {
+  "name": "輪島",
+  "kana": "ワジマ",
+  "prefecture": "石川県",
+  "prec_no": 56,
+  "block_no": "47600",
+  "verified": false
+ },
+ {
+  "name": "金沢",
+  "kana": "カナザワ",
+  "prefecture": "石川県",
+  "prec_no": 56,
+  "block_no": "47605",
+  "verified": false
+ },
+ {
+  "name": "福井",
+  "kana": "フクイ",
+  "prefecture": "福井県",
+  "prec_no": 57,
+  "block_no": "47616",
+  "verified": false
+ },
+ {
+  "name": "敦賀",
+  "kana": "ツルガ",
+  "prefecture": "福井県",
+  "prec_no": 57,
+  "block_no": "47631",
+  "verified": false
+ },
+ {
+  "name": "彦根",
+  "kana": "ヒコネ",
+  "prefecture": "滋賀県",
+  "prec_no": 60,
+  "block_no": "47761",
+  "verified": false
+ },
+ {
+  "name": "舞鶴",
+  "kana": "マイヅル",
+  "prefecture": "京都府",
+  "prec_no": 61,
+  "block_no": "47750",
+  "verified": false
+ },
+ {
+  "name": "京都",
+  "kana": "キョウト",
+  "prefecture": "京都府",
+  "prec_no": 61,
+  "block_no": "47759",
+  "verified": false
+ },
+ {
+  "name": "大阪",
+  "kana": "オオサカ",
+  "prefecture": "大阪府",
+  "prec_no": 62,
+  "block_no": "47772",
+  "verified": false
+ },
+ {
+  "name": "豊岡",
+  "kana": "トヨオカ",
+  "prefecture": "兵庫県",
+  "prec_no": 63,
+  "block_no": "47747",
+  "verified": false
+ },
+ {
+  "name": "姫路",
+  "kana": "ヒメジ",
+  "prefecture": "兵庫県",
+  "prec_no": 63,
+  "block_no": "47769",
+  "verified": false
+ },
+ {
+  "name": "神戸",
+  "kana": "コウベ",
+  "prefecture": "兵庫県",
+  "prec_no": 63,
+  "block_no": "47770",
+  "verified": false
+ },
+ {
+  "name": "洲本",
+  "kana": "スモト",
+  "prefecture": "兵庫県",
+  "prec_no": 63,
+  "block_no": "47776",
+  "verified": false
+ },
+ {
+  "name": "奈良",
+  "kana": "ナラ",
+  "prefecture": "奈良県",
+  "prec_no": 64,
+  "block_no": "47780",
+  "verified": false
+ },
+ {
+  "name": "和歌山",
+  "kana": "ワカヤマ",
+  "prefecture": "和歌山県",
+  "prec_no": 65,
+  "block_no": "47777",
+  "verified": false
+ },
+ {
+  "name": "潮岬",
+  "kana": "シオノミサキ",
+  "prefecture": "和歌山県",
+  "prec_no": 65,
+  "block_no": "47778",
+  "verified": false
+ },
+ {
+  "name": "津山",
+  "kana": "ツヤマ",
+  "prefecture": "岡山県",
+  "prec_no": 66,
+  "block_no": "47756",
+  "verified": false
+ },
+ {
+  "name": "岡山",
+  "kana": "オカヤマ",
+  "prefecture": "岡山県",
+  "prec_no": 66,
+  "block_no": "47768",
+  "verified": false
+ },
+ {
+  "name": "福山",
+  "kana": "フクヤマ",
+  "prefecture": "広島県",
+  "prec_no": 67,
+  "block_no": "47767",
+  "verified": false
+ },
+ {
+  "name": "広島",
+  "kana": "ヒロシマ",
+  "prefecture": "広島県",
+  "prec_no": 67,
+  "block_no": "47765",
+  "verified": false
+ },
+ {
+  "name": "呉",
+  "kana": "クレ",
+  "prefecture": "広島県",
+  "prec_no": 67,
+  "block_no": "47766",
+  "verified": false
+ },
+ {
+  "name": "西郷",
+  "kana": "サイゴウ",
+  "prefecture": "島根県",
+  "prec_no": 68,
+  "block_no": "47740",
+  "verified": false
+ },
+ {
+  "name": "松江",
+  "kana": "マツエ",
+  "prefecture": "島根県",
+  "prec_no": 68,
+  "block_no": "47741",
+  "verified": false
+ },
+ {
+  "name": "浜田",
+  "kana": "ハマダ",
+  "prefecture": "島根県",
+  "prec_no": 68,
+  "block_no": "47755",
+  "verified": false
+ },
+ {
+  "name": "境",
+  "kana": "サカイ",
+  "prefecture": "鳥取県",
+  "prec_no": 69,
+  "block_no": "47742",
+  "verified": false
+ },
+ {
+  "name": "米子",
+  "kana": "ヨナゴ",
+  "prefecture": "鳥取県",
+  "prec_no": 69,
+  "block_no": "47744",
+  "verified": false
+ },
+ {
+  "name": "鳥取",
+  "kana": "トットリ",
+  "prefecture": "鳥取県",
+  "prec_no": 69,
+  "block_no": "47746",
+  "verified": false
+ },
+ {
+  "name": "徳島",
+  "kana": "トクシマ",
+  "prefecture": "徳島県",
+  "prec_no": 71,
+  "block_no": "47895",
+  "verified": false
+ },
+ {
+  "name": "高松",
+  "kana": "タカマツ",
+  "prefecture": "香川県",
+  "prec_no": 72,
+  "block_no": "47891",
+  "verified": false
+ },
+ {
+  "name": "多度津",
+  "kana": "タドツ",
+  "prefecture": "香川県",
+  "prec_no": 72,
+  "block_no": "47890",
+  "verified": false
+ },
+ {
+  "name": "松山",
+  "kana": "マツヤマ",
+  "prefecture": "愛媛県",
+  "prec_no": 73,
+  "block_no": "47887",
+  "verified": false
+ },
+ {
+  "name": "宇和島",
+  "kana": "ウワジマ",
+  "prefecture": "愛媛県",
+  "prec_no": 73,
+  "block_no": "47892",
+  "verified": false
+ },
+ {
+  "name": "高知",
+  "kana": "コウチ",
+  "prefecture": "高知県",
+  "prec_no": 74,
+  "block_no": "47893",
+  "verified": false
+ },
+ {
+  "name": "室戸岬",
+  "kana": "ムロトミサキ",
+  "prefecture": "高知県",
+  "prec_no": 74,
+  "block_no": "47899",
+  "verified": false
+ },
+ {
+  "name": "宿毛",
+  "kana": "スクモ",
+  "prefecture": "高知県",
+  "prec_no": 74,
+  "block_no": "47897",
+  "verified": false
+ },
+ {
+  "name": "清水",
+  "kana": "シミズ",
+  "prefecture": "高知県",
+  "prec_no": 74,
+  "block_no": "47898",
+  "verified": false
+ },
+ {
+  "name": "萩",
+  "kana": "ハギ",
+  "prefecture": "山口県",
+  "prec_no": 81,
+  "block_no": "47754",
+  "verified": false
+ },
+ {
+  "name": "山口",
+  "kana": "ヤマグチ",
+  "prefecture": "山口県",
+  "prec_no": 81,
+  "block_no": "47784",
+  "verified": false
+ },
+ {
+  "name": "下関",
+  "kana": "シモノセキ",
+  "prefecture": "山口県",
+  "prec_no": 81,
+  "block_no": "47762",
+  "verified": false
+ },
+ {
+  "name": "飯塚",
+  "kana": "イイヅカ",
+  "prefecture": "福岡県",
+  "prec_no": 82,
+  "block_no": "47809",
+  "verified": false
+ },
+ {
+  "name": "福岡",
+  "kana": "フクオカ",
+  "prefecture": "福岡県",
+  "prec_no": 82,
+  "block_no": "47807",
+  "verified": false
+ },
+ {
+  "name": "日田",
+  "kana": "ヒタ",
+  "prefecture": "大分県",
+  "prec_no": 83,
+  "block_no": "47814",
+  "verified": false
+ },
+ {
+  "name": "大分",
+  "kana": "オオイタ",
+  "prefecture": "大分県",
+  "prec_no": 83,
+  "block_no": "47815",
+  "verified": false
+ },
+ {
+  "name": "厳原",
+  "kana": "イヅハラ",
+  "prefecture": "長崎県",
+  "prec_no": 84,
+  "block_no": "47800",
+  "verified": false
+ },
+ {
+  "name": "平戸",
+  "kana": "ヒラド",
+  "prefecture": "長崎県",
+  "prec_no": 84,
+  "block_no": "47805",
+  "verified": false
+ },
+ {
+  "name": "佐世保",
+  "kana": "サセボ",
+  "prefecture": "長崎県",
+  "prec_no": 84,
+  "block_no": "47812",
+  "verified": false
+ },
+ {
+  "name": "長崎",
+  "kana": "ナガサキ",
+  "prefecture": "長崎県",
+  "prec_no": 84,
+  "block_no": "47817",
+  "verified": false
+ },
+ {
+  "name": "雲仙岳",
+  "kana": "ウンゼンダケ",
+  "prefecture": "長崎県",
+  "prec_no": 84,
+  "block_no": "47818",
+  "verified": false
+ },
+ {
+  "name": "福江",
+  "kana": "フクエ",
+  "prefecture": "長崎県",
+  "prec_no": 84,
+  "block_no": "47843",
+  "verified": false
+ },
+ {
+  "name": "佐賀",
+  "kana": "サガ",
+  "prefecture": "佐賀県",
+  "prec_no": 85,
+  "block_no": "47813",
+  "verified": false
+ },
+ {
+  "name": "熊本",
+  "kana": "クマモト",
+  "prefecture": "熊本県",
+  "prec_no": 86,
+  "block_no": "47819",
+  "verified": false
+ },
+ {
+  "name": "人吉",
+  "kana": "ヒトヨシ",
+  "prefecture": "熊本県",
+  "prec_no": 86,
+  "block_no": "47824",
+  "verified": false
+ },
+ {
+  "name": "牛深",
+  "kana": "ウシブカ",
+  "prefecture": "熊本県",
+  "prec_no": 86,
+  "block_no": "47838",
+  "verified": false
+ },
+ {
+  "name": "延岡",
+  "kana": "ノベオカ",
+  "prefecture": "宮崎県",
+  "prec_no": 87,
+  "block_no": "47822",
+  "verified": false
+ },
+ {
+  "name": "宮崎",
+  "kana": "ミヤザキ",
+  "prefecture": "宮崎県",
+  "prec_no": 87,
+  "block_no": "47830",
+  "verified": false
+ },
+ {
+  "name": "都城",
+  "kana": "ミヤコノジョウ",
+  "prefecture": "宮崎県",
+  "prec_no": 87,
+  "block_no": "47829",
+  "verified": false
+ },
+ {
+  "name": "油津",
+  "kana": "アブラツ",
+  "prefecture": "宮崎県",
+  "prec_no": 87,
+  "block_no": "47835",
+  "verified": false
+ },
+ {
+  "name": "阿久根",
+  "kana": "アクネ",
+  "prefecture": "鹿児島県",
+  "prec_no": 88,
+  "block_no": "47823",
+  "verified": false
+ },
+ {
+  "name": "鹿児島",
+  "kana": "カゴシマ",
+  "prefecture": "鹿児島県",
+  "prec_no": 88,
+  "block_no": "47827",
+  "verified": false
+ },
+ {
+  "name": "枕崎",
+  "kana": "マクラザキ",
+  "prefecture": "鹿児島県",
+  "prec_no": 88,
+  "block_no": "47831",
+  "verified": false
+ },
+ {
+  "name": "種子島",
+  "kana": "タネガシマ",
+  "prefecture": "鹿児島県",
+  "prec_no": 88,
+  "block_no": "47837",
+  "verified": false
+ },
+ {
+  "name": "屋久島",
+  "kana": "ヤクシマ",
+  "prefecture": "鹿児島県",
+  "prec_no": 88,
+  "block_no": "47836",
+  "verified": true
+ },
+ {
+  "name": "名瀬",
+  "kana": "ナゼ",
+  "prefecture": "鹿児島県",
+  "prec_no": 88,
+  "block_no": "47909",
+  "verified": false
+ },
+ {
+  "name": "沖永良部",
+  "kana": "オキノエラブ",
+  "prefecture": "鹿児島県",
+  "prec_no": 88,
+  "block_no": "47942",
+  "verified": false
+ },
+ {
+  "name": "名護",
+  "kana": "ナゴ",
+  "prefecture": "沖縄県",
+  "prec_no": 91,
+  "block_no": "47940",
+  "verified": false
+ },
+ {
+  "name": "久米島",
+  "kana": "クメジマ",
+  "prefecture": "沖縄県",
+  "prec_no": 91,
+  "block_no": "47929",
+  "verified": false
+ },
+ {
+  "name": "那覇",
+  "kana": "ナハ",
+  "prefecture": "沖縄県",
+  "prec_no": 91,
+  "block_no": "47936",
+  "verified": true
+ },
+ {
+  "name": "南大東",
+  "kana": "ミナミダイトウ）（南大東島（ミナミダイトウジマ）",
+  "prefecture": "沖縄県",
+  "prec_no": 92,
+  "block_no": "47945",
+  "verified": false
+ },
+ {
+  "name": "宮古島",
+  "kana": "ミヤコジマ",
+  "prefecture": "沖縄県",
+  "prec_no": 93,
+  "block_no": "47927",
+  "verified": false
+ },
+ {
+  "name": "与那国島",
+  "kana": "ヨナグニジマ",
+  "prefecture": "沖縄県",
+  "prec_no": 94,
+  "block_no": "47912",
+  "verified": false
+ },
+ {
+  "name": "西表島",
+  "kana": "イリオモテジマ",
+  "prefecture": "沖縄県",
+  "prec_no": 94,
+  "block_no": "47917",
+  "verified": false
+ },
+ {
+  "name": "石垣島",
+  "kana": "イシガキジマ",
+  "prefecture": "沖縄県",
+  "prec_no": 91,
+  "block_no": "47918",
+  "verified": true
+ }
+]

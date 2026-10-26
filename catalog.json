@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "updated": "2026-10-27",
-  "note": "verified: confirmed=ページ内容を実際に確認 / table=出典対応表(~/.claude/CLAUDE.md)由来で未再確認。static=パラメータなしでリンク検査できる",
+  "note": "verified: confirmed=ページ内容を実際に確認 / table=出典対応表(~/.claude/CLAUDE.md)由来で未再確認",
   "items": [
     {
       "id": "forecast_short",
@@ -23,8 +23,9 @@
         }
       },
       "note": "",
-      "verified": "table",
-      "static": false
+      "verified": "confirmed",
+      "static": false,
+      "verified_date": "2026-10-27"
     },
     {
       "id": "forecast_weekly",
@@ -44,8 +45,9 @@
         }
       },
       "note": "短期と同じページ内の週間欄",
-      "verified": "table",
-      "static": false
+      "verified": "confirmed",
+      "static": false,
+      "verified_date": "2026-10-27"
     },
     {
       "id": "warning_map",
@@ -65,8 +67,9 @@
         }
       },
       "note": "防災情報は公式ページを先に示す",
-      "verified": "table",
-      "static": false
+      "verified": "confirmed",
+      "static": false,
+      "verified_date": "2026-10-27"
     },
     {
       "id": "warning_timeline",
@@ -79,8 +82,9 @@
       "url": "https://www.jma.go.jp/bosai/warning_timeline/",
       "params": {},
       "note": "",
-      "verified": "table",
-      "static": true
+      "verified": "confirmed",
+      "static": true,
+      "verified_date": "2026-10-27"
     },
     {
       "id": "early_warning",
@@ -99,8 +103,9 @@
         }
       },
       "note": "",
-      "verified": "table",
-      "static": false
+      "verified": "confirmed",
+      "static": false,
+      "verified_date": "2026-10-27"
     },
     {
       "id": "information",
@@ -119,8 +124,9 @@
         }
       },
       "note": "",
-      "verified": "table",
-      "static": false
+      "verified": "confirmed",
+      "static": false,
+      "verified_date": "2026-10-27"
     },
     {
       "id": "typhoon",
@@ -133,8 +139,9 @@
       "url": "https://www.jma.go.jp/bosai/information/typhoon.html#",
       "params": {},
       "note": "",
-      "verified": "table",
-      "static": true
+      "verified": "confirmed",
+      "static": true,
+      "verified_date": "2026-10-27"
     },
     {
       "id": "tsunami",
@@ -147,8 +154,9 @@
       "url": "https://www.jma.go.jp/bosai/map.html#5/38.411/143.987/&elem=info&contents=tsunami",
       "params": {},
       "note": "",
-      "verified": "table",
-      "static": true
+      "verified": "confirmed",
+      "static": true,
+      "verified_date": "2026-10-27"
     },
     {
       "id": "tide",
@@ -173,9 +181,10 @@
           "resolver": "area.json"
         }
       },
-      "note": "パラメータが多い。観測所は検索ツールで引く",
-      "verified": "table",
-      "static": false
+      "note": "パラメータが多い。観測所は検索ツールで引く。トップを開くとURLが東京(class20s=1310200,class30s=13001100)で補完されることを確認",
+      "verified": "confirmed",
+      "static": false,
+      "verified_date": "2026-10-27"
     },
     {
       "id": "monthly_forecast",
@@ -187,7 +196,7 @@
       ],
       "url": "https://www.data.jma.go.jp/cpd/longfcst/kaisetsu/?term=P1M",
       "params": {},
-      "note": "",
+      "note": "ページは「季節予報解説資料」で存在確認。term指定で1か月/3か月に切り替わるかは未確認（data.jma.go.jpはブラウザ操作不可）",
       "verified": "table",
       "static": true
     },
@@ -201,14 +210,14 @@
       ],
       "url": "https://www.data.jma.go.jp/cpd/longfcst/kaisetsu/?term=P3M",
       "params": {},
-      "note": "",
+      "note": "ページは「季節予報解説資料」で存在確認。term指定で1か月/3か月に切り替わるかは未確認（data.jma.go.jpはブラウザ操作不可）",
       "verified": "table",
       "static": true
     },
     {
       "id": "past_data_search",
       "category": "過去データ",
-      "title": "過去の気象データ検索（地点・日・月）",
+      "title": "過去の気象データ（日ごとの値・気象官署）",
       "intents": [
         "去年の気温",
         "過去の降水量",
@@ -218,7 +227,7 @@
         "去年",
         "昨年"
       ],
-      "url": "https://www.data.jma.go.jp/stats/etrn/index.php?prec_no={prec_no}&block_no={block_no}&year={year}&month={month}&day={day}&view=",
+      "url": "https://www.data.jma.go.jp/stats/etrn/view/daily_s1.php?prec_no={prec_no}&block_no={block_no}&year={year}&month={month}&day=&view=",
       "params": {
         "prec_no": {
           "type": "int",
@@ -233,15 +242,12 @@
         },
         "month": {
           "type": "int"
-        },
-        "day": {
-          "type": "int",
-          "optional": true
         }
       },
-      "note": "URLパターンは既知。観測所辞書は未整備（Phase1で作成）。1976年以前を含む検索はview=h0/np0で確認",
-      "verified": "table",
-      "static": false
+      "note": "旧案のindex.php?...&view=は地点選択画面に留まり表が出ない。daily_s1.phpで日ごとの値の表が直接開く(那覇47936/prec_no=91で確認)。アメダス地点はdaily_a1.php。1976年以前を含む検索はview=h0/np0で確認",
+      "verified": "confirmed",
+      "static": false,
+      "verified_date": "2026-10-27"
     },
     {
       "id": "past_data_menu",

@@ -5,9 +5,11 @@ URLは必ずカタログのテンプレートから組み立て、自由記述�
 """
 import json
 import re
+from datetime import date
 from pathlib import Path
 
 from .areas import resolve
+from .stations import find_station
 
 _CATALOG = Path(__file__).resolve().parent.parent / "catalog.json"
 
@@ -47,6 +49,33 @@ def extract_place(question):
     return best
 
 
+def parse_year_month(question, today=None):
+    """「去年の8月」「2025年3月」「先月」「今月」などから (year, month) を返す。分からない要素は None。"""
+    today = today or date.today()
+    year = month = None
+    m = re.search(r"(\d{4})年", question)
+    if m:
+        year = int(m.group(1))
+    elif "一昨年" in question:
+        year = today.year - 2
+    elif "去年" in question or "昨年" in question:
+        year = today.year - 1
+    elif "今年" in question:
+        year = today.year
+    m = re.search(r"(\d{1,2})月", question)
+    if m and 1 <= int(m.group(1)) <= 12:
+        month = int(m.group(1))
+    elif "先月" in question:
+        month = today.month - 1 or 12
+        year = year or (today.year if today.month > 1 else today.year - 1)
+    elif "今月" in question:
+        month = today.month
+        year = year or today.year
+    if month and year is None:
+        year = today.year if month <= today.month else today.year - 1
+    return year, month
+
+
 def build_url(item, values):
     """テンプレートへ値を埋める。足りない params があれば missing に返す。"""
     missing = [k for k, spec in item["params"].items()
@@ -75,6 +104,17 @@ def guide(question):
                 for c in cands[:6]]}
         values["office_code"] = cands[0]["office_code"]
         result["place"] = f'{cands[0]["office_name"]}'
+    if "prec_no" in item["params"]:
+        st = find_station(question)
+        if st is None:
+            return {**result, "status": "need_place", "hint": "気象官署の地点名（例: 那覇、東京）が必要です。アメダス地点は未対応"}
+        year, month = parse_year_month(question)
+        values.update(prec_no=st["prec_no"], block_no=st["block_no"])
+        if year and month:
+            values.update(year=year, month=month)
+        result["place"] = st["name"]
+        if not st["verified"]:
+            result["note"] = "prec_noは推定値です。開けない場合は気象庁の地点選択ページから選んでください"
     url, missing = build_url(item, values)
     if missing:
         return {**result, "status": "need_more", "missing": missing}
