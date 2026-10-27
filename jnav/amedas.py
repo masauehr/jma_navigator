@@ -13,13 +13,9 @@ def _load():
     global _cache
     if _cache is None:
         raw = json.loads(_DATA.read_text(encoding="utf-8"))
-        # 積雪の深さ用の観測所（種類が雪、または番号下3桁が900以上）は、
-        # 同名・同管内に気温などを観測する地点があれば除く（同じ地名が二重に出るのを防ぐ）
-        def is_snow(x):
-            return x["kind"] == "雪" or int(x["amdno"][2:]) >= 900
-
-        keep = {(x["name"], x["subprefecture"]) for x in raw if not is_snow(x)}
-        _cache = [x for x in raw if not is_snow(x) or (x["name"], x["subprefecture"]) not in keep]
+        # アメダス画面(amedastable.json)に載っている地点だけを使う。
+        # 積雪の深さ用の観測所（種類が雪・番号下3桁900以上）は載っておらず、リンクが開けない
+        _cache = [x for x in raw if x.get("in_viewer")]
     return _cache
 
 
@@ -34,3 +30,32 @@ def find_stations(question):
             elif n == best_len:
                 found.append(s)
     return found
+
+
+# 質問文の語 → 観測要素。その要素を観測しない地点なら案内に注意を付ける
+MEASURES = [("気温", "気温"), ("何度", "気温"), ("風", "風"), ("降水", "降水量"), ("雨", "降水量"),
+            ("日照", "日照"), ("湿度", "湿度"), ("気圧", "気圧")]
+
+
+def wanted_element(question):
+    for kw, elem in MEASURES:
+        if kw in question:
+            return elem
+    return None
+
+
+def nearest(lat, lon, n=3, need=None):
+    """緯度経度に近い観測所をn件返す（近い順）。need に観測要素名を渡すと、それを観測する地点に限る。
+
+    距離は緯度経度の簡易計算（km）。戻り値: [(距離km, 観測所), ...]
+    """
+    import math
+    out = []
+    for st in _load():
+        if need and need not in st.get("observes", []):
+            continue
+        dy = (st["lat"] - lat) * 111.0
+        dx = (st["lon"] - lon) * 111.0 * math.cos(math.radians(lat))
+        out.append((round(math.hypot(dx, dy), 1), st))
+    out.sort(key=lambda x: x[0])
+    return out[:n]

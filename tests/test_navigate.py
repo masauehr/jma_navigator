@@ -39,6 +39,14 @@ class TestGuide(unittest.TestCase):
         self.assertEqual(r["status"], "need_place")
         self.assertEqual({c["area"] for c in r["candidates"]}, {"東京", "広島"})
 
+    def test_アメダス_観測しない要素は注意(self):
+        r = guide("渡名喜の今の気温")  # 渡名喜は雨量のみ
+        self.assertEqual(r["status"], "ok")
+        self.assertIn("気温を観測していません", r["note"])
+
+    def test_アメダス_積雪用番号は除外(self):
+        self.assertIn("amdno=62078", guide("大阪の今の気温")["url"])
+
     def test_沖縄の離島はprec_no91(self):
         self.assertIn("prec_no=91&block_no=47918", guide("2025年8月の石垣島の気温")["url"])
 

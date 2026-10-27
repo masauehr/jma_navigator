@@ -8,7 +8,7 @@ import re
 from datetime import date
 from pathlib import Path
 
-from .amedas import find_stations
+from .amedas import find_stations, nearest, wanted_element
 from .areas import resolve
 from .stations import find_station
 
@@ -122,6 +122,13 @@ def guide(question, item_id=None, place_text=None):
                 {"amdno": x["amdno"], "place": x["name"], "area": x["subprefecture"]} for x in sts[:6]]}
         values["amdno"] = sts[0]["amdno"]
         result["place"] = sts[0]["name"]
+        elem = wanted_element(question)
+        if elem and elem not in sts[0]["observes"]:
+            near = nearest(sts[0]["lat"], sts[0]["lon"], 1, need=elem)
+            hint = f'{sts[0]["name"]}は{elem}を観測していません。'
+            if near:
+                hint += f'最寄りで観測する地点は{near[0][1]["name"]}（約{near[0][0]}km）です。'
+            result["note"] = hint
     if "prec_no" in item["params"]:
         st = find_station(place_q)
         if st is None:
