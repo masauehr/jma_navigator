@@ -1,6 +1,8 @@
 # jma_navigator（気象庁ナビ）設計メモ
 
-開始日: 2026-10-27 / 状態: **Phase 0 ほぼ完了 / Phase 1 ベースライン・LLM版実装済み / Phase 2 評価セット第1・2版を実施**
+> 中断・再開の要点は末尾の「一旦中断時点のまとめ」を参照。
+
+開始日: 2026-10-27 / 状態: **一旦中断（2026-10-27）。Phase 0〜2 完了、Phase 3 以降は未着手**
 
 「知りたい情報」を日本語で伝えると、気象庁HPの**どのページを開けばよいか**を案内するアシスタント。
 「となりの孫」（`~/projects/tonari_no_mago`）の考え方を土台にしつつ、気象庁HP向けに方式を見直す。
@@ -202,3 +204,41 @@ Chrome 実機で bosai 系を開いて確認した結果、15件中 **13件が c
 2. 観測所辞書の `prec_no` を検証する（沖縄以外の抜き取り確認。一致しない理由も調べる）。アメダス用 `block_no` の入手方法を調べる。
 3. Phase 3: カタログのリンク検査と、辞書（amedastable・area.json・観測所）の鮮度点検。ネットワーク確認スクリプトは実行前にユーザー確認を取る。
 4. Phase 4: Web画面（質問欄・結果カード・出典と注意文の固定表示）。防災系は公式ページを先に・大きく示し、判断を断定しない。
+
+## 17. 一旦中断時点のまとめ（2026-10-27）
+
+### できていること
+| 領域 | 内容 |
+|------|------|
+| 方式 | 質問 → ページ選択（カタログ） → 地名解決（辞書） → URL組み立て。URLはLLMに作らせない（誤っても別ページ止まり） |
+| カタログ | `catalog.json` 21項目（天気・防災・観測・長期・過去データ）。19項目はChrome実機/WebFetchで内容確認済み（confirmed）、長期予報2件のみ未確認 |
+| 辞書 | `data/area.json`（予報区・市町村）、`data/amedastable.json`＋`amedas_stations.json`（アメダス1,622地点のうち画面で開ける1,286地点・緯度経度・観測要素）、`data/etrn_stations.json`（気象官署153地点） |
+| エンジン | `jnav/`: `areas.py`・`amedas.py`・`stations.py`・`navigate.py`（キーワード版）・`llm.py`（LLM版・CLI経由） |
+| 評価 | `eval/questions.json`（62問）・`questions_v2.json`（36問）。LLM Haiku: 62/62・35/36、キーワード: 56・31 |
+| テスト | `python3 -m unittest discover -s tests`（18件OK）、`python3 tools/validate_catalog.py`（21件OK） |
+
+### 使い方（コマンド）
+- キーワード版: `python3 -m jnav "明日の那覇の天気"`
+- LLM版（Claude Code CLI＝サブスク消費）: `python3 -c "from jnav.llm import guide_llm; print(guide_llm('質問'))"`
+- 評価: `python3 eval/run_eval.py --set questions|questions_v2 --engine keyword|llm --model haiku|sonnet`
+- アメダス辞書の再生成: `python3 tools/build_amedas_stations.py ame_master.pdf`（`pdftotext` が必要。原本PDFは `https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf`）
+
+### 未解決・要確認
+1. **`prec_no` の検証**（過去データURL）: 確認済みは4地点（那覇91・江差24・屋久島88・石垣島91）。残り149地点は観測所番号の先頭2桁からの推定。沖縄の92〜94は91に直す規則を入れた。ユーザーは「一致しないのはおかしい気がする」との見解で、原因（etrn側の番号体系）を要調査。
+2. **アメダス用 `block_no`**（`daily_a1.php`）: PDFにも原本テーブルにもなく、観測所番号の下4桁では開けない。アメダス専用地点の過去データは未対応（聞き返し）。
+3. **長期予報2件の `term` 切替**（`monthly_forecast`・`three_month_forecast`）: `www.data.jma.go.jp` はブラウザ操作不可。手動確認が必要。
+4. **`elems`（観測要素8桁）の読み方**は推定。
+5. 評価は自作で易しめ。実際の利用者の質問分布ではない。LLMの項目選択は揺れる質問がある。
+
+### 方針・制約（再開時に守ること）
+- ネットワーク確認スクリプト（リンク検査・prec_no検証）は、実行前にユーザーへ確認する（グローバル設定で curl 等は禁止のため、Python標準ライブラリでの取得も同趣旨で確認を取る）。
+- 他リポジトリと部品を共有しない。`common/` のデータは必要分を `data/` に複製して使う（出所はこのmdに記録）。
+- 防災情報は断定しない。公式ページを先に・大きく示し、出典リンクを付ける。
+- 変更したら `pc_docs/manuals/jma-app-suite/jma-navigator.md` にも同じ内容をコピーし、`pc_docs/README.md` の表を保つ。
+
+### 再開するとき（推奨順）
+1. `prec_no` を抜き取り検証（北海道・鹿児島・東北など各数地点）し、規則の例外を洗い出す。
+2. 長期予報の `term` を手動確認 → `catalog.json` を `confirmed` に。
+3. Phase 3: リンク検査（静的URLのみHTTP、ハッシュ付きはブラウザ）と辞書の鮮度点検（`amedastable.json`・`area.json` を原本と比較）。launchdで週次。
+4. Phase 4: Web画面（質問欄・結果カード・出典と注意文の固定表示）。LLM呼び出しはプロキシ経由にしてAPIキーを画面側に置かない。
+5. Phase 5（任意）: 孫方式の画面ガイドをフォールバックに。
