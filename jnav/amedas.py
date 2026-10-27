@@ -29,6 +29,11 @@ def find_stations(question):
                 best_len, found = n, [s]
             elif n == best_len:
                 found.append(s)
+    if len(found) > 1:
+        # 「広島の府中市」: 同じ長さの名前が並ぶとき、「府中市」のように市町村名として書かれたものを優先する
+        as_city = [x for x in found if any(x["name"] + suf in question for suf in ("市", "町", "村", "区"))]
+        if as_city:
+            found = as_city
     return found
 
 

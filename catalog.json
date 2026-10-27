@@ -318,6 +318,97 @@
       "verified": "confirmed",
       "verified_date": "2026-10-27",
       "static": false
+    },
+    {
+      "id": "nowcast",
+      "category": "防災",
+      "title": "雨雲の動き・雷・竜巻（ナウキャスト）",
+      "intents": [
+        "雨雲",
+        "雨雲レーダー",
+        "雨雲の動き",
+        "今雨降ってる",
+        "雷",
+        "竜巻",
+        "線状降水帯"
+      ],
+      "url": "https://www.jma.go.jp/bosai/nowc/",
+      "params": {},
+      "note": "1時間先までの雨雲の動き。線状降水帯予測マップも同ページ",
+      "verified": "confirmed",
+      "verified_date": "2026-10-27",
+      "static": true
+    },
+    {
+      "id": "kikikuru",
+      "category": "防災",
+      "title": "キキクル（危険度分布）",
+      "intents": [
+        "キキクル",
+        "危険度分布",
+        "土砂災害の危険度",
+        "洪水の危険度",
+        "浸水",
+        "避難"
+      ],
+      "url": "https://www.jma.go.jp/bosai/risk/",
+      "params": {},
+      "note": "避難の判断は自治体の避難情報と合わせる。断定せず公式ページを示す",
+      "verified": "confirmed",
+      "verified_date": "2026-10-27",
+      "static": true
+    },
+    {
+      "id": "weather_map",
+      "category": "天気",
+      "title": "天気図",
+      "intents": [
+        "天気図",
+        "高気圧",
+        "低気圧",
+        "前線",
+        "等圧線"
+      ],
+      "url": "https://www.jma.go.jp/bosai/weather_map/",
+      "params": {},
+      "note": "",
+      "verified": "confirmed",
+      "verified_date": "2026-10-27",
+      "static": true
+    },
+    {
+      "id": "earthquake",
+      "category": "防災",
+      "title": "地震情報（震源・震度）",
+      "intents": [
+        "地震",
+        "震度",
+        "震源",
+        "揺れ"
+      ],
+      "url": "https://www.jma.go.jp/bosai/map.html#contents=earthquake_map",
+      "params": {},
+      "note": "",
+      "verified": "confirmed",
+      "verified_date": "2026-10-27",
+      "static": true
+    },
+    {
+      "id": "himawari",
+      "category": "観測",
+      "title": "気象衛星ひまわり",
+      "intents": [
+        "衛星",
+        "ひまわり",
+        "衛星画像",
+        "雲の画像"
+      ],
+      "url": "https://www.jma.go.jp/bosai/map.html#contents=himawari",
+      "params": {},
+      "note": "",
+      "verified": "confirmed",
+      "verified_date": "2026-10-27",
+      "static": true
     }
   ]
 }

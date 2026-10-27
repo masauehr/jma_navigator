@@ -34,20 +34,43 @@ def select_item(question, items=None):
 
 
 def extract_place(question):
-    """質問文中の部分文字列から地名を探す。見つかった候補リストを返す（曖昧なら複数 office）。"""
-    best = []
-    best_len = 0
-    for n in range(6, 1, -1):
-        for i in range(len(question) - n + 1):
-            frag = question[i:i + n]
-            if not re.search(r"[一-龥ぁ-んァ-ヶ]", frag):
-                continue
-            cands = [c for c in resolve(frag) if c["score"] >= 80]
-            if cands and n > best_len:
-                best, best_len = cands, n
-        if best:
-            break
-    return best
+    """質問文中の部分文字列から地名を探し、候補のリストを返す（曖昧なら複数 office）。
+
+    - 1つの予報区に決まる語（「東京」「札幌」）があれば、それを優先する。
+      「東京の府中市」「北海道の札幌」のように、広い語や同名の語が混じっても絞り込める。
+    - 決まる語が複数の予報区に分かれる（「那覇と東京」）、または全て曖昧なら、聞き返し用に候補を返す。
+    - ひらがなだけの語は、かなの前方一致（score 60）も認める（「おおさか」）。
+    """
+    def collect(min_score, min_len, kana_only):
+        found = {}
+        for n in range(6, min_len - 1, -1):
+            for i in range(len(question) - n + 1):
+                frag = question[i:i + n]
+                if frag in found or not re.search(r"[一-龥ぁ-んァ-ヶ]", frag):
+                    continue
+                if kana_only and not re.fullmatch(r"[ぁ-ん]+", frag):
+                    continue
+                cands = [c for c in resolve(frag) if c["score"] >= min_score]
+                if cands:
+                    found[frag] = cands
+        return found
+
+    frags = collect(80, 2, False)
+    if not frags:  # 見つからないときだけ、ひらがな3字以上のかな前方一致を試す（ノイズ防止）
+        frags = collect(60, 3, True)
+    if not frags:
+        return []
+    unique = {}
+    for frag, cands in frags.items():
+        offices = {c["office_code"] for c in cands}
+        if len(offices) == 1:
+            unique[next(iter(offices))] = cands
+    if len(unique) == 1:
+        return next(iter(unique.values()))
+    if len(unique) > 1:
+        return [c for cs in unique.values() for c in cs]  # 異なる地域が混在: 聞き返す
+    longest = max(frags, key=len)
+    return frags[longest]
 
 
 def parse_year_month(question, today=None):
@@ -95,6 +118,18 @@ def guide(question, item_id=None, place_text=None):
     item_id / place_text を渡すと、項目選択・地名抽出をその値で置き換える（LLM版が使う）。
     項目の選択以外（地域解決・URL組み立て）は常に決定論的で、LLMはURLを作らない。
     """
+    if place_text:
+        # LLMが取り出した地名で解決し、曖昧なときは質問全体（「東京の府中市」の県名など）で絞り直す
+        r = _guide(question, item_id, place_text)
+        if r.get("status") == "need_place":
+            r2 = _guide(question, item_id, None)
+            if r2.get("status") != "need_place":
+                return r2
+        return r
+    return _guide(question, item_id, None)
+
+
+def _guide(question, item_id, place_text):
     if item_id is not None:
         item = next((i for i in load_catalog() if i["id"] == item_id), None)
     else:
@@ -117,6 +152,10 @@ def guide(question, item_id=None, place_text=None):
         sts = find_stations(place_q)
         if not sts:
             return {**result, "status": "need_place", "hint": "アメダス観測所名（例: 石垣島、伊是名）が必要です"}
+        if len(sts) > 1:
+            narrowed = [x for x in sts if x["subprefecture"] in place_q]  # 「広島の府中」のような県名つき
+            if len(narrowed) == 1:
+                sts = narrowed
         if len(sts) > 1:
             return {**result, "status": "need_place", "candidates": [
                 {"amdno": x["amdno"], "place": x["name"], "area": x["subprefecture"]} for x in sts[:6]]}

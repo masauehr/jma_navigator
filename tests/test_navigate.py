@@ -47,6 +47,13 @@ class TestGuide(unittest.TestCase):
     def test_アメダス_積雪用番号は除外(self):
         self.assertIn("amdno=62078", guide("大阪の今の気温")["url"])
 
+    def test_県名つきで同名を絞り込む(self):
+        self.assertIn("amdno=67326", guide("広島の府中市の今の気温")["url"])  # 広島県の府中
+        self.assertTrue(guide("東京の府中市の天気")["url"].endswith("area_code=130000"))
+
+    def test_ひらがな地名(self):
+        self.assertTrue(guide("おおさかの天気")["url"].endswith("area_code=270000"))
+
     def test_沖縄の離島はprec_no91(self):
         self.assertIn("prec_no=91&block_no=47918", guide("2025年8月の石垣島の気温")["url"])
 

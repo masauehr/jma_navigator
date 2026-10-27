@@ -1,6 +1,6 @@
 """評価セット(eval/questions.json)で guide() の正答率を測る。標準ライブラリのみ。
 
-使い方: python3 eval/run_eval.py [--engine keyword|llm] [--model haiku|sonnet]
+使い方: python3 eval/run_eval.py [--engine keyword|llm] [--model haiku|sonnet] [--set questions|questions_v2]
 正解の判定: status が一致し、期待する item / office_code / amdno / block_no / 年月が一致すること。
 """
 import argparse
@@ -23,7 +23,8 @@ def check(exp, got, today):
         return why
     if exp["status"] == "no_match":
         return why
-    if exp["item"] and got.get("item") != exp["item"]:
+    want_items = exp["item"] if isinstance(exp["item"], list) else [exp["item"]]
+    if exp["item"] and got.get("item") not in want_items:
         why.append(f'item {got.get("item")} != {exp["item"]}')
     url = got.get("url", "")
     for key, pat in (("office_code", r"[aA]rea_?[cC]ode=(\d+)"), ("amdno", r"amdno=(\d+)"),
@@ -42,9 +43,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--engine", default="keyword", choices=["keyword", "llm"])
     ap.add_argument("--model", default="haiku")
+    ap.add_argument("--set", default="questions", help="eval/ 内の評価セット名（questions / questions_v2）")
     ap.add_argument("--limit", type=int, default=0)
     a = ap.parse_args()
-    qs = json.loads((ROOT / "eval" / "questions.json").read_text(encoding="utf-8"))
+    qs = json.loads((ROOT / "eval" / f"{a.set}.json").read_text(encoding="utf-8"))
     if a.limit:
         qs = qs[:a.limit]
     if a.engine == "llm":
@@ -61,7 +63,7 @@ def main():
         if why:
             print(f'NG {e["q"]}  → {"; ".join(why)}')
     print(f"{a.engine}{'/' + a.model if a.engine == 'llm' else ''}: {ok}/{len(qs)}")
-    out = ROOT / "eval" / f"result_{a.engine}{'_' + a.model if a.engine == 'llm' else ''}.json"
+    out = ROOT / "eval" / f"result_{a.set}_{a.engine}{'_' + a.model if a.engine == 'llm' else ''}.json"
     out.write_text(json.dumps(results, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
