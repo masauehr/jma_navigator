@@ -367,7 +367,7 @@ Chrome 実機で bosai 系を開いて確認した結果、15件中 **13件が c
 ### 気象庁側の対応状況（Chrome実機で確認）
 | ページ | 全国 | 府県（offices） | 市町村（class20s） | 一次細分（class10s） |
 |--------|------|----------------|--------------------|----------------------|
-| 警報・注意報 | `map.html#contents=warning`（全国の地図） | `map.html#contents=warning&areaCode=…`（府県の地図） | `warning/#area_type=class20s&area_code=…`（市町村の発表状況） | **非対応**（府県に自動で戻る） |
+| 警報・注意報 | `map.html#contents=warning`（全国の地図） | `warning/#area_type=offices&area_code=…`（府県の発表状況。※旧記載の `map.html#…&areaCode=…` は誤り。§28） | `warning/#area_type=class20s&area_code=…`（市町村の発表状況） | **非対応**（府県に自動で戻る） |
 | 警報等の時系列 | `warning_timeline/` | `#area_type=offices&area_code=…` | `#area_type=class20s&area_code=…` | 未確認 |
 | 天気予報（短期・週間） | — | `#area_type=offices&area_code=…` | `#area_type=class20s&area_code=…`（那覇市で確認） | 未確認 |
 | 早期注意情報 | `map.html#contents=probability` | `probability/#area_type=offices&area_code=…` | 未確認（一次細分は全国地図に戻る） | **非対応** |
@@ -476,3 +476,15 @@ Phase 0 で未整備だった「潮位の観測所と class30 コード」を、
 - **海況ビューア（kaiyo_sokuho_viewer）へのリンクを入れるか**: 入れるなら、個人運営の別アプリである旨の表示と、画面・サーバーの許可ドメインに `kaiyo-sokuho-viewer.onrender.com` を足す必要がある（「リンク先はすべて気象庁のページ」という表記の見直しも要る）。
 - 海域・地点を指定して波浪図を開く（地図の緯度経度指定）は未対応（地名の緯度経度の辞書が要る）。
 - 波浪図のURLは、JMATileの画面状態（`#zoom:…/lat:…/lon:…`）を持つ。指定した場所で開くには別途検証が必要。
+
+## 28. 訂正: 警報・注意報の「府県」が全国の地図になっていた（2026-10-30）
+
+**症状**: 「名護市の警報」で地域の単位「府県」を押しても、沖縄本島地方ではなく全国の地図が開いた（利用者の指摘）。
+
+**原因**: 府県用のURL `map.html#contents=warning&areaCode={office_code}` は、実際に開くと `areaCode` が無視され、全国の地図になる。Phase 0 で「確認済み（confirmed）」としていたが、**ページが開くことしか見ておらず、地域が効くかを確認していなかった**。
+
+**修正**: 府県のURLを、警報・注意報のページ `warning/#area_type=offices&area_code={office_code}&lang=ja`（「沖縄本島地方の警報・注意報」）に変更。市町村（`area_type=class20s`）と同じページで、単位だけが違う。回帰テストを追加（`test_名護市の警報で府県を選ぶと沖縄本島地方`、府県のURLに `map.html` を使わないことも検査）。
+
+**他の項目の再確認**（Chrome実機・沖縄本島地方 471000）: 府県気象情報、早期注意情報、天気予報（短期・週間）、警報等の時系列は、いずれも「沖縄本島地方」で開くことを確認。誤りは `warning_map` の府県URLだけだった。
+
+**教訓・今後**: ハッシュ（`#`以降）付きのURLは、HTTPでは検査できず（§19）、地域パラメータが効かなくても200で返る。カタログに地域付きURLを足すときは、**地域名がページの見出しに出ること**までブラウザで確認する。週次のリンク検査は、この種の誤りを検知できない。

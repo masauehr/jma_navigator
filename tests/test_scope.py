@@ -16,11 +16,18 @@ class TestScope(unittest.TestCase):
     def test_府県の名前なら府県の単位(self):
         r = guide("沖縄の警報は？", item_id="warning_map")
         self.assertEqual(r["scope"], "offices")
-        self.assertIn("areaCode=471000", r["url"])
+        # 府県は警報・注意報のページ（予報区の発表状況）。map.html の areaCode は無視され全国の地図になるため使わない
+        self.assertIn("warning/#area_type=offices&area_code=471000", r["url"])
+        self.assertNotIn("map.html", r["url"])
 
     def test_地名がなければ全国(self):
         r = guide("警報は出ている？", item_id="warning_map")
         self.assertEqual((r["scope"], r["url"]), ("japan", "https://www.jma.go.jp/bosai/map.html#contents=warning"))
+
+    def test_名護市の警報で府県を選ぶと沖縄本島地方(self):
+        r = guide("名護市の警報", item_id="warning_map", scope="offices")
+        self.assertEqual((r["status"], r["scope"], r["place"]), ("ok", "offices", "沖縄本島地方"))
+        self.assertIn("area_code=471000", r["url"])
 
     def test_単位を指定して切り替える(self):
         self.assertEqual(guide("那覇市の警報", item_id="warning_map", scope="offices")["scope"], "offices")

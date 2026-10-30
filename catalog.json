@@ -93,7 +93,7 @@
         "注意報",
         "大雨警報は出ている"
       ],
-      "url": "https://www.jma.go.jp/bosai/map.html#contents=warning&areaCode={office_code}",
+      "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code={office_code}&lang=ja",
       "params": {
         "office_code": {
           "type": "area_office",
@@ -101,10 +101,10 @@
           "example": "471000"
         }
       },
-      "note": "防災情報は公式ページを先に示す。警報・注意報は市町村ごとに発表されるため、市町村の単位では「警報・注意報」の一覧ページ（市町村の発表状況）を開く",
+      "note": "防災情報は公式ページを先に示す。警報・注意報は市町村ごとに発表される。府県・市町村の単位は warning/ ページ（府県は予報区内の市町村の発表状況、市町村は1市町村）。全国は地図。【訂正 2026-10-30】旧URL map.html#contents=warning&areaCode=… は areaCode が無視され全国の地図になるため廃止",
       "verified": "confirmed",
       "static": false,
-      "verified_date": "2026-10-27",
+      "verified_date": "2026-10-30",
       "tags": [
         "warning",
         "rain",
@@ -120,7 +120,7 @@
       ],
       "scope_urls": {
         "japan": "https://www.jma.go.jp/bosai/map.html#contents=warning",
-        "offices": "https://www.jma.go.jp/bosai/map.html#contents=warning&areaCode={office_code}",
+        "offices": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code={office_code}&lang=ja",
         "class20s": "https://www.jma.go.jp/bosai/warning/#area_type=class20s&area_code={class20_code}&lang=ja"
       }
     },
