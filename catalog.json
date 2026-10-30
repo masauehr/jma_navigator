@@ -31,7 +31,9 @@
         "rain",
         "temp",
         "wind",
-        "snow"
+        "snow",
+        "sea",
+        "safety"
       ],
       "when": [
         "now",
@@ -108,7 +110,10 @@
         "rain",
         "wind",
         "snow",
-        "flood"
+        "flood",
+        "sea",
+        "wave",
+        "safety"
       ],
       "when": [
         "now"
@@ -180,7 +185,9 @@
         "warning",
         "rain",
         "wind",
-        "snow"
+        "snow",
+        "wave",
+        "safety"
       ],
       "when": [
         "future"
@@ -321,7 +328,9 @@
       "verified_date": "2026-10-27",
       "tags": [
         "tide",
-        "tsunami"
+        "tsunami",
+        "sea",
+        "wave"
       ],
       "when": [
         "now",
@@ -546,7 +555,8 @@
       "tags": [
         "rain",
         "thunder",
-        "wind"
+        "wind",
+        "safety"
       ],
       "when": [
         "now"
@@ -574,7 +584,8 @@
       "static": true,
       "tags": [
         "rain",
-        "flood"
+        "flood",
+        "safety"
       ],
       "when": [
         "now"

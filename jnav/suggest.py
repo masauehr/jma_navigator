@@ -26,16 +26,23 @@ TOPICS = {
     "warning": ["警報", "注意報", "特別警報", "警戒"],
     "flood": ["洪水", "土砂", "浸水", "氾濫", "危険", "危ない", "あぶない"],
     "observe": ["観測", "アメダス"],
+    "sea": ["海", "海水浴", "釣り", "ビーチ", "サーフ", "マリン", "ダイビング", "シュノーケル", "船", "フェリー"],
+    "wave": ["波", "高波", "うねり", "波浪"],
+    # 出かける前に確認したいという意図。警報・注意報などの確認につなげる（安全かどうかは断定しない）
+    "safety": ["大丈夫", "安全", "行きたい", "行ける", "行って", "出かけ", "お出かけ", "外出", "レジャー", "キャンプ", "登山"],
 }
 # 時間軸の語
 WHEN = {
     "future": ["見通し", "これから", "今後", "明日", "明後日", "あした", "あさって", "週間", "来週", "予報",
-               "数日", "いつまで", "今年の冬", "今年の夏", "来月", "長期", "季節"],
+               "数日", "いつまで", "今年の冬", "今年の夏", "来月", "長期", "季節",
+               "夕方", "今夜", "今夕", "夜", "午後", "のちほど", "あとで"],
     "now": ["今", "現在", "いま", "実況", "さっき", "リアルタイム", "今すぐ"],
     "past": ["去年", "昨年", "過去", "先月", "昨日", "記録", "歴代", "統計", "平年", "何年"],
 }
 TOPIC_LABEL = {"rain": "雨", "typhoon": "台風", "quake": "地震", "tsunami": "津波", "temp": "気温・暑さ寒さ",
-               "wind": "風", "snow": "雪", "weather": "天気全般", "warning": "警報・注意報"}
+               "wind": "風", "snow": "雪", "weather": "天気全般", "warning": "警報・注意報",
+               "sea": "海", "wave": "波", "safety": "出かける前の確認"}
+CHOICE_TOPICS = ("rain", "typhoon", "quake", "tsunami", "temp", "wind", "snow", "sea", "weather", "warning")
 WHEN_LABEL = {"now": "今の状況", "future": "これからの見通し", "past": "過去の記録"}
 
 W_TOPIC, W_WHEN, W_REGION = 4, 3, 2
@@ -47,9 +54,19 @@ def _hits(question, table):
     return {k for k, words in table.items() if any(w in question for w in words)}
 
 
+def _topic_hits(question):
+    hits = _hits(question, TOPICS)
+    if "wave" in hits and not _hits(question.replace("津波", ""), {"wave": TOPICS["wave"]}):
+        hits.discard("wave")  # 「津波」の「波」は波浪の話題ではない
+    return hits
+
+
 def _when_hits(question):
     # 「今年の冬」「今月」「今週」の「今」は、いま(now)ではなくこれから(future)の意味で使われる
-    return _hits(re.sub(r"今(年|月|週)", "", question), WHEN) | _hits(question, {"future": ["今年の冬", "今年の夏", "今週", "今月"]})
+    hits = _hits(re.sub(r"今(年|月|週)", "", question), WHEN) | _hits(question, {"future": ["今年の冬", "今年の夏", "今週", "今月"]})
+    if re.search(r"今日|本日|きょう", question):
+        hits |= {"now", "future"}  # 「今日」は、いまとこれからの両方
+    return hits
 
 
 def _place_kind(question):
@@ -79,7 +96,7 @@ def rank(question, refine=None, exclude=(), items=None):
     """(点数, 項目, 理由) のリストを点数降順で返す。点数が基準未満の項目は含めない。"""
     items = items or load_catalog()
     refine = refine or {}
-    q_topics = _hits(question, TOPICS)
+    q_topics = _topic_hits(question)
     q_when = _when_hits(question)
     place = _place_kind(question)
     out = []
@@ -119,7 +136,7 @@ def choices(question):
     """候補がないとき・「違う」のときに出す、絞り込みの選択肢。"""
     return {
         "when": [{"value": k, "label": v} for k, v in WHEN_LABEL.items()],
-        "topic": [{"value": k, "label": v} for k, v in TOPIC_LABEL.items()],
+        "topic": [{"value": k, "label": TOPIC_LABEL[k]} for k in CHOICE_TOPICS],
     }
 
 

@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from jnav.suggest import rank, suggest  # noqa: E402
+from jnav.suggest import _topic_hits, _when_hits, rank, suggest  # noqa: E402
 
 
 class TestSuggest(unittest.TestCase):
@@ -46,6 +46,23 @@ class TestSuggest(unittest.TestCase):
         r = suggest("ラーメンの作り方")
         self.assertEqual(r["status"], "no_match")
         self.assertTrue(r["choices"]["topic"])
+
+    def test_海と出かける前の確認を拾う(self):
+        q = "今日の夕方、名護市の海に行きたいけど、天気は大丈夫？"
+        self.assertTrue({"sea", "safety", "weather"} <= _topic_hits(q))
+        self.assertTrue({"now", "future"} <= _when_hits(q))
+        r = suggest(q)
+        self.assertEqual((r["item"], r["scope"]), ("forecast_short", "class20s"))
+        self.assertIn("area_code=4720900", r["url"])
+        self.assertIn("warning_map", [a["item"] for a in r["alternatives"]])  # 警報・注意報の確認も案内する
+
+    def test_津波は波浪の話題にしない(self):
+        self.assertNotIn("wave", _topic_hits("津波が心配"))
+        self.assertIn("wave", _topic_hits("高波が心配"))
+
+    def test_夕方や夜はこれから(self):
+        self.assertIn("future", _when_hits("夕方の雨"))
+        self.assertIn("future", _when_hits("今夜の天気"))
 
     def test_点数の順(self):
         scores = [s for s, _, _ in rank("明日の那覇の天気")]

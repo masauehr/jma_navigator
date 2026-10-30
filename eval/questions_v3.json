@@ -130,5 +130,32 @@
   "q": "雨が心配",
   "item": null,
   "status": "choose"
+ },
+ {
+  "q": "今日の夕方、名護市の海に行きたいけど、天気は大丈夫？",
+  "item": [
+   "forecast_short",
+   "warning_map"
+  ],
+  "status": "ok",
+  "office_code": "4720900",
+  "also": [
+   "forecast_short",
+   "warning_map"
+  ]
+ },
+ {
+  "q": "明日、石垣島で釣りに行くけど波は大丈夫？",
+  "item": [
+   "forecast_short",
+   "warning_map",
+   "tide"
+  ],
+  "status": "ok",
+  "office_code": "474000",
+  "also": [
+   "warning_map",
+   "tide"
+  ]
  }
 ]
