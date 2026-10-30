@@ -117,3 +117,8 @@ footer a { color: var(--accent); }
 .feedback button { padding: 4px 14px; font-size: 0.9rem; background: #fff; color: var(--accent); border: 1px solid var(--accent); }
 .refine h2 { font-size: 1rem; }
 .candidates button.on { background: var(--accent); color: #fff; }
+
+/* 地域の単位（全国・府県・市町村） */
+.scope { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; }
+.scope button { padding: 4px 14px; font-size: 0.9rem; background: #fff; color: var(--accent); border: 1px solid var(--accent); }
+.scope button.on { background: var(--accent); color: #fff; }

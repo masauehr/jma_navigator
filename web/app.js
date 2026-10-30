@@ -10,7 +10,7 @@
   var result = document.getElementById("result");
 
   // 「違う」のあとの絞り込み状態。サーバーは何も覚えず、毎回この内容を送る
-  var state = { refine: {}, exclude: [] };
+  var state = { refine: {}, exclude: [], scope: null };
 
   // 気象庁のページ以外へは案内しない
   function isJmaUrl(url) {
@@ -34,7 +34,7 @@
 
   // 新しい質問のときは絞り込みをリセットする
   function newQuestion(question) {
-    state = { refine: {}, exclude: [] };
+    state = { refine: {}, exclude: [], scope: null };
     ask(question);
   }
 
@@ -44,7 +44,7 @@
     fetch("/api/guide", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: question, pick: pick || null, refine: state.refine, exclude: state.exclude })
+      body: JSON.stringify({ question: question, pick: pick || null, refine: state.refine, exclude: state.exclude, scope: state.scope })
     })
       .then(function (r) { return r.json(); })
       .then(function (data) { render(question, data); })
@@ -89,6 +89,8 @@
     if (d.place) card.appendChild(el("p", null, "対象: " + d.place));
     if (d.reason) card.appendChild(el("p", "note", "選んだ理由: " + d.reason));
     card.appendChild(link("open", "気象庁のページを開く", d.url));
+    var sc = scopeRow(d);
+    if (sc) card.appendChild(sc);
     if (bosai) {
       card.appendChild(el("p", "note", "最新の状況は必ず公式ページで確認してください。このアプリは「安全」かどうかを判断しません。"));
     }
@@ -99,21 +101,40 @@
   function renderNeedPlace(card, question, d) {
     card.appendChild(el("h2", null, d.title || "地名を教えてください"));
     var cands = d.candidates || [];
+    var sc = scopeRow(d, question);
     if (!cands.length) {
       card.appendChild(el("p", null, d.hint || "地名（例: 那覇、東京）を入れてもう一度入力してください。"));
+      if (sc) card.appendChild(sc);
       return;
     }
-    card.appendChild(el("p", null, "どの地域ですか？"));
+    card.appendChild(el("p", null, d.scope === "class20s" ? "どの市町村ですか？" : "どの地域ですか？"));
     var box = el("div", "candidates");
     cands.forEach(function (c) {
       var label = c.place + "（" + (c.office_name || c.area || "") + "）";
       var b = el("button", null, label);
       b.type = "button";
-      var pick = c.office_code ? { office_code: c.office_code } : { amdno: c.amdno };
+      var pick = c.class20_code ? { office_code: c.office_code, class20_code: c.class20_code }
+        : c.office_code ? { office_code: c.office_code } : { amdno: c.amdno };
       b.addEventListener("click", function () { ask(question, pick); });
       box.appendChild(b);
     });
     card.appendChild(box);
+    if (sc) card.appendChild(sc);
+  }
+
+  // 地域の単位（全国・府県・市町村）。警報・注意報は市町村ごとに発表されるため、単位を選べるようにする
+  function scopeRow(d, question) {
+    if (!d.scopes || d.scopes.length < 2) return null;
+    var q = question || input.value.trim();
+    var row = el("div", "scope");
+    row.appendChild(el("span", "note", "地域の単位:"));
+    d.scopes.forEach(function (s) {
+      var b = el("button", s.value === d.scope ? "on" : null, s.label);
+      b.type = "button";
+      b.addEventListener("click", function () { state.scope = s.value; ask(q); });
+      row.appendChild(b);
+    });
+    return row;
   }
 
   // 次点以下の候補。リンクが開けるものはリンク、地域が必要なものは説明だけ出す

@@ -54,6 +54,7 @@ def resolve(query):
                 "office_code": office,
                 "office_name": area["offices"][office]["name"],
                 "place": entry["name"],
+                "code": code,
                 "level": level,
                 "score": score,
             }

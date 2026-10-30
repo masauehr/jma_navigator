@@ -22,7 +22,7 @@
           "example": "471000"
         }
       },
-      "note": "",
+      "note": "市町村の単位でも開く（那覇市で実機確認 2026-10-30。画面は府県の予報と同じ内容を市町村の見出しで表示）",
       "verified": "confirmed",
       "static": false,
       "verified_date": "2026-10-27",
@@ -36,7 +36,11 @@
       "when": [
         "now",
         "future"
-      ]
+      ],
+      "scope_urls": {
+        "offices": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code={office_code}",
+        "class20s": "https://www.jma.go.jp/bosai/forecast/#area_type=class20s&area_code={class20_code}"
+      }
     },
     {
       "id": "forecast_weekly",
@@ -59,7 +63,7 @@
           "example": "471000"
         }
       },
-      "note": "短期と同じページ内の週間欄",
+      "note": "市町村の単位でも開く（那覇市で実機確認 2026-10-30。画面は府県の予報と同じ内容を市町村の見出しで表示）",
       "verified": "confirmed",
       "static": false,
       "verified_date": "2026-10-27",
@@ -72,7 +76,11 @@
       ],
       "when": [
         "future"
-      ]
+      ],
+      "scope_urls": {
+        "offices": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code={office_code}",
+        "class20s": "https://www.jma.go.jp/bosai/forecast/#area_type=class20s&area_code={class20_code}"
+      }
     },
     {
       "id": "warning_map",
@@ -91,7 +99,7 @@
           "example": "471000"
         }
       },
-      "note": "防災情報は公式ページを先に示す",
+      "note": "防災情報は公式ページを先に示す。警報・注意報は市町村ごとに発表されるため、市町村の単位では「警報・注意報」の一覧ページ（市町村の発表状況）を開く",
       "verified": "confirmed",
       "static": false,
       "verified_date": "2026-10-27",
@@ -104,7 +112,12 @@
       ],
       "when": [
         "now"
-      ]
+      ],
+      "scope_urls": {
+        "japan": "https://www.jma.go.jp/bosai/map.html#contents=warning",
+        "offices": "https://www.jma.go.jp/bosai/map.html#contents=warning&areaCode={office_code}",
+        "class20s": "https://www.jma.go.jp/bosai/warning/#area_type=class20s&area_code={class20_code}&lang=ja"
+      }
     },
     {
       "id": "warning_timeline",
@@ -120,7 +133,7 @@
       ],
       "url": "https://www.jma.go.jp/bosai/warning_timeline/",
       "params": {},
-      "note": "",
+      "note": "地域の単位（全国・府県・市町村）を選べる。市町村は沖縄の那覇市で実機確認（2026-10-30）",
       "verified": "confirmed",
       "static": true,
       "verified_date": "2026-10-27",
@@ -132,41 +145,12 @@
       ],
       "when": [
         "future"
-      ]
-    },
-    {
-      "id": "warning_timeline_area",
-      "category": "防災",
-      "title": "警報等の時系列（地域を指定）",
-      "intents": [
-        "警報はいつまで",
-        "警報の見通し",
-        "大雨の見通し",
-        "雨の見通し",
-        "大雨はいつまで",
-        "大雨の時間変化"
       ],
-      "url": "https://www.jma.go.jp/bosai/warning_timeline/#area_type=offices&area_code={office_code}&efilter=all&lfilter=all",
-      "params": {
-        "office_code": {
-          "type": "area_office",
-          "resolver": "area.json:offices",
-          "example": "471000"
-        }
-      },
-      "note": "全国版は warning_timeline。地域の予報区を指定して、明日までの警報等の見通しを時系列で見る",
-      "verified": "confirmed",
-      "static": false,
-      "verified_date": "2026-10-30",
-      "tags": [
-        "warning",
-        "rain",
-        "wind",
-        "snow"
-      ],
-      "when": [
-        "future"
-      ]
+      "scope_urls": {
+        "japan": "https://www.jma.go.jp/bosai/warning_timeline/",
+        "offices": "https://www.jma.go.jp/bosai/warning_timeline/#area_type=offices&area_code={office_code}&efilter=all&lfilter=all",
+        "class20s": "https://www.jma.go.jp/bosai/warning_timeline/#area_type=class20s&area_code={class20_code}&efilter=all&lfilter=all"
+      }
     },
     {
       "id": "early_warning",
@@ -290,7 +274,9 @@
       "title": "津波情報",
       "intents": [
         "津波",
-        "津波警報は出ている"
+        "津波警報は出ている",
+        "津波警報",
+        "津波注意報"
       ],
       "url": "https://www.jma.go.jp/bosai/map.html#5/38.411/143.987/&elem=info&contents=tsunami",
       "params": {},

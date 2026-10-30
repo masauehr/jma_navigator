@@ -2,14 +2,14 @@
  {
   "q": "沖縄の大雨の見通し",
   "item": [
-   "warning_timeline_area",
+   "warning_timeline",
    "early_warning"
   ],
   "status": "ok",
   "office_code": "471000",
   "also": [
    "early_warning",
-   "warning_timeline_area"
+   "warning_timeline"
   ]
  },
  {
@@ -20,7 +20,7 @@
   ],
   "status": "ok",
   "also": [
-   "warning_timeline_area",
+   "warning_timeline",
    "early_warning"
   ]
  },

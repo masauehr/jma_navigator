@@ -10,17 +10,17 @@ from jnav.suggest import rank, suggest  # noqa: E402
 class TestSuggest(unittest.TestCase):
     def test_地名があれば地域指定できるページが本命(self):
         r = suggest("沖縄の大雨の見通し")
-        self.assertIn(r["item"], ("early_warning", "warning_timeline_area"))
+        self.assertIn(r["item"], ("early_warning", "warning_timeline"))
         self.assertIn("area_code=471000", r["url"])
         shown = {r["item"]} | {a["item"] for a in r["alternatives"]}
-        self.assertTrue({"early_warning", "warning_timeline_area"} <= shown)  # どちらも案内に出る
+        self.assertTrue({"early_warning", "warning_timeline"} <= shown)  # どちらも案内に出る
 
-    def test_地名がなければ全国版が本命で地域版は聞き返し(self):
+    def test_地名がなければ全国版が本命で地域が要るページは聞き返し(self):
         r = suggest("大雨の見通し")
-        self.assertEqual(r["item"], "warning_timeline")
+        self.assertEqual((r["item"], r["scope"]), ("warning_timeline", "japan"))
         alt = {a["item"]: a for a in r["alternatives"]}
-        self.assertEqual(alt["warning_timeline_area"]["status"], "need_place")
-        self.assertNotIn("url", alt["warning_timeline_area"])
+        self.assertEqual(alt["early_warning"]["status"], "need_place")
+        self.assertNotIn("url", alt["early_warning"])
 
     def test_話題だけなら本命を決めず選択肢を出す(self):
         r = suggest("雨が心配")
@@ -29,9 +29,9 @@ class TestSuggest(unittest.TestCase):
         self.assertGreaterEqual(len(r["alternatives"]), 3)
 
     def test_却下した項目は出ない(self):
-        r = suggest("沖縄の大雨の見通し", exclude=["warning_timeline_area", "warning_timeline"])
+        r = suggest("沖縄の大雨の見通し", exclude=["early_warning", "warning_timeline"])
         shown = [r.get("item")] + [a["item"] for a in r["alternatives"]]
-        self.assertNotIn("warning_timeline_area", shown)
+        self.assertNotIn("early_warning", shown)
         self.assertNotIn("warning_timeline", shown)
 
     def test_絞り込みで時間軸が効く(self):

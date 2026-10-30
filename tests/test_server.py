@@ -89,6 +89,24 @@ class ServerTest(unittest.TestCase):
                                                      "exclude": [1, 2]})[1])
         self.assertIn(d["status"], ("ok", "choose", "need_place"))
 
+    def test_scope_and_city_pick(self):
+        d = json.loads(call(self.port, "/api/guide", {"question": "那覇市の警報は出ている？"})[1])
+        self.assertEqual((d["item"], d["scope"]), ("warning_map", "class20s"))
+        self.assertEqual([s["value"] for s in d["scopes"]], ["japan", "offices", "class20s"])
+        d = json.loads(call(self.port, "/api/guide", {"question": "那覇市の警報は出ている？", "scope": "japan"})[1])
+        self.assertEqual(d["scope"], "japan")
+        # 略称で市町村を選ぶ → 候補ボタン(class20_code)で確定
+        d = json.loads(call(self.port, "/api/guide", {"question": "那覇の警報は出ている？", "scope": "class20s"})[1])
+        self.assertEqual(d["status"], "need_place")
+        cand = d["candidates"][0]
+        d = json.loads(call(self.port, "/api/guide", {"question": "那覇の警報は出ている？", "scope": "class20s",
+                                                     "pick": {"office_code": cand["office_code"], "class20_code": cand["class20_code"]}})[1])
+        self.assertEqual(d["status"], "ok")
+        self.assertIn("area_code=4720100", d["url"])
+        # 不正な単位・候補外のコードは無視される
+        d = json.loads(call(self.port, "/api/guide", {"question": "警報は出ている？", "scope": "evil"})[1])
+        self.assertEqual(d["scope"], "japan")
+
     def test_bad_requests(self):
         self.assertEqual(call(self.port, "/api/guide", {"question": ""})[0], 400)
         self.assertEqual(call(self.port, "/api/guide", {"question": "あ" * 201})[0], 400)

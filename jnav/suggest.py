@@ -100,11 +100,13 @@ def rank(question, refine=None, exclude=(), items=None):
         if refine.get("topic") and refine["topic"] in it.get("tags", []):
             score += W_REFINE
         needs = set(it["params"]) & {"office_code", "amdno", "prec_no"}
-        region_ok = bool(needs) and place is not None
-        if needs and place is not None:
+        su = set(it.get("scope_urls", {}))
+        regional = bool(needs) or bool(su - {"japan"})  # 地域を指定して開けるページ
+        region_ok = regional and place is not None
+        if regional and place is not None:
             score += W_REGION  # 地名があれば、地域を指定して開けるページを優先
-        elif needs and place is None:
-            score -= 1         # 地名がなければ、全国版(地域不要)のページを優先
+        elif regional and place is None:
+            score -= 1         # 地名がなければ、地域指定の要らないページをわずかに優先
         shown_topics = q_topics | ({refine["topic"]} if refine.get("topic") else set())
         shown_when = q_when | ({refine["when"]} if refine.get("when") else set())
         if score >= MIN_SCORE and (matched or shown_topics & set(it.get("tags", []))):
@@ -128,8 +130,8 @@ def _has_basis(question, item, refine):
     return bool(_when_hits(question) or (refine or {}).get("when") or (refine or {}).get("topic"))
 
 
-def _alt(question, it, reason):
-    r = guide(question, item_id=it["id"])
+def _alt(question, it, reason, scope=None):
+    r = guide(question, item_id=it["id"], scope=scope)
     a = {"item": it["id"], "title": it["title"], "category": it["category"], "reason": reason,
          "status": "ok" if r.get("status") == "ok" else "need_place"}
     if r.get("status") == "ok":
@@ -139,7 +141,7 @@ def _alt(question, it, reason):
     return a
 
 
-def suggest(question, refine=None, exclude=(), limit=5):
+def suggest(question, refine=None, exclude=(), limit=5, scope=None):
     """最良の候補を guide() 形式で返し、alternatives に次点以下を付ける。"""
     ranked = rank(question, refine, exclude)
     if not ranked:
@@ -148,15 +150,15 @@ def suggest(question, refine=None, exclude=(), limit=5):
     clear_win = len(ranked) == 1 or top_score - ranked[1][0] >= W_REGION + 1  # 2位との差が大きい
     if not clear_win and not _has_basis(question, ranked[0][1], refine):
         # 話題だけが一致して全項目が同点に近いとき、本命を決めずに候補と絞り込みを示す
-        alts = [_alt(question, it, reason) for _, it, reason in ranked[:limit]]
+        alts = [_alt(question, it, reason, scope) for _, it, reason in ranked[:limit]]
         return {"status": "choose", "question": question, "alternatives": alts, "choices": choices(question)}
-    primary = guide(question, item_id=ranked[0][1]["id"])
+    primary = guide(question, item_id=ranked[0][1]["id"], scope=scope)
     primary["reason"] = ranked[0][2]
     alts = []
     for score, it, reason in ranked[1:]:
         if len(alts) >= limit - 1 or score < max(MIN_SCORE, top_score * 0.4):
             break
-        alts.append(_alt(question, it, reason))
+        alts.append(_alt(question, it, reason, scope))
     primary["alternatives"] = alts
     primary["choices"] = choices(question)
     return primary

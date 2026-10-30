@@ -29,6 +29,12 @@ def main():
             errors.append(f"{iid}: URLの{{}}={sorted(holders)} と params={sorted(params)} が不一致")
         if it.get("static") and holders:
             errors.append(f"{iid}: static=true なのにプレースホルダがあります")
+        for scope, url in it.get("scope_urls", {}).items():
+            if scope not in ("japan", "offices", "class20s"):
+                errors.append(f"{iid}: scope_urls の単位 {scope} は japan/offices/class20s のいずれか")
+            extra = set(re.findall(r"\{(\w+)\}", url)) - {"office_code", "class20_code"}
+            if extra or not url.startswith("https://"):
+                errors.append(f"{iid}: scope_urls[{scope}] のプレースホルダ/URLが不正 {sorted(extra)}")
         if not it["url"].startswith("https://"):
             errors.append(f"{iid}: URLはhttpsにしてください")
     for e in errors:

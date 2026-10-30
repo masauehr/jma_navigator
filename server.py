@@ -19,7 +19,7 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from jnav.navigate import build_url, load_catalog
+from jnav.navigate import SCOPES, build_scoped, build_url, load_catalog
 from jnav.suggest import suggest
 
 WEB = Path(__file__).resolve().parent / "web"
@@ -65,11 +65,12 @@ class RateLimiter:
 LIMITER = RateLimiter()
 
 
-def run_guide(question, pick=None, refine=None, exclude=()):
+def run_guide(question, pick=None, refine=None, exclude=(), scope=None):
     """pick は聞き返しの候補ボタンで選ばれた {"office_code":..} か {"amdno":..}。
     refine は「違う」のあとの絞り込み {"when":..,"topic":..}、exclude は却下したページの項目ID。
     元の質問を解き直し、返ってきた候補に含まれる値だけを受け付けてURLを組み立てる。"""
-    result = suggest(question, refine=refine, exclude=exclude)
+    scope = scope if scope in SCOPES else None
+    result = suggest(question, refine=refine, exclude=exclude, scope=scope)
     if USE_LLM:  # LLMは本命の項目選択だけを差し替える(次点以下はキーワード版のまま)
         from jnav.llm import guide_llm
         llm = guide_llm(question)
@@ -79,7 +80,7 @@ def run_guide(question, pick=None, refine=None, exclude=()):
             result = llm
     if pick and result.get("status") == "need_place":
         alts, choices = result.get("alternatives"), result.get("choices")
-        result = apply_pick(question, result, pick)
+        result = apply_pick(question, result, pick, scope)
         if alts is not None and "alternatives" not in result:
             result["alternatives"], result["choices"] = alts, choices
     url = result.get("url")
@@ -92,18 +93,30 @@ def run_guide(question, pick=None, refine=None, exclude=()):
     return result
 
 
-def apply_pick(question, result, pick):
-    key = next((k for k in ("office_code", "amdno") if k in pick), None)
-    chosen = next((c for c in result.get("candidates", []) if key and c.get(key) == pick[key]), None)
+def apply_pick(question, result, pick, scope=None):
+    """聞き返しの候補ボタンの選択を反映する。候補に含まれる値だけを受け付ける。"""
+    key = next((k for k in ("class20_code", "office_code", "amdno") if k in pick), None)
+    chosen = next((c for c in result.get("candidates", [])
+                   if key and c.get(key) == pick[key] and ("office_code" not in pick or c.get("office_code") == pick["office_code"])), None)
     item = next((i for i in load_catalog() if i["id"] == result.get("item")), None)
     if not chosen or not item:
         return result
+    base = {"item": item["id"], "title": item["title"], "category": item["category"],
+            "status": "ok", "verified": item["verified"]}
+    if item.get("scope_urls"):
+        values = {k: chosen[k] for k in ("office_code", "class20_code") if k in chosen}
+        use = scope if scope in item["scope_urls"] else ("class20s" if "class20_code" in values and "class20s" in item["scope_urls"] else "offices")
+        if use not in item["scope_urls"]:
+            return result
+        url, missing = build_scoped(item, use, values)
+        if missing:
+            return result
+        place = chosen.get("office_name", "") + (" " + chosen["place"] if "class20_code" in chosen else "")
+        return {**base, "url": url, "place": place.strip(), "scope": use, "scopes": result.get("scopes", [])}
     url, missing = build_url(item, {key: chosen[key]})
     if missing:  # 年月などが足りない項目は、ここでは確定しない
         return result
-    return {"item": item["id"], "title": item["title"], "category": item["category"],
-            "status": "ok", "url": url, "verified": item["verified"],
-            "place": chosen.get("office_name") or chosen.get("place")}
+    return {**base, "url": url, "place": chosen.get("office_name") or chosen.get("place")}
 
 
 def shortcuts():
@@ -180,13 +193,14 @@ class Handler(BaseHTTPRequestHandler):
             pick = body.get("pick") if isinstance(body.get("pick"), dict) else None
             refine = body.get("refine") if isinstance(body.get("refine"), dict) else None
             exclude = [str(x) for x in body.get("exclude", [])][:10] if isinstance(body.get("exclude"), list) else []
+            scope = body.get("scope") if body.get("scope") in SCOPES else None
             if refine:  # 許可した語彙だけ受け付ける
                 refine = {k: v for k, v in refine.items() if k in ("when", "topic") and isinstance(v, str) and len(v) < 20}
         except (ValueError, AttributeError):
             return self._send(400, {"error": "bad request"})
         if not question or len(question) > MAX_QUESTION:
             return self._send(400, {"error": f"質問は1〜{MAX_QUESTION}文字で入力してください"})
-        self._send(200, run_guide(question, pick, refine, exclude))
+        self._send(200, run_guide(question, pick, refine, exclude, scope))
 
     def log_message(self, fmt, *args):  # 質問文をログに残さない
         pass
