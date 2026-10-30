@@ -196,8 +196,8 @@
       ],
       "url": "https://www.data.jma.go.jp/cpd/longfcst/kaisetsu/?term=P1M",
       "params": {},
-      "note": "ページは「季節予報解説資料」で存在確認。term指定で1か月/3か月に切り替わるかは未確認（data.jma.go.jpはブラウザ操作不可）",
-      "verified": "table",
+      "note": "ページは「季節予報解説資料」。term指定で1か月/3か月に切り替わることをユーザーが手動確認（2026-10-30）",
+      "verified": "confirmed",
       "static": true
     },
     {
@@ -210,8 +210,8 @@
       ],
       "url": "https://www.data.jma.go.jp/cpd/longfcst/kaisetsu/?term=P3M",
       "params": {},
-      "note": "ページは「季節予報解説資料」で存在確認。term指定で1か月/3か月に切り替わるかは未確認（data.jma.go.jpはブラウザ操作不可）",
-      "verified": "table",
+      "note": "ページは「季節予報解説資料」。term指定で1か月/3か月に切り替わることをユーザーが手動確認（2026-10-30）",
+      "verified": "confirmed",
       "static": true
     },
     {

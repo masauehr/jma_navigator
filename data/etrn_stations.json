@@ -5,7 +5,7 @@
   "prefecture": "北海道宗谷地方",
   "prec_no": 11,
   "block_no": "47401",
-  "verified": false
+  "verified": true
  },
  {
   "name": "北見枝幸",
@@ -21,7 +21,7 @@
   "prefecture": "北海道上川地方",
   "prec_no": 12,
   "block_no": "47407",
-  "verified": false
+  "verified": true
  },
  {
   "name": "羽幌",
@@ -37,7 +37,7 @@
   "prefecture": "北海道留萌地方",
   "prec_no": 13,
   "block_no": "47406",
-  "verified": false
+  "verified": true
  },
  {
   "name": "札幌",
@@ -45,7 +45,7 @@
   "prefecture": "北海道石狩地方",
   "prec_no": 14,
   "block_no": "47412",
-  "verified": false
+  "verified": true
  },
  {
   "name": "岩見沢",
@@ -53,7 +53,7 @@
   "prefecture": "北海道空知地方",
   "prec_no": 15,
   "block_no": "47413",
-  "verified": false
+  "verified": true
  },
  {
   "name": "小樽",
@@ -61,7 +61,7 @@
   "prefecture": "北海道後志地方",
   "prec_no": 16,
   "block_no": "47411",
-  "verified": false
+  "verified": true
  },
  {
   "name": "倶知安",
@@ -101,7 +101,7 @@
   "prefecture": "北海道網走・北見・紋別地方",
   "prec_no": 17,
   "block_no": "47409",
-  "verified": false
+  "verified": true
  },
  {
   "name": "根室",
@@ -109,7 +109,7 @@
   "prefecture": "北海道根室地方",
   "prec_no": 18,
   "block_no": "47420",
-  "verified": false
+  "verified": true
  },
  {
   "name": "釧路",
@@ -117,7 +117,7 @@
   "prefecture": "北海道釧路地方",
   "prec_no": 19,
   "block_no": "47418",
-  "verified": false
+  "verified": true
  },
  {
   "name": "帯広",
@@ -125,7 +125,7 @@
   "prefecture": "北海道十勝地方",
   "prec_no": 20,
   "block_no": "47417",
-  "verified": false
+  "verified": true
  },
  {
   "name": "広尾",
@@ -149,7 +149,7 @@
   "prefecture": "北海道胆振地方",
   "prec_no": 21,
   "block_no": "47423",
-  "verified": false
+  "verified": true
  },
  {
   "name": "浦河",
@@ -157,7 +157,7 @@
   "prefecture": "北海道日高地方",
   "prec_no": 22,
   "block_no": "47426",
-  "verified": false
+  "verified": true
  },
  {
   "name": "函館",
@@ -165,7 +165,7 @@
   "prefecture": "北海道渡島地方",
   "prec_no": 23,
   "block_no": "47430",
-  "verified": false
+  "verified": true
  },
  {
   "name": "江差",
@@ -189,7 +189,7 @@
   "prefecture": "青森県",
   "prec_no": 31,
   "block_no": "47575",
-  "verified": false
+  "verified": true
  },
  {
   "name": "深浦",
@@ -213,7 +213,7 @@
   "prefecture": "秋田県",
   "prec_no": 32,
   "block_no": "47582",
-  "verified": false
+  "verified": true
  },
  {
   "name": "盛岡",
@@ -221,7 +221,7 @@
   "prefecture": "岩手県",
   "prec_no": 33,
   "block_no": "47584",
-  "verified": false
+  "verified": true
  },
  {
   "name": "宮古",
@@ -253,7 +253,7 @@
   "prefecture": "宮城県",
   "prec_no": 34,
   "block_no": "47590",
-  "verified": false
+  "verified": true
  },
  {
   "name": "酒田",
@@ -277,7 +277,7 @@
   "prefecture": "山形県",
   "prec_no": 35,
   "block_no": "47588",
-  "verified": false
+  "verified": true
  },
  {
   "name": "福島",
@@ -285,7 +285,7 @@
   "prefecture": "福島県",
   "prec_no": 36,
   "block_no": "47595",
-  "verified": false
+  "verified": true
  },
  {
   "name": "若松",
@@ -317,7 +317,7 @@
   "prefecture": "茨城県",
   "prec_no": 40,
   "block_no": "47629",
-  "verified": false
+  "verified": true
  },
  {
   "name": "つくば",
@@ -341,7 +341,7 @@
   "prefecture": "栃木県",
   "prec_no": 41,
   "block_no": "47615",
-  "verified": false
+  "verified": true
  },
  {
   "name": "前橋",
@@ -349,7 +349,7 @@
   "prefecture": "群馬県",
   "prec_no": 42,
   "block_no": "47624",
-  "verified": false
+  "verified": true
  },
  {
   "name": "熊谷",
@@ -357,7 +357,7 @@
   "prefecture": "埼玉県",
   "prec_no": 43,
   "block_no": "47626",
-  "verified": false
+  "verified": true
  },
  {
   "name": "秩父",
@@ -405,7 +405,7 @@
   "prefecture": "東京都",
   "prec_no": 44,
   "block_no": "47971",
-  "verified": false
+  "verified": true
  },
  {
   "name": "銚子",
@@ -421,7 +421,7 @@
   "prefecture": "千葉県",
   "prec_no": 45,
   "block_no": "47682",
-  "verified": false
+  "verified": true
  },
  {
   "name": "勝浦",
@@ -445,7 +445,7 @@
   "prefecture": "神奈川県",
   "prec_no": 46,
   "block_no": "47670",
-  "verified": false
+  "verified": true
  },
  {
   "name": "長野",
@@ -453,7 +453,7 @@
   "prefecture": "長野県",
   "prec_no": 48,
   "block_no": "47610",
-  "verified": false
+  "verified": true
  },
  {
   "name": "軽井沢",
@@ -493,7 +493,7 @@
   "prefecture": "山梨県",
   "prec_no": 49,
   "block_no": "47638",
-  "verified": false
+  "verified": true
  },
  {
   "name": "河口湖",
@@ -525,7 +525,7 @@
   "prefecture": "静岡県",
   "prec_no": 50,
   "block_no": "47656",
-  "verified": false
+  "verified": true
  },
  {
   "name": "浜松",
@@ -557,7 +557,7 @@
   "prefecture": "愛知県",
   "prec_no": 51,
   "block_no": "47636",
-  "verified": false
+  "verified": true
  },
  {
   "name": "伊良湖",
@@ -581,7 +581,7 @@
   "prefecture": "岐阜県",
   "prec_no": 52,
   "block_no": "47632",
-  "verified": false
+  "verified": true
  },
  {
   "name": "四日市",
@@ -605,7 +605,7 @@
   "prefecture": "三重県",
   "prec_no": 53,
   "block_no": "47651",
-  "verified": false
+  "verified": true
  },
  {
   "name": "尾鷲",
@@ -629,7 +629,7 @@
   "prefecture": "新潟県",
   "prec_no": 54,
   "block_no": "47604",
-  "verified": false
+  "verified": true
  },
  {
   "name": "高田",
@@ -653,7 +653,7 @@
   "prefecture": "富山県",
   "prec_no": 55,
   "block_no": "47607",
-  "verified": false
+  "verified": true
  },
  {
   "name": "輪島",
@@ -669,7 +669,7 @@
   "prefecture": "石川県",
   "prec_no": 56,
   "block_no": "47605",
-  "verified": false
+  "verified": true
  },
  {
   "name": "福井",
@@ -677,7 +677,7 @@
   "prefecture": "福井県",
   "prec_no": 57,
   "block_no": "47616",
-  "verified": false
+  "verified": true
  },
  {
   "name": "敦賀",
@@ -693,7 +693,7 @@
   "prefecture": "滋賀県",
   "prec_no": 60,
   "block_no": "47761",
-  "verified": false
+  "verified": true
  },
  {
   "name": "舞鶴",
@@ -709,7 +709,7 @@
   "prefecture": "京都府",
   "prec_no": 61,
   "block_no": "47759",
-  "verified": false
+  "verified": true
  },
  {
   "name": "大阪",
@@ -717,7 +717,7 @@
   "prefecture": "大阪府",
   "prec_no": 62,
   "block_no": "47772",
-  "verified": false
+  "verified": true
  },
  {
   "name": "豊岡",
@@ -741,7 +741,7 @@
   "prefecture": "兵庫県",
   "prec_no": 63,
   "block_no": "47770",
-  "verified": false
+  "verified": true
  },
  {
   "name": "洲本",
@@ -757,7 +757,7 @@
   "prefecture": "奈良県",
   "prec_no": 64,
   "block_no": "47780",
-  "verified": false
+  "verified": true
  },
  {
   "name": "和歌山",
@@ -765,7 +765,7 @@
   "prefecture": "和歌山県",
   "prec_no": 65,
   "block_no": "47777",
-  "verified": false
+  "verified": true
  },
  {
   "name": "潮岬",
@@ -789,7 +789,7 @@
   "prefecture": "岡山県",
   "prec_no": 66,
   "block_no": "47768",
-  "verified": false
+  "verified": true
  },
  {
   "name": "福山",
@@ -805,7 +805,7 @@
   "prefecture": "広島県",
   "prec_no": 67,
   "block_no": "47765",
-  "verified": false
+  "verified": true
  },
  {
   "name": "呉",
@@ -829,7 +829,7 @@
   "prefecture": "島根県",
   "prec_no": 68,
   "block_no": "47741",
-  "verified": false
+  "verified": true
  },
  {
   "name": "浜田",
@@ -861,7 +861,7 @@
   "prefecture": "鳥取県",
   "prec_no": 69,
   "block_no": "47746",
-  "verified": false
+  "verified": true
  },
  {
   "name": "徳島",
@@ -869,7 +869,7 @@
   "prefecture": "徳島県",
   "prec_no": 71,
   "block_no": "47895",
-  "verified": false
+  "verified": true
  },
  {
   "name": "高松",
@@ -877,7 +877,7 @@
   "prefecture": "香川県",
   "prec_no": 72,
   "block_no": "47891",
-  "verified": false
+  "verified": true
  },
  {
   "name": "多度津",
@@ -893,7 +893,7 @@
   "prefecture": "愛媛県",
   "prec_no": 73,
   "block_no": "47887",
-  "verified": false
+  "verified": true
  },
  {
   "name": "宇和島",
@@ -909,7 +909,7 @@
   "prefecture": "高知県",
   "prec_no": 74,
   "block_no": "47893",
-  "verified": false
+  "verified": true
  },
  {
   "name": "室戸岬",
@@ -949,7 +949,7 @@
   "prefecture": "山口県",
   "prec_no": 81,
   "block_no": "47784",
-  "verified": false
+  "verified": true
  },
  {
   "name": "下関",
@@ -973,7 +973,7 @@
   "prefecture": "福岡県",
   "prec_no": 82,
   "block_no": "47807",
-  "verified": false
+  "verified": true
  },
  {
   "name": "日田",
@@ -989,7 +989,7 @@
   "prefecture": "大分県",
   "prec_no": 83,
   "block_no": "47815",
-  "verified": false
+  "verified": true
  },
  {
   "name": "厳原",
@@ -1021,7 +1021,7 @@
   "prefecture": "長崎県",
   "prec_no": 84,
   "block_no": "47817",
-  "verified": false
+  "verified": true
  },
  {
   "name": "雲仙岳",
@@ -1045,7 +1045,7 @@
   "prefecture": "佐賀県",
   "prec_no": 85,
   "block_no": "47813",
-  "verified": false
+  "verified": true
  },
  {
   "name": "熊本",
@@ -1053,7 +1053,7 @@
   "prefecture": "熊本県",
   "prec_no": 86,
   "block_no": "47819",
-  "verified": false
+  "verified": true
  },
  {
   "name": "人吉",
@@ -1085,7 +1085,7 @@
   "prefecture": "宮崎県",
   "prec_no": 87,
   "block_no": "47830",
-  "verified": false
+  "verified": true
  },
  {
   "name": "都城",
@@ -1117,7 +1117,7 @@
   "prefecture": "鹿児島県",
   "prec_no": 88,
   "block_no": "47827",
-  "verified": false
+  "verified": true
  },
  {
   "name": "枕崎",
@@ -1149,7 +1149,7 @@
   "prefecture": "鹿児島県",
   "prec_no": 88,
   "block_no": "47909",
-  "verified": false
+  "verified": true
  },
  {
   "name": "沖永良部",
