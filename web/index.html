@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>気象庁ナビ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>気象庁ナビ</h1>
+    <p class="lead">知りたい情報を入力すると、気象庁ホームページの該当ページを案内します。</p>
+  </header>
+
+  <main>
+    <form id="form" autocomplete="off">
+      <label for="q">知りたいこと</label>
+      <div class="row">
+        <input id="q" type="text" maxlength="200" placeholder="例: 明日の那覇の天気" required>
+        <button type="submit">案内する</button>
+      </div>
+    </form>
+
+    <div class="examples" id="examples" aria-label="入力例"></div>
+
+    <section id="result" aria-live="polite"></section>
+
+    <section class="shortcuts">
+      <h2>よく使うページ</h2>
+      <div id="shortcuts"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>このアプリは気象庁ホームページの<strong>案内役</strong>です。気象情報そのものの解説や、防災行動の判断は行いません。<br>
+      警報・避難など命に関わる情報は、必ず表示先の<strong>気象庁の公式ページ</strong>と自治体の情報で確認してください。</p>
+    <p>出典: <a href="https://www.jma.go.jp/" target="_blank" rel="noopener noreferrer">気象庁ホームページ</a>
+      （リンク先はすべて気象庁のページです）</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
