@@ -4,9 +4,18 @@
 - 127.0.0.1 にだけ待ち受ける(外部からは届かない)。
 - LLM版を使う場合も呼び出しはこのサーバー側で行う。画面側にキーや認証情報は置かない。
 使い方: python3 server.py [--port 8765] [--llm]
+
+公開モード(環境変数 JNAV_PUBLIC=1。Renderで使う):
+- 0.0.0.0 で PORT 環境変数のポートを待ち受ける。LLM版は常に無効(サブスク枠・乱用対策)。
+- Host は 127.0.0.1/localhost に加え、*.onrender.com と JNAV_ALLOWED_HOSTS(カンマ区切り)を許可。
+- 検索エンジンに載せない(robots.txt・noindex)。URLを知っている人向け。
 """
 import argparse
+import collections
 import json
+import os
+import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -16,11 +25,43 @@ WEB = Path(__file__).resolve().parent / "web"
 MAX_BODY = 2048
 MAX_QUESTION = 200
 TYPES = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
-         ".js": "text/javascript; charset=utf-8"}
+         ".js": "text/javascript; charset=utf-8", ".txt": "text/plain; charset=utf-8"}
+PUBLIC = os.environ.get("JNAV_PUBLIC") == "1"
+EXTRA_HOSTS = tuple(h.strip() for h in os.environ.get("JNAV_ALLOWED_HOSTS", "").split(",") if h.strip())
+RATE_LIMIT = 30      # 1分あたりの /api/guide の回数(IPごと)
+RATE_WINDOW = 60
+
 # 画面に出す前に、リンク先が気象庁のドメインか確認する(サーバー側でも念のため)
 ALLOWED_HOSTS = ("https://www.jma.go.jp/", "https://www.data.jma.go.jp/")
 
 USE_LLM = False
+
+
+class RateLimiter:
+    """IPごとの単純なスライディングウィンドウ。メモリ上のみ(再起動で消える)。"""
+
+    def __init__(self, limit=RATE_LIMIT, window=RATE_WINDOW, max_ips=10000):
+        self.limit, self.window, self.max_ips = limit, window, max_ips
+        self.hits = {}
+        self.lock = threading.Lock()
+
+    def allow(self, ip, now=None):
+        now = time.monotonic() if now is None else now
+        with self.lock:
+            if len(self.hits) >= self.max_ips:  # 溜まりすぎたら古いIPを掃除
+                self.hits = {k: v for k, v in self.hits.items() if v and now - v[-1] < self.window}
+                while len(self.hits) >= self.max_ips:  # それでも多ければ古い順に捨てる(上限を必ず守る)
+                    self.hits.pop(next(iter(self.hits)))
+            q = self.hits.setdefault(ip, collections.deque())
+            while q and now - q[0] >= self.window:
+                q.popleft()
+            if len(q) >= self.limit:
+                return False
+            q.append(now)
+            return True
+
+
+LIMITER = RateLimiter()
 
 
 def run_guide(question, pick=None):
@@ -61,6 +102,7 @@ def shortcuts():
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "jnav"
+    timeout = 10  # 遅い接続でスレッドを占有されないようにする
 
     def _send(self, code, body, ctype="application/json; charset=utf-8"):
         data = body if isinstance(body, bytes) else json.dumps(body, ensure_ascii=False).encode("utf-8")
@@ -69,20 +111,35 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(data)))
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Cache-Control", "no-store")
+        self.send_header("X-Robots-Tag", "noindex, nofollow")
+        if PUBLIC:
+            self.send_header("Strict-Transport-Security", "max-age=31536000")
         # 外部リソースを読まない・インラインスクリプトを実行しない
         self.send_header("Content-Security-Policy", "default-src 'self'; base-uri 'none'; form-action 'self'")
         self.end_headers()
         self.wfile.write(data)
 
     def _host_ok(self):
-        # DNSリバインディング対策: Hostがローカルのものだけ受け付ける
-        host = (self.headers.get("Host") or "").rsplit(":", 1)[0]
-        return host in ("127.0.0.1", "localhost")
+        # DNSリバインディング対策: 許可したHostだけ受け付ける
+        host = (self.headers.get("Host") or "").rsplit(":", 1)[0].lower()
+        if host in ("127.0.0.1", "localhost") or host in EXTRA_HOSTS:
+            return True
+        return PUBLIC and host.endswith(".onrender.com")
+
+    def _client_ip(self):
+        # 公開時はRenderのプロキシが付けたX-Forwarded-Forの末尾(最も信頼できる値)を使う
+        if PUBLIC:
+            xff = self.headers.get("X-Forwarded-For", "")
+            if xff:
+                return xff.split(",")[-1].strip()
+        return self.client_address[0]
 
     def do_GET(self):
+        path = self.path.split("?", 1)[0]
+        if path == "/healthz":  # Renderのヘルスチェック用(Host検査の対象外)
+            return self._send(200, {"ok": True})
         if not self._host_ok():
             return self._send(403, {"error": "forbidden"})
-        path = self.path.split("?", 1)[0]
         if path == "/api/shortcuts":
             return self._send(200, shortcuts())
         name = "index.html" if path == "/" else path.lstrip("/")
@@ -94,6 +151,12 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if not self._host_ok() or self.path != "/api/guide":
             return self._send(403 if not self._host_ok() else 404, {"error": "not found"})
+        if not LIMITER.allow(self._client_ip()):
+            self.send_response(429)
+            self.send_header("Retry-After", str(RATE_WINDOW))
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
         if self.headers.get("Content-Type", "").split(";")[0] != "application/json":
             return self._send(415, {"error": "json only"})
         try:
@@ -116,12 +179,13 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     global USE_LLM
     ap = argparse.ArgumentParser()
-    ap.add_argument("--port", type=int, default=8765)
-    ap.add_argument("--llm", action="store_true", help="項目選択にLLM(Claude Code CLI経由)を使う")
+    ap.add_argument("--port", type=int, default=int(os.environ.get("PORT", 8765)))
+    ap.add_argument("--llm", action="store_true", help="項目選択にLLM(Claude Code CLI経由)を使う(公開モードでは無効)")
     args = ap.parse_args()
-    USE_LLM = args.llm
-    srv = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
-    print(f"http://127.0.0.1:{args.port}/ (LLM={'on' if USE_LLM else 'off'}) Ctrl+Cで終了")
+    USE_LLM = args.llm and not PUBLIC
+    bind = "0.0.0.0" if PUBLIC else "127.0.0.1"
+    srv = ThreadingHTTPServer((bind, args.port), Handler)
+    print(f"http://{bind}:{args.port}/ (public={PUBLIC}, LLM={'on' if USE_LLM else 'off'}) Ctrl+Cで終了", flush=True)
     try:
         srv.serve_forever()
     except KeyboardInterrupt:

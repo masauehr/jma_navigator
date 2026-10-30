@@ -72,6 +72,23 @@ class ServerTest(unittest.TestCase):
         self.assertEqual(call(self.port, "/api/guide", b"{}", ctype="text/plain")[0], 415)
         self.assertEqual(call(self.port, "/api/guide", b"not json")[0], 400)
 
+    def test_healthz_and_noindex(self):
+        code, body, h = call(self.port, "/healthz", host="anything.example")
+        self.assertEqual((code, json.loads(body)), (200, {"ok": True}))
+        self.assertIn("noindex", h["X-Robots-Tag"])
+        self.assertIn(b"Disallow: /", call(self.port, "/robots.txt")[1])
+
+    def test_public_host_rules(self):
+        old = server.PUBLIC
+        try:
+            server.PUBLIC = True
+            self.assertEqual(call(self.port, "/", host="jma-navigator.onrender.com")[0], 200)
+            self.assertEqual(call(self.port, "/", host="evil.example")[0], 403)
+            self.assertEqual(call(self.port, "/", host="onrender.com.evil.example")[0], 403)
+        finally:
+            server.PUBLIC = old
+        self.assertEqual(call(self.port, "/", host="jma-navigator.onrender.com")[0], 403)  # 非公開時は不可
+
     def test_foreign_host_rejected(self):
         self.assertEqual(call(self.port, "/", host="evil.example")[0], 403)
 
@@ -83,6 +100,21 @@ class ServerTest(unittest.TestCase):
         items = json.loads(call(self.port, "/api/shortcuts")[1])
         self.assertGreater(len(items), 5)
         self.assertTrue(all(i["url"].startswith(server.ALLOWED_HOSTS) for i in items))
+
+
+class RateLimiterTest(unittest.TestCase):
+    def test_limit_and_window(self):
+        rl = server.RateLimiter(limit=3, window=60)
+        self.assertTrue(all(rl.allow("a", now=t) for t in (0, 1, 2)))
+        self.assertFalse(rl.allow("a", now=3))
+        self.assertTrue(rl.allow("b", now=3))      # 別IPは別枠
+        self.assertTrue(rl.allow("a", now=61))     # 窓が過ぎたら再び許可
+
+    def test_memory_bounded(self):
+        rl = server.RateLimiter(limit=1, window=10, max_ips=5)
+        for i in range(50):
+            rl.allow(f"ip{i}", now=100 + i)
+        self.assertLessEqual(len(rl.hits), 6)
 
 
 if __name__ == "__main__":
