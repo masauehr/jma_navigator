@@ -206,6 +206,7 @@ def _guide_scoped(item, result, place_q, scope):
                        hint=None if cands else "府県・地方の名前（例: 沖縄、東京）を入れてください")
         values = {"office_code": office}
         result["place"] = cands[0]["office_name"]
+        result["office_code"] = office
     else:  # class20s
         if office is None:
             return ask(candidates=office_candidates() if cands else None,
@@ -218,6 +219,7 @@ def _guide_scoped(item, result, place_q, scope):
             return ask(candidates=[{"office_code": office, "office_name": c["office_name"], "place": c["place"],
                                     "class20_code": c["code"]} for c in pool[:6]])
         values = {"office_code": office, "class20_code": pool[0]["code"]}
+        result["office_code"] = office
         result["place"] = f'{pool[0]["office_name"]} {pool[0]["place"]}'
     url, missing = build_scoped(item, want, values)
     if missing:

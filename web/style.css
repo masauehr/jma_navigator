@@ -122,3 +122,8 @@ footer a { color: var(--accent); }
 .scope { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; }
 .scope button { padding: 4px 14px; font-size: 0.9rem; background: #fff; color: var(--accent); border: 1px solid var(--accent); }
 .scope button.on { background: var(--accent); color: #fff; }
+
+/* 気象台からのコメント */
+.comment { background: #ffffee; border-color: #d9d28a; }
+.comment-text { white-space: pre-wrap; word-break: break-word; font-family: inherit; font-size: 0.95rem; margin: 8px 0; line-height: 1.7; }
+.comment .warn { color: #8a4b00; background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 6px; padding: 6px 10px; margin: 8px 0; }

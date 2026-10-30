@@ -130,6 +130,48 @@
       }
     },
     {
+      "id": "forecaster_comment",
+      "category": "防災",
+      "title": "気象台からのコメント（あなたの街の防災情報）",
+      "intents": [
+        "気象台からのコメント",
+        "気象台のコメント",
+        "気象台からの",
+        "予報官",
+        "あなたの街の防災情報",
+        "コメント"
+      ],
+      "url": "https://www.jma.go.jp/bosai/#pro&area_type=offices&area_code={office_code}&disp=forecaster_comment,panel,warning_summary,warning_timeline!all,typhoon,radar!hrpns,forecast_table,amedas_table,earthquake&row=b4b4b4b4&col=8z8z90dhdhdhdhdhdh",
+      "params": {
+        "office_code": {
+          "type": "area_office",
+          "resolver": "area.json:offices",
+          "example": "471000"
+        }
+      },
+      "scope_urls": {
+        "offices": "https://www.jma.go.jp/bosai/#pro&area_type=offices&area_code={office_code}&disp=forecaster_comment,panel,warning_summary,warning_timeline!all,typhoon,radar!hrpns,forecast_table,amedas_table,earthquake&row=b4b4b4b4&col=8z8z90dhdhdhdhdhdh",
+        "class20s": "https://www.jma.go.jp/bosai/#pro&area_type=class20s&area_code={class20_code}&disp=forecaster_comment,panel,warning_summary,warning_timeline!all,typhoon,radar!hrpns,forecast_table,amedas_table,earthquake&row=b4b4b4b4&col=8z8z90dhdhdhdhdhdh"
+      },
+      "note": "気象庁「あなたの街の防災情報」。左上の「気象台からのコメント」は予報区ごとの予報官の文章（forecaster_comment/data/comments/{予報区}.txt）。名護市・沖縄本島地方で実機確認（2026-10-30）。同じ画面に発表中の防災情報・警報注意報・時系列・台風も並ぶ。disp=forecaster_comment だけでは空になるため、row/col つきの形を使う",
+      "verified": "confirmed",
+      "static": false,
+      "verified_date": "2026-10-30",
+      "tags": [
+        "warning",
+        "rain",
+        "wind",
+        "snow",
+        "typhoon",
+        "weather",
+        "safety"
+      ],
+      "when": [
+        "now",
+        "future"
+      ]
+    },
+    {
       "id": "warning_timeline",
       "category": "防災",
       "title": "警報等の時系列（見通し）",

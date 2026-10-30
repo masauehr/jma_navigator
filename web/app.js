@@ -61,6 +61,7 @@
       card.appendChild(el("p", null, d.error));
     } else if (d.status === "ok" && isJmaUrl(d.url)) {
       renderOk(card, d);
+      if (d.comment) frag.appendChild(commentBox(d.comment));
       frag.appendChild(feedback(question, d));
     } else if (d.status === "need_place") {
       renderNeedPlace(card, question, d);
@@ -138,6 +139,23 @@
       row.appendChild(b);
     });
     return row;
+  }
+
+  // 気象台からのコメント（予報官の文章を要約せず、そのまま）。発表日時と出典を必ず付ける
+  function commentBox(c) {
+    var box = el("div", "card comment");
+    box.appendChild(el("h2", null, "気象台からのコメント" + (c.office_name ? "（" + c.office_name + "）" : "")));
+    if (c.unavailable) {
+      box.appendChild(el("p", null, "コメントを取得できませんでした。上の「気象庁のページを開く」で確認してください。"));
+      return box;
+    }
+    box.appendChild(el("p", "note", "発表: " + (c.published || "不明")));
+    if (c.stale) {
+      box.appendChild(el("p", "warn", "発表から時間が経っている可能性があります。最新の内容は気象庁のページで確認してください。"));
+    }
+    box.appendChild(el("pre", "comment-text", c.text));
+    box.appendChild(el("p", "note", "出典: 気象庁「気象台からのコメント」の文章をそのまま表示しています（このアプリが書いたものではありません）。"));
+    return box;
   }
 
   // 次点以下の候補。リンクが開けるものはリンク、地域が必要なものは説明だけ出す

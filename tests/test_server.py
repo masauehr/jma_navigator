@@ -107,6 +107,26 @@ class ServerTest(unittest.TestCase):
         d = json.loads(call(self.port, "/api/guide", {"question": "警報は出ている？", "scope": "evil"})[1])
         self.assertEqual(d["scope"], "japan")
 
+    def test_comment_attached(self):
+        fake = {"office_code": "471000", "office_name": "沖縄気象台", "published": "2026年10月30日(金)11時28分",
+                "text": "【警戒レベル相当情報の発表の見込み】\n・なし", "age_hours": 0.5, "stale": False}
+        old = server.comments.get
+        server.comments.get = lambda code: fake if code == "471000" else None
+        try:
+            d = json.loads(call(self.port, "/api/guide", {"question": "名護市の気象台からのコメント"})[1])
+            self.assertEqual((d["item"], d["scope"]), ("forecaster_comment", "class20s"))
+            self.assertEqual(d["comment"]["text"], fake["text"])  # 全文をそのまま返す
+            self.assertIn("forecaster_comment,panel", d["url"])
+            # 取得できないときは unavailable（画面で案内する）
+            server.comments.get = lambda code: None
+            d = json.loads(call(self.port, "/api/guide", {"question": "沖縄の気象台のコメント"})[1])
+            self.assertTrue(d["comment"]["unavailable"])
+            # コメント以外の案内には付かない
+            d = json.loads(call(self.port, "/api/guide", {"question": "名護市の警報"})[1])
+            self.assertNotIn("comment", d)
+        finally:
+            server.comments.get = old
+
     def test_center_pick(self):
         d = json.loads(call(self.port, "/api/guide", {"question": "警報は出ている？", "scope": "centers"})[1])
         self.assertEqual(d["status"], "need_place")

@@ -20,6 +20,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from jnav.navigate import SCOPES, build_scoped, build_url, load_catalog
+from jnav import comments
 from jnav.suggest import suggest
 
 WEB = Path(__file__).resolve().parent / "web"
@@ -83,6 +84,7 @@ def run_guide(question, pick=None, refine=None, exclude=(), scope=None):
         result = apply_pick(question, result, pick, scope)
         if alts is not None and "alternatives" not in result:
             result["alternatives"], result["choices"] = alts, choices
+    attach_comment(result)
     url = result.get("url")
     if url and not url.startswith(ALLOWED_HOSTS):  # カタログ由来なので通常は起きない
         result = {"status": "no_match", "question": question}
@@ -91,6 +93,16 @@ def run_guide(question, pick=None, refine=None, exclude=(), scope=None):
             a.pop("url")
             a["status"] = "need_place"
     return result
+
+
+def attach_comment(result):
+    """「気象台からのコメント」の案内には、予報官の文章（全文・そのまま）を付ける。"""
+    if result.get("item") != "forecaster_comment" or result.get("status") != "ok":
+        return
+    office = result.get("office_code")
+    if not office:
+        return
+    result["comment"] = comments.get(office) or {"office_code": office, "unavailable": True}
 
 
 def apply_pick(question, result, pick, scope=None):
@@ -115,7 +127,8 @@ def apply_pick(question, result, pick, scope=None):
         if missing:
             return result
         place = chosen["place"] if "center_code" in chosen else chosen.get("office_name", "") + (" " + chosen["place"] if "class20_code" in chosen else "")
-        return {**base, "url": url, "place": place.strip(), "scope": use, "scopes": result.get("scopes", [])}
+        return {**base, "url": url, "place": place.strip(), "scope": use, "scopes": result.get("scopes", []),
+                "office_code": chosen.get("office_code")}
     values = {k: chosen[k] for k in ("area_code", "station_code", "class30_code")} if key == "station_code" else {key: chosen[key]}
     url, missing = build_url(item, values)
     if missing:  # 年月などが足りない項目は、ここでは確定しない

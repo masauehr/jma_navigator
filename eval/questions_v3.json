@@ -186,5 +186,17 @@
   "q": "ナウキャストを見たい",
   "item": "nowcast",
   "status": "ok"
+ },
+ {
+  "q": "名護市の気象台からのコメント",
+  "item": "forecaster_comment",
+  "status": "ok",
+  "office_code": "4720900"
+ },
+ {
+  "q": "沖縄の気象台のコメントを見たい",
+  "item": "forecaster_comment",
+  "status": "ok",
+  "office_code": "471000"
  }
 ]
