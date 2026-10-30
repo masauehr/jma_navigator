@@ -307,11 +307,14 @@ Chrome 実機で bosai 系を開いて確認した結果、15件中 **13件が c
 ### デプロイ手順（Renderのダッシュボードで利用者が実施）
 1. Render にログイン → New → **Blueprint** → GitHub の `masauehr/jma_navigator` を選ぶ（`render.yaml` が読まれる）。
 2. 作成されたサービス `jma-navigator` のURL（`https://….onrender.com`）を確認する。名前が使われていれば末尾に文字が付く。
-3. そのURLを `README.md` の「公開版」の行に書き換えて push する（現在は仮のURL）。
+3. そのURLを `README.md` の「公開版」の行に書く（→ `https://jma-navigator.onrender.com` で確定済み）。
 4. 動作確認: `/healthz` が `{"ok": true}`、トップで「明日の那覇の天気」が案内される、`/robots.txt` が `Disallow: /`。
 
 ### 注意
 - GitHubリポジトリは**公開**。README にURLを載せると、リポジトリを見た人には公開版のURLが分かる（サイト自体は検索に載らない）。
 - 公開すると、利用者の質問文がRender（海外のクラウド）を通る。質問文は保存・ログ出力しないが、個人情報は入力しないよう画面に注記する案もある（未実装）。
 - Render上ではリンク検査（§19）は動かさない。手元のlaunchd（毎週水曜）を維持する。
-- 未確認: Render実機での動作（ローカルで `JNAV_PUBLIC=1` による起動・Host検査・レート制限・HSTS は確認済み）。テスト36件OK。
+- Render実機での動作は確認済み（下記）。ローカルの公開モードでHost検査・レート制限・HSTSも確認済み。テスト36件OK。
+
+### デプロイ結果（2026-10-30）
+`https://jma-navigator.onrender.com` で公開。`/healthz` が `{"ok": true}`、`/robots.txt` が `Disallow: /`、トップ画面の免責・非公式・出典表示、「明日の那覇の天気」→沖縄本島地方の予報ページ案内をRender実機で確認。
