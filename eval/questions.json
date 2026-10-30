@@ -308,12 +308,12 @@
  {
   "q": "潮位を知りたい",
   "item": "tide",
-  "status": "need_more"
+  "status": "need_place"
  },
  {
   "q": "潮位の現在値",
   "item": "tide",
-  "status": "need_more"
+  "status": "need_place"
  },
  {
   "q": "府中の天気予報",

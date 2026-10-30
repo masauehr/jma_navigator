@@ -110,10 +110,11 @@
     card.appendChild(el("p", null, d.scope === "class20s" ? "どの市町村ですか？" : "どの地域ですか？"));
     var box = el("div", "candidates");
     cands.forEach(function (c) {
-      var label = c.place + "（" + (c.office_name || c.area || "") + "）";
+      var label = c.station_code ? c.place + "（" + (c.area || "") + "）" : c.place + "（" + (c.office_name || c.area || "") + "）";
       var b = el("button", null, label);
       b.type = "button";
-      var pick = c.class20_code ? { office_code: c.office_code, class20_code: c.class20_code }
+      var pick = c.station_code ? { station_code: c.station_code }
+        : c.class20_code ? { office_code: c.office_code, class20_code: c.class20_code }
         : c.office_code ? { office_code: c.office_code } : { amdno: c.amdno };
       b.addEventListener("click", function () { ask(question, pick); });
       box.appendChild(b);

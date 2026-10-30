@@ -11,6 +11,7 @@ from pathlib import Path
 from .amedas import find_stations, nearest, wanted_element
 from .areas import resolve
 from .stations import find_station
+from . import tides
 
 _CATALOG = Path(__file__).resolve().parent.parent / "catalog.json"
 
@@ -205,6 +206,24 @@ def _guide_scoped(item, result, place_q, scope):
     return {**result, "scopes": scopes, "status": "ok", "url": url, "verified": item["verified"], "scope": want}
 
 
+def _guide_tide(item, result, place_q):
+    """潮位観測所: 観測所名→市町村→同じ予報区の順に決め、決まらなければ観測所を候補にする。"""
+    cands = extract_place(place_q)
+    offices = {c["office_code"] for c in cands}
+    office = next(iter(offices)) if len(offices) == 1 else None
+    office_name = cands[0]["office_name"] if office else ""
+    city_codes = [c["code"] for c in _cities(cands, 90)] if office else []
+    st, near = tides.find(place_q, city_codes, office, office_name)
+    if st is None:
+        if not near:
+            return {**result, "status": "need_place",
+                    "hint": "潮位観測所のある地名（例: 那覇、石垣、東京）を入れてください。全国166局を探せます"}
+        return {**result, "status": "need_place", "candidates": near,
+                "hint": "お住まいの市町村に観測所がないときは、近い観測所を選んでください"}
+    url, missing = build_url(item, {"area_code": st["area_code"], "station_code": st["code"], "class30_code": st["class30"]})
+    return {**result, "status": "ok", "url": url, "verified": item["verified"], "place": f'{st["name"]}（{st["area_name"]}）'}
+
+
 def guide(question, item_id=None, place_text=None, scope=None):
     """質問に対するガイド結果を辞書で返す。status: ok / need_place / need_more / no_match
 
@@ -234,6 +253,8 @@ def _guide(question, item_id, place_text, scope=None):
     values = {}
     if item.get("scope_urls"):
         return _guide_scoped(item, result, place_text or question, scope)
+    if "station_code" in item["params"]:
+        return _guide_tide(item, result, place_text or question)
     if "office_code" in item["params"]:
         cands = extract_place(place_q)
         offices = {c["office_code"] for c in cands}

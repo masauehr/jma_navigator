@@ -147,15 +147,33 @@
  {
   "q": "明日、石垣島で釣りに行くけど波は大丈夫？",
   "item": [
-   "forecast_short",
    "warning_map",
-   "tide"
+   "forecast_short",
+   "tide",
+   "wave_map"
   ],
   "status": "ok",
-  "office_code": "474000",
   "also": [
-   "warning_map",
-   "tide"
+   "wave_map",
+   "forecast_short"
   ]
+ },
+ {
+  "q": "波の高さを知りたい",
+  "item": "wave_map",
+  "status": "ok",
+  "also": [
+   "wave_coastal"
+  ]
+ },
+ {
+  "q": "那覇の満潮はいつ？",
+  "item": "tide",
+  "status": "ok"
+ },
+ {
+  "q": "名護市の潮位",
+  "item": "tide",
+  "status": "need_place"
  }
 ]

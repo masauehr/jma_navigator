@@ -19,7 +19,7 @@ TOPICS = {
     "typhoon": ["台風"],
     "quake": ["地震", "揺れ", "震度", "震源"],
     "tsunami": ["津波"],
-    "tide": ["潮位", "潮", "高潮"],
+    "tide": ["潮位", "潮", "高潮", "満潮", "干潮", "潮汐"],
     "temp": ["気温", "暑", "寒", "熱中症", "猛暑", "暖冬", "冷夏", "最高気温", "最低気温"],
     "snow": ["雪", "大雪", "積雪"],
     "weather": ["天気", "天候", "空模様"],
@@ -116,7 +116,7 @@ def rank(question, refine=None, exclude=(), items=None):
             score += W_REFINE if refine["when"] in item_when else -W_REFINE
         if refine.get("topic") and refine["topic"] in it.get("tags", []):
             score += W_REFINE
-        needs = set(it["params"]) & {"office_code", "amdno", "prec_no"}
+        needs = set(it["params"]) & {"office_code", "amdno", "prec_no", "station_code"}
         su = set(it.get("scope_urls", {}))
         regional = bool(needs) or bool(su - {"japan"})  # 地域を指定して開けるページ
         region_ok = regional and place is not None

@@ -305,7 +305,11 @@
       "title": "潮位観測（現在値・推移）",
       "intents": [
         "潮位",
-        "潮位の現在値"
+        "潮位の現在値",
+        "満潮",
+        "干潮",
+        "潮汐",
+        "潮の満ち引き"
       ],
       "url": "https://www.jma.go.jp/bosai/tidelevel/#area_type=class20s&area_code={area_code}&point_code={station_code}&filter=0&class30s={class30_code}",
       "params": {
@@ -322,15 +326,70 @@
           "resolver": "area.json"
         }
       },
-      "note": "パラメータが多い。観測所は検索ツールで引く。トップを開くとURLが東京(class20s=1310200,class30s=13001100)で補完されることを確認",
+      "note": "観測所（166局）は data/tide_stations.json（気象庁 tide_area.json から作成）で、観測所名・市町村・同じ予報区の順に引く。観測所がない市町村は、同じ予報区の観測所を候補に出す",
       "verified": "confirmed",
       "static": false,
-      "verified_date": "2026-10-27",
+      "verified_date": "2026-10-30",
       "tags": [
         "tide",
         "tsunami",
         "sea",
-        "wave"
+        "safety"
+      ],
+      "when": [
+        "now",
+        "future"
+      ]
+    },
+    {
+      "id": "wave_map",
+      "category": "海",
+      "title": "波浪実況・予想図（全国の波の高さ）",
+      "intents": [
+        "波浪図",
+        "波浪実況",
+        "波浪予想",
+        "波の高さ",
+        "波の予想",
+        "波の予報",
+        "波浪"
+      ],
+      "url": "https://www.data.jma.go.jp/waveinf/tile/jp/index.html",
+      "params": {},
+      "note": "全国の波の高さを面（地図）で見る。数値モデルの画像で、時刻の切り替え・再生ができる。ページ内の「海面水温」「表層水温・海流」の分類切替も同じ画面にある（kaiyo_sokuho_viewer が使うデータと同じ出所）",
+      "verified": "confirmed",
+      "static": true,
+      "verified_date": "2026-10-30",
+      "tags": [
+        "sea",
+        "wave",
+        "safety"
+      ],
+      "when": [
+        "now",
+        "future"
+      ]
+    },
+    {
+      "id": "wave_coastal",
+      "category": "海",
+      "title": "沿岸波浪実況・予想図（海域ごとの最大波高）",
+      "intents": [
+        "沿岸波浪",
+        "沿岸の波",
+        "海域ごとの波",
+        "沿岸波浪図"
+      ],
+      "url": "https://www.data.jma.go.jp/waveinf/tile/jp/index_guid.html",
+      "params": {},
+      "note": "沿岸の海域（53海域）ごとの波の高さの最大を地図で見る。過去から約3日先まで",
+      "verified": "confirmed",
+      "static": true,
+      "verified_date": "2026-10-30",
+      "tags": [
+        "sea",
+        "wave",
+        "safety"
       ],
       "when": [
         "now",

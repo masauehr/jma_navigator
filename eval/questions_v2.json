@@ -193,7 +193,7 @@
  {
   "q": "潮位の現在値を教えて",
   "item": "tide",
-  "status": "need_more"
+  "status": "need_place"
  },
  {
   "q": "最高気温の歴代記録",

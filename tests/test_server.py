@@ -107,6 +107,17 @@ class ServerTest(unittest.TestCase):
         d = json.loads(call(self.port, "/api/guide", {"question": "警報は出ている？", "scope": "evil"})[1])
         self.assertEqual(d["scope"], "japan")
 
+    def test_tide_station_pick(self):
+        d = json.loads(call(self.port, "/api/guide", {"question": "名護市の潮位"})[1])
+        self.assertEqual(d["status"], "need_place")
+        cand = next(c for c in d["candidates"] if c["place"] == "那覇")
+        d = json.loads(call(self.port, "/api/guide", {"question": "名護市の潮位", "pick": {"station_code": cand["station_code"]}})[1])
+        self.assertEqual(d["status"], "ok")
+        self.assertIn("point_code=209131", d["url"])
+        # 候補にない観測所コードは受け付けない
+        d = json.loads(call(self.port, "/api/guide", {"question": "名護市の潮位", "pick": {"station_code": "999999"}})[1])
+        self.assertEqual(d["status"], "need_place")
+
     def test_bad_requests(self):
         self.assertEqual(call(self.port, "/api/guide", {"question": ""})[0], 400)
         self.assertEqual(call(self.port, "/api/guide", {"question": "あ" * 201})[0], 400)

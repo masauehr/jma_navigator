@@ -95,7 +95,7 @@ def run_guide(question, pick=None, refine=None, exclude=(), scope=None):
 
 def apply_pick(question, result, pick, scope=None):
     """聞き返しの候補ボタンの選択を反映する。候補に含まれる値だけを受け付ける。"""
-    key = next((k for k in ("class20_code", "office_code", "amdno") if k in pick), None)
+    key = next((k for k in ("station_code", "class20_code", "office_code", "amdno") if k in pick), None)
     chosen = next((c for c in result.get("candidates", [])
                    if key and c.get(key) == pick[key] and ("office_code" not in pick or c.get("office_code") == pick["office_code"])), None)
     item = next((i for i in load_catalog() if i["id"] == result.get("item")), None)
@@ -113,10 +113,11 @@ def apply_pick(question, result, pick, scope=None):
             return result
         place = chosen.get("office_name", "") + (" " + chosen["place"] if "class20_code" in chosen else "")
         return {**base, "url": url, "place": place.strip(), "scope": use, "scopes": result.get("scopes", [])}
-    url, missing = build_url(item, {key: chosen[key]})
+    values = {k: chosen[k] for k in ("area_code", "station_code", "class30_code")} if key == "station_code" else {key: chosen[key]}
+    url, missing = build_url(item, values)
     if missing:  # 年月などが足りない項目は、ここでは確定しない
         return result
-    return {**base, "url": url, "place": chosen.get("office_name") or chosen.get("place")}
+    return {**base, "url": url, "place": chosen.get("place") if key == "station_code" else (chosen.get("office_name") or chosen.get("place"))}
 
 
 def shortcuts():
