@@ -239,7 +239,7 @@ Chrome 実機で bosai 系を開いて確認した結果、15件中 **13件が c
 ### 再開するとき（推奨順）
 1. ~~`prec_no` の抜き取り検証~~（2026-10-30 完了。§18）
 2. ~~長期予報の `term` 確認~~（2026-10-30 完了）
-3. Phase 3: リンク検査（静的URLのみHTTP、ハッシュ付きはブラウザ）と辞書の鮮度点検（`amedastable.json`・`area.json` を原本と比較）。launchdで週次。
+3. ~~Phase 3: リンク検査と辞書の鮮度点検~~（2026-10-30 実装済み。§19。launchd登録のみ未実施）
 4. Phase 4: Web画面（質問欄・結果カード・出典と注意文の固定表示）。LLM呼び出しはプロキシ経由にしてAPIキーを画面側に置かない。
 5. Phase 5（任意）: 孫方式の画面ガイドをフォールバックに。
 
@@ -252,3 +252,19 @@ Chrome 実機で bosai 系を開いて確認した結果、15件中 **13件が c
 - 「一致しないのはおかしい」という疑問の原因: PDF（地域気象観測所一覧）の先頭2桁は観測所番号の区分で、etrn の `prec_no` とは別体系。沖縄の大東島・宮古島・八重山だけ実際の `prec_no` と違い、他は一致していた。
 - 未確認の残り: 個別には開いていない約90地点（同じ群の `prec_no` を使用）。`block_no` は `common/stations.json` の国際地点番号。ページ表示は群の代表地点で確認したため、各地点固有の `block_no` 誤りは起こりうる。
 - 未解決（変更なし）: アメダス専用地点の `block_no`、長期予報の `term`、`elems` の読み方。
+
+## 19. Phase 3: リンク検査と辞書の鮮度点検（2026-10-30）
+
+`python3 tools/check_links.py [--notify]`（標準ライブラリのみ。1.5秒間隔・リトライなし・約26リクエスト）。結果は `reports/link_check_YYYYMMDD.json`（git管理外）。NGがあれば終了コード1、`--notify` でmacOS通知。
+
+| 検査 | 内容 |
+|------|------|
+| カタログURL | 全21項目のURL（プレースホルダは那覇の代表値、ハッシュ除去）がHTTP 200か。同一URLは1回だけ取得 |
+| 裏のJSON | 予報JSON・警報JSON・アメダス最新時刻が取れるか（SPAの中身が生きている目安） |
+| 辞書の鮮度 | `data/area.json`・`data/amedastable.json` が気象庁の原本と一致するか（JSON構造で比較） |
+
+限界: `#` 以降はサーバーに届かないため、bosai系SPAは「土台のページがあるか」までしか検査できない。表示内容が変わった場合は検知できない（ブラウザ実機での確認が必要。新体系移行のような変更は、裏JSONの取得失敗・構造変化で気づく想定）。
+
+初回の実行結果: リンク・裏JSONは全件OK。**`area.json` に原本との差分を検出**（市町村 class20s が 1796→1805件。横浜市→横浜市北部/南部、相模原市→西部/東部、富山市・長野市・伊那市なども地区分割）。`data/area.json` を原本で更新し、`jnav/areas.py` に「市名＋地区名への前方一致（スコア90）」を追加して `横浜市` などが従来どおり確定するようにした（回帰テスト追加。テスト23件OK、評価は更新前と同じ 56/62・31/36）。
+
+定期実行: `run_weekly_check.sh` と `launchd/com.user.jma_navigator_linkcheck.plist`（毎週月曜9:30）を用意。**登録は未実施**（`cp launchd/*.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.user.jma_navigator_linkcheck.plist`）。

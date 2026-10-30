@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.user.jma_navigator_linkcheck</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/masahiro/projects/jma_navigator/run_weekly_check.sh</string>
+    </array>
+
+    <!-- 毎週月曜 9:30（スリープ中だった場合は復帰後に実行される） -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key><integer>1</integer>
+        <key>Hour</key><integer>9</integer>
+        <key>Minute</key><integer>30</integer>
+    </dict>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/bin:/bin</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/masahiro/projects/jma_navigator/launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/masahiro/projects/jma_navigator/launchd.log</string>
+</dict>
+</plist>

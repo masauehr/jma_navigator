@@ -75,6 +75,8 @@ def resolve(query):
                 score = 90
             elif name.startswith(q) and name[len(q):len(q) + 1] in ("市", "町", "村", "区") and len(q) >= 2:
                 score = 90  # 「伊達」→「伊達市伊達」のように、市町村名+旧町名の形
+            elif q.endswith("市") and len(q) >= 3 and name.startswith(q):
+                score = 90  # 「横浜市」→「横浜市北部」のように、市が地区に分割された形
             elif kana and q == kana:
                 score = 80
             elif kana and len(q) >= 2 and kana.startswith(q) and re.fullmatch(r"[ぁ-ん]+", q):

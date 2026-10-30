@@ -13,6 +13,12 @@ class TestAreas(unittest.TestCase):
             with self.subTest(q=q):
                 self.assertEqual(pick(q)["office_code"], office)
 
+    def test_地区に分割された市(self):
+        # 2026-10-30 の area.json 更新で「横浜市」などが「横浜市北部/南部」に分割された
+        for q, office in [("横浜市", "140000"), ("相模原市", "140000"), ("長野市", "200000"), ("富山市", "160000")]:
+            with self.subTest(q=q):
+                self.assertEqual(pick(q)["office_code"], office)
+
     def test_曖昧な地名は確定しない(self):
         for q in ["府中", "伊達", "北海道"]:
             with self.subTest(q=q):
