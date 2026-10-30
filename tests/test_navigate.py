@@ -65,6 +65,21 @@ class TestGuide(unittest.TestCase):
         self.assertEqual(parse_year_month("2024年3月", t), (2024, 3))
         self.assertEqual(parse_year_month("先月", date(2026, 1, 5)), (2025, 12))
 
+    def test_台風は経路図へ(self):
+        for q in ["台風の進路", "台風経路図", "台風情報"]:
+            with self.subTest(q=q):
+                r = guide(q)
+                self.assertEqual((r["item"], r["status"]), ("typhoon", "ok"))
+                self.assertEqual(r["url"], "https://www.jma.go.jp/bosai/map.html#contents=typhoon")
+
+    def test_大雨の見通しと早期注意情報(self):
+        self.assertEqual(guide("大雨の見通し")["item"], "warning_timeline")
+        self.assertEqual(guide("全国の早期注意情報")["item"], "early_warning_map")
+        self.assertEqual(guide("早期注意情報")["item"], "early_warning")  # 地域が要る→聞き返し
+        r = guide("那覇の早期注意情報")
+        self.assertEqual((r["item"], r["status"]), ("early_warning", "ok"))
+        self.assertIn("area_code=471000", r["url"])
+
     def test_該当なし(self):
         self.assertEqual(guide("ラーメンの作り方")["status"], "no_match")
 

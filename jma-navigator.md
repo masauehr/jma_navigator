@@ -318,3 +318,15 @@ Chrome 実機で bosai 系を開いて確認した結果、15件中 **13件が c
 
 ### デプロイ結果（2026-10-30）
 `https://jma-navigator.onrender.com` で公開。`/healthz` が `{"ok": true}`、`/robots.txt` が `Disallow: /`、トップ画面の免責・非公式・出典表示、「明日の那覇の天気」→沖縄本島地方の予報ページ案内をRender実機で確認。
+
+## 22. 台風・早期注意情報・大雨の見通しの案内先を修正（2026-10-30）
+
+公開版の利用で指摘された3点を直した。カタログは22項目（`early_warning_map` を追加）。
+
+| 項目 | 変更 |
+|------|------|
+| 台風 | 案内先を `typhoon.html#`（一覧）から **`https://www.jma.go.jp/bosai/map.html#contents=typhoon`（経路図）** に変更。台風番号を付けなくても、開くと現在の台風の経路図（`...&typhoon=TC2637&contents=typhoon` の形）に自動で移ることをChrome実機で確認。言い回しに「台風の経路」「台風経路図」「台風はどこ」を追加 |
+| 早期注意情報 | 全国の地図を開く静的項目 `early_warning_map`（`map.html#contents=probability`）を新設し、「防災」の「よく使うページ」に表示。`https://www.jma.go.jp/bosai/probability/`（地域指定なし）も同じ全国地図に移ることを実機確認。地域を決めて見る `early_warning` は従来どおり（言い回し「早期注意情報」を追加。地名がなければ聞き返し） |
+| 大雨の見通し | 該当する言い回しが未登録で `no_match` だった。`warning_timeline`（警報等の時系列）に「大雨の見通し」「雨の見通し」「大雨はいつまで」「大雨の時間変化」を追加 |
+
+テスト38件OK、評価は変化なし（キーワード版 56/62・31/36）。台風がないときの表示は未確認。
