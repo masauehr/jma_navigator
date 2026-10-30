@@ -267,4 +267,4 @@ Chrome 実機で bosai 系を開いて確認した結果、15件中 **13件が c
 
 初回の実行結果: リンク・裏JSONは全件OK。**`area.json` に原本との差分を検出**（市町村 class20s が 1796→1805件。横浜市→横浜市北部/南部、相模原市→西部/東部、富山市・長野市・伊那市なども地区分割）。`data/area.json` を原本で更新し、`jnav/areas.py` に「市名＋地区名への前方一致（スコア90）」を追加して `横浜市` などが従来どおり確定するようにした（回帰テスト追加。テスト23件OK、評価は更新前と同じ 56/62・31/36）。
 
-定期実行: `run_weekly_check.sh` と `launchd/com.user.jma_navigator_linkcheck.plist`（毎週月曜9:30）を用意。**登録は未実施**（`cp launchd/*.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.user.jma_navigator_linkcheck.plist`）。
+定期実行: `run_weekly_check.sh` と `launchd/com.user.jma_navigator_linkcheck.plist`（毎週水曜9:30）を用意。**登録は未実施**（`cp launchd/*.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.user.jma_navigator_linkcheck.plist`）。

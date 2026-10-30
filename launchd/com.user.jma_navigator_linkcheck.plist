@@ -12,10 +12,10 @@
         <string>/Users/masahiro/projects/jma_navigator/run_weekly_check.sh</string>
     </array>
 
-    <!-- 毎週月曜 9:30（スリープ中だった場合は復帰後に実行される） -->
+    <!-- 毎週水曜 9:30（スリープ中だった場合は復帰後に実行される） -->
     <key>StartCalendarInterval</key>
     <dict>
-        <key>Weekday</key><integer>1</integer>
+        <key>Weekday</key><integer>3</integer>
         <key>Hour</key><integer>9</integer>
         <key>Minute</key><integer>30</integer>
     </dict>
