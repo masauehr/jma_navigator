@@ -175,5 +175,16 @@
   "q": "名護市の潮位",
   "item": "tide",
   "status": "need_place"
+ },
+ {
+  "q": "糸満市の時系列情報を教えて",
+  "item": "warning_timeline",
+  "status": "ok",
+  "office_code": "4721000"
+ },
+ {
+  "q": "ナウキャストを見たい",
+  "item": "nowcast",
+  "status": "ok"
  }
 ]

@@ -12,7 +12,8 @@
         "天気予報",
         "降水確率",
         "最高気温",
-        "天気"
+        "天気",
+        "明後日"
       ],
       "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code={office_code}",
       "params": {
@@ -91,7 +92,10 @@
       "intents": [
         "警報",
         "注意報",
-        "大雨警報は出ている"
+        "大雨警報は出ている",
+        "レベル付き",
+        "警報レベル",
+        "警報・注意報"
       ],
       "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code={office_code}&lang=ja",
       "params": {
@@ -135,7 +139,12 @@
         "大雨の見通し",
         "雨の見通し",
         "大雨はいつまで",
-        "大雨の時間変化"
+        "大雨の時間変化",
+        "時系列",
+        "時系列情報",
+        "警報の時系列",
+        "警報等の時系列",
+        "明日までの警報"
       ],
       "url": "https://www.jma.go.jp/bosai/warning_timeline/",
       "params": {},
@@ -206,7 +215,9 @@
       "intents": [
         "全国の早期注意情報",
         "早期注意情報の全国",
-        "警報級の可能性の全国"
+        "警報級の可能性の全国",
+        "早期注意情報の地図",
+        "全国の地図"
       ],
       "url": "https://www.jma.go.jp/bosai/map.html#contents=probability",
       "params": {},
@@ -268,7 +279,10 @@
         "台風の進路",
         "台風の経路",
         "台風経路図",
-        "台風はどこ"
+        "台風はどこ",
+        "経路図",
+        "進路予報",
+        "台風情報"
       ],
       "url": "https://www.jma.go.jp/bosai/map.html#contents=typhoon",
       "params": {},
@@ -319,7 +333,8 @@
         "満潮",
         "干潮",
         "潮汐",
-        "潮の満ち引き"
+        "潮の満ち引き",
+        "潮位観測"
       ],
       "url": "https://www.jma.go.jp/bosai/tidelevel/#area_type=class20s&area_code={area_code}&point_code={station_code}&filter=0&class30s={class30_code}",
       "params": {
@@ -362,7 +377,9 @@
         "波の高さ",
         "波の予想",
         "波の予報",
-        "波浪"
+        "波浪",
+        "波浪実況・予想図",
+        "波浪予想図"
       ],
       "url": "https://www.data.jma.go.jp/waveinf/tile/jp/index.html",
       "params": {},
@@ -388,7 +405,8 @@
         "沿岸波浪",
         "沿岸の波",
         "海域ごとの波",
-        "沿岸波浪図"
+        "沿岸波浪図",
+        "沿岸波浪実況・予想図"
       ],
       "url": "https://www.data.jma.go.jp/waveinf/tile/jp/index_guid.html",
       "params": {},
@@ -463,7 +481,10 @@
         "気温",
         "降水量",
         "去年",
-        "昨年"
+        "昨年",
+        "過去の気象データ",
+        "日ごとの値",
+        "気象官署"
       ],
       "url": "https://www.data.jma.go.jp/stats/etrn/view/daily_s1.php?prec_no={prec_no}&block_no={block_no}&year={year}&month={month}&day=&view=",
       "params": {
@@ -503,7 +524,9 @@
       "title": "過去の気象データ検索（地点を選ぶ入口）",
       "intents": [
         "過去の天気データ",
-        "観測所を探す"
+        "観測所を探す",
+        "過去の気象データ検索",
+        "地点を選ぶ"
       ],
       "url": "https://www.data.jma.go.jp/stats/etrn/select/prefecture00.php",
       "params": {},
@@ -549,7 +572,10 @@
       "title": "最新の統計データ（現在の気象状況）",
       "intents": [
         "今日の最高気温ランキング",
-        "今日の全国の気温"
+        "今日の全国の気温",
+        "最新の統計データ",
+        "統計データ",
+        "現在の気象状況"
       ],
       "url": "https://www.data.jma.go.jp/stats/data/mdrr/index.html",
       "params": {},
@@ -578,7 +604,9 @@
         "今の風",
         "今の降水",
         "いまの気温",
-        "現在の風速"
+        "現在の風速",
+        "直近の1時間",
+        "1時間ごとの一覧"
       ],
       "url": "https://www.jma.go.jp/bosai/amedas/#amdno={amdno}&format=table1h",
       "params": {
@@ -613,7 +641,10 @@
         "今雨降ってる",
         "雷",
         "竜巻",
-        "線状降水帯"
+        "線状降水帯",
+        "ナウキャスト",
+        "雷ナウキャスト",
+        "竜巻ナウキャスト"
       ],
       "url": "https://www.jma.go.jp/bosai/nowc/",
       "params": {},

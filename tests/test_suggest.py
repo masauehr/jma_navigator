@@ -64,6 +64,21 @@ class TestSuggest(unittest.TestCase):
         self.assertIn("future", _when_hits("夕方の雨"))
         self.assertIn("future", _when_hits("今夜の天気"))
 
+    def test_気象庁のページ名そのもので聞ける(self):
+        # 「時系列情報」が未登録で no_match になっていた（糸満市の時系列情報）
+        r = suggest("糸満市の時系列情報を教えて")
+        self.assertEqual((r["item"], r["scope"]), ("warning_timeline", "class20s"))
+        self.assertIn("area_type=class20s&area_code=4721000", r["url"])
+        self.assertEqual(suggest("時系列情報")["scope"], "japan")
+        self.assertEqual(suggest("糸満市の警報の時系列")["item"], "warning_timeline")
+
+    def test_ページ名の断片で候補に出る(self):
+        for q, item in [("ナウキャスト", "nowcast"), ("経路図", "typhoon"), ("統計データ", "mdrr_latest"),
+                        ("過去の気象データ", "past_data_search"), ("レベル付き", "warning_map")]:
+            with self.subTest(q=q):
+                r = suggest(q)
+                self.assertIn(item, [r.get("item")] + [a["item"] for a in r.get("alternatives", [])])
+
     def test_点数の順(self):
         scores = [s for s, _, _ in rank("明日の那覇の天気")]
         self.assertEqual(scores, sorted(scores, reverse=True))
