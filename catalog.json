@@ -101,7 +101,7 @@
           "example": "471000"
         }
       },
-      "note": "防災情報は公式ページを先に示す。警報・注意報は市町村ごとに発表される。府県・市町村の単位は warning/ ページ（府県は予報区内の市町村の発表状況、市町村は1市町村）。全国は地図。【訂正 2026-10-30】旧URL map.html#contents=warning&areaCode=… は areaCode が無視され全国の地図になるため廃止",
+      "note": "防災情報は公式ページを先に示す。警報・注意報は市町村ごとに発表される。府県・市町村の単位は warning/ ページ（府県は予報区内の市町村の発表状況、市町村は1市町村）。全国は地図。【訂正 2026-10-30】旧URL map.html#contents=warning&areaCode=… は areaCode が無視され全国の地図になるため廃止。地方（centers）は予報区をまとめた概況ページ（例: 沖縄地方）。天気予報は地方の単位に非対応（全国に戻る）",
       "verified": "confirmed",
       "static": false,
       "verified_date": "2026-10-30",
@@ -120,6 +120,7 @@
       ],
       "scope_urls": {
         "japan": "https://www.jma.go.jp/bosai/map.html#contents=warning",
+        "centers": "https://www.jma.go.jp/bosai/warning/#area_type=centers&area_code={center_code}&lang=ja",
         "offices": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code={office_code}&lang=ja",
         "class20s": "https://www.jma.go.jp/bosai/warning/#area_type=class20s&area_code={class20_code}&lang=ja"
       }
@@ -153,6 +154,7 @@
       ],
       "scope_urls": {
         "japan": "https://www.jma.go.jp/bosai/warning_timeline/",
+        "centers": "https://www.jma.go.jp/bosai/warning_timeline/#area_type=centers&area_code={center_code}&efilter=all&lfilter=all",
         "offices": "https://www.jma.go.jp/bosai/warning_timeline/#area_type=offices&area_code={office_code}&efilter=all&lfilter=all",
         "class20s": "https://www.jma.go.jp/bosai/warning_timeline/#area_type=class20s&area_code={class20_code}&efilter=all&lfilter=all"
       }
@@ -191,7 +193,11 @@
       ],
       "when": [
         "future"
-      ]
+      ],
+      "scope_urls": {
+        "centers": "https://www.jma.go.jp/bosai/probability/#area_type=centers&area_code={center_code}&lang=ja",
+        "offices": "https://www.jma.go.jp/bosai/probability/#area_type=offices&area_code={office_code}&lang=ja"
+      }
     },
     {
       "id": "early_warning_map",
@@ -247,7 +253,11 @@
       "when": [
         "now",
         "future"
-      ]
+      ],
+      "scope_urls": {
+        "centers": "https://www.jma.go.jp/bosai/information/#area_type=centers&area_code={center_code}&format=table",
+        "offices": "https://www.jma.go.jp/bosai/information/#area_type=offices&area_code={office_code}&format=table"
+      }
     },
     {
       "id": "typhoon",

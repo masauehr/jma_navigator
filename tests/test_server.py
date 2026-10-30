@@ -92,7 +92,7 @@ class ServerTest(unittest.TestCase):
     def test_scope_and_city_pick(self):
         d = json.loads(call(self.port, "/api/guide", {"question": "那覇市の警報は出ている？"})[1])
         self.assertEqual((d["item"], d["scope"]), ("warning_map", "class20s"))
-        self.assertEqual([s["value"] for s in d["scopes"]], ["japan", "offices", "class20s"])
+        self.assertEqual([s["value"] for s in d["scopes"]], ["japan", "centers", "offices", "class20s"])
         d = json.loads(call(self.port, "/api/guide", {"question": "那覇市の警報は出ている？", "scope": "japan"})[1])
         self.assertEqual(d["scope"], "japan")
         # 略称で市町村を選ぶ → 候補ボタン(class20_code)で確定
@@ -106,6 +106,15 @@ class ServerTest(unittest.TestCase):
         # 不正な単位・候補外のコードは無視される
         d = json.loads(call(self.port, "/api/guide", {"question": "警報は出ている？", "scope": "evil"})[1])
         self.assertEqual(d["scope"], "japan")
+
+    def test_center_pick(self):
+        d = json.loads(call(self.port, "/api/guide", {"question": "警報は出ている？", "scope": "centers"})[1])
+        self.assertEqual(d["status"], "need_place")
+        cand = next(c for c in d["candidates"] if c["place"] == "沖縄地方")
+        d = json.loads(call(self.port, "/api/guide", {"question": "警報は出ている？", "scope": "centers",
+                                                     "pick": {"center_code": cand["center_code"]}})[1])
+        self.assertEqual((d["status"], d["scope"]), ("ok", "centers"))
+        self.assertIn("area_type=centers&area_code=011100", d["url"])
 
     def test_tide_station_pick(self):
         d = json.loads(call(self.port, "/api/guide", {"question": "名護市の潮位"})[1])

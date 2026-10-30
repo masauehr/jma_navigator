@@ -95,7 +95,7 @@ def run_guide(question, pick=None, refine=None, exclude=(), scope=None):
 
 def apply_pick(question, result, pick, scope=None):
     """聞き返しの候補ボタンの選択を反映する。候補に含まれる値だけを受け付ける。"""
-    key = next((k for k in ("station_code", "class20_code", "office_code", "amdno") if k in pick), None)
+    key = next((k for k in ("station_code", "center_code", "class20_code", "office_code", "amdno") if k in pick), None)
     chosen = next((c for c in result.get("candidates", [])
                    if key and c.get(key) == pick[key] and ("office_code" not in pick or c.get("office_code") == pick["office_code"])), None)
     item = next((i for i in load_catalog() if i["id"] == result.get("item")), None)
@@ -104,14 +104,17 @@ def apply_pick(question, result, pick, scope=None):
     base = {"item": item["id"], "title": item["title"], "category": item["category"],
             "status": "ok", "verified": item["verified"]}
     if item.get("scope_urls"):
-        values = {k: chosen[k] for k in ("office_code", "class20_code") if k in chosen}
-        use = scope if scope in item["scope_urls"] else ("class20s" if "class20_code" in values and "class20s" in item["scope_urls"] else "offices")
+        values = {k: chosen[k] for k in ("office_code", "class20_code", "center_code") if k in chosen}
+        if "center_code" in values:
+            use = "centers"
+        else:
+            use = scope if scope in item["scope_urls"] else ("class20s" if "class20_code" in values and "class20s" in item["scope_urls"] else "offices")
         if use not in item["scope_urls"]:
             return result
         url, missing = build_scoped(item, use, values)
         if missing:
             return result
-        place = chosen.get("office_name", "") + (" " + chosen["place"] if "class20_code" in chosen else "")
+        place = chosen["place"] if "center_code" in chosen else chosen.get("office_name", "") + (" " + chosen["place"] if "class20_code" in chosen else "")
         return {**base, "url": url, "place": place.strip(), "scope": use, "scopes": result.get("scopes", [])}
     values = {k: chosen[k] for k in ("area_code", "station_code", "class30_code")} if key == "station_code" else {key: chosen[key]}
     url, missing = build_url(item, values)

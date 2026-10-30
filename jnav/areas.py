@@ -103,3 +103,24 @@ def pick(query):
     if len(offices) == 1:
         return next(c for c in cands if c["score"] == top)
     return None
+
+
+def center_of(office_code):
+    """予報区コード → (地方コード, 地方名)。例: 471000 → ("011100", "沖縄地方")。"""
+    area = _load()
+    code = area["offices"][office_code]["parent"]
+    return code, area["centers"][code]["name"]
+
+
+def find_centers(question):
+    """質問に地方名（「東北地方」など。括弧書きは除く）が書かれていれば [(コード, 名前)] を返す。"""
+    out = []
+    for code, e in _load()["centers"].items():
+        base = e["name"].split("（")[0]
+        if base in question:
+            out.append((code, e["name"]))
+    return out
+
+
+def all_centers():
+    return [(code, e["name"]) for code, e in _load()["centers"].items()]

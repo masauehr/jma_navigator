@@ -46,9 +46,38 @@ class TestScope(unittest.TestCase):
 
     def test_対応する単位の一覧(self):
         by = {i["id"]: i for i in load_catalog()}
-        self.assertEqual([s["value"] for s in scopes_of(by["warning_map"])], ["japan", "offices", "class20s"])
-        self.assertEqual([s["value"] for s in scopes_of(by["forecast_short"])], ["offices", "class20s"])
-        self.assertEqual(scopes_of(by["early_warning"]), [])  # 府県のみ（一次細分は全国地図に戻るため非対応）
+        self.assertEqual([s["value"] for s in scopes_of(by["warning_map"])], ["japan", "centers", "offices", "class20s"])
+        self.assertEqual([s["value"] for s in scopes_of(by["forecast_short"])], ["offices", "class20s"])  # 地方は全国の予報に戻るため非対応
+        self.assertEqual([s["value"] for s in scopes_of(by["early_warning"])], ["centers", "offices"])  # 市町村・一次細分は全国地図に戻る
+        self.assertEqual([s["label"] for s in scopes_of(by["warning_map"])], ["全国", "地方", "府県", "市町村"])
+
+    def test_地方の単位(self):
+        # 利用者が示したURLと同じ: 沖縄地方 = 011100（予報区 沖縄本島・大東島・宮古島・八重山をまとめた単位）
+        r = guide("名護市の警報", item_id="warning_map", scope="centers")
+        self.assertEqual((r["status"], r["scope"], r["place"]), ("ok", "centers", "沖縄地方"))
+        self.assertEqual(r["url"], "https://www.jma.go.jp/bosai/warning/#area_type=centers&area_code=011100&lang=ja")
+
+    def test_地方名が書かれていれば地方の単位(self):
+        r = guide("東北地方の警報", item_id="warning_map")
+        self.assertEqual((r["scope"], r["place"]), ("centers", "東北地方"))
+        self.assertIn("area_code=010200", r["url"])
+
+    def test_地名がなければ地方を選んでもらう(self):
+        r = guide("警報は？", item_id="warning_map", scope="centers")
+        self.assertEqual(r["status"], "need_place")
+        self.assertEqual(len(r["candidates"]), 11)
+        self.assertTrue(all("center_code" in c for c in r["candidates"]))
+
+    def test_地方に対応するページ(self):
+        for iid, frag in [("warning_timeline", "warning_timeline/#area_type=centers&area_code=011100"),
+                          ("early_warning", "probability/#area_type=centers&area_code=011100"),
+                          ("information", "information/#area_type=centers&area_code=011100")]:
+            with self.subTest(iid=iid):
+                self.assertIn(frag, guide("沖縄の" + iid, item_id=iid, scope="centers")["url"])
+
+    def test_天気予報は地方に対応しない(self):
+        r = guide("沖縄の天気", item_id="forecast_short", scope="centers")
+        self.assertEqual(r["scope"], "offices")  # 非対応の単位は無視して地名から決める
 
     def test_予報は市町村でも開く(self):
         r = guide("明日の那覇市の天気", item_id="forecast_short", scope="class20s")

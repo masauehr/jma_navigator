@@ -9,7 +9,7 @@ from datetime import date
 from pathlib import Path
 
 from .amedas import find_stations, nearest, wanted_element
-from .areas import resolve
+from .areas import all_centers, center_of, find_centers, resolve
 from .stations import find_station
 from . import tides
 
@@ -113,7 +113,7 @@ def build_url(item, values):
     return url, []
 
 
-SCOPE_LABEL = {"japan": "全国", "offices": "府県", "class20s": "市町村"}
+SCOPE_LABEL = {"japan": "全国", "centers": "地方", "offices": "府県", "class20s": "市町村"}
 SCOPES = tuple(SCOPE_LABEL)
 
 
@@ -145,7 +145,7 @@ def _cities(cands, min_score):
 
 
 def _guide_scoped(item, result, place_q, scope):
-    """全国・府県・市町村のうち、選んだ（または地名から決めた）単位でURLを組み立てる。"""
+    """全国・地方・府県・市町村のうち、選んだ（または地名から決めた）単位でURLを組み立てる。"""
     su = item["scope_urls"]
     scopes = scopes_of(item)
     cands = extract_place(place_q)
@@ -154,6 +154,7 @@ def _guide_scoped(item, result, place_q, scope):
     # 質問に市町村名そのもの（「那覇市」）が書かれているか。略称（「那覇」「沖縄」）は別に扱う
     exact_cities = [c for c in _cities(cands, 90) if c["place"] in place_q] if office else []
     loose_cities = _cities(cands, 90) if office else []
+    named_centers = find_centers(place_q)  # 「東北地方」のように地方名が書かれているか
 
     def ask(hint=None, candidates=None):
         r = {**result, "scopes": scopes, "status": "need_place", "scope": want}
@@ -167,9 +168,14 @@ def _guide_scoped(item, result, place_q, scope):
         return [{"office_code": c["office_code"], "office_name": c["office_name"], "place": c["place"]}
                 for c in cands[:6]]
 
+    def center_candidates(pool):
+        return [{"center_code": code, "place": name, "office_name": ""} for code, name in pool]
+
     want = scope if scope in su else None
     if want is None:  # 地名の粒度から単位を決める
-        if not cands:
+        if named_centers and "centers" in su:
+            want = "centers"
+        elif not cands:
             want = "japan" if "japan" in su else None
         elif office is None:
             return ask(candidates=office_candidates())
@@ -181,6 +187,19 @@ def _guide_scoped(item, result, place_q, scope):
             return ask(hint="地名（例: 那覇、東京）を入れてください")
     if want == "japan":
         values = {}
+    elif want == "centers":
+        if len(named_centers) > 1:
+            return ask(candidates=center_candidates(named_centers))
+        if named_centers:
+            code, name = named_centers[0]
+        elif office:
+            code, name = center_of(office)
+        elif cands:  # 地名が複数の予報区にまたがる: まず地域を決めてもらう
+            return ask(candidates=office_candidates())
+        else:
+            return ask(candidates=center_candidates(all_centers()), hint="どの地方ですか？")
+        values = {"center_code": code}
+        result["place"] = name
     elif want == "offices":
         if office is None:
             return ask(candidates=office_candidates() if cands else None,
