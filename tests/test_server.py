@@ -65,6 +65,30 @@ class ServerTest(unittest.TestCase):
         d = json.loads(call(self.port, "/api/guide", {"question": "府中の天気", "pick": {"office_code": "999999"}})[1])
         self.assertEqual(d["status"], "need_place")
 
+    def test_alternatives_and_refine(self):
+        d = json.loads(call(self.port, "/api/guide", {"question": "沖縄の大雨の見通し"})[1])
+        self.assertEqual(d["status"], "ok")
+        self.assertIn("area_code=471000", d["url"])
+        self.assertGreaterEqual(len(d["alternatives"]), 2)
+        self.assertTrue(all(a["url"].startswith(server.ALLOWED_HOSTS) for a in d["alternatives"] if a.get("url")))
+        # 「違う」: 却下した項目を除き、話題で絞って探し直す
+        d2 = json.loads(call(self.port, "/api/guide", {"question": "沖縄の大雨の見通し", "exclude": [d["item"]],
+                                                     "refine": {"when": "now"}})[1])
+        self.assertNotEqual(d2.get("item"), d["item"])
+        shown = [d2.get("item")] + [a["item"] for a in d2.get("alternatives", [])]
+        self.assertNotIn(d["item"], shown)
+
+    def test_choose_when_ambiguous(self):
+        d = json.loads(call(self.port, "/api/guide", {"question": "雨が心配"})[1])
+        self.assertEqual(d["status"], "choose")
+        self.assertTrue(d["alternatives"] and d["choices"]["when"])
+
+    def test_refine_input_sanitized(self):
+        # 想定外のキー・型は無視され、エラーにならない
+        d = json.loads(call(self.port, "/api/guide", {"question": "雨が心配", "refine": {"x": 1, "when": "future"},
+                                                     "exclude": [1, 2]})[1])
+        self.assertIn(d["status"], ("ok", "choose", "need_place"))
+
     def test_bad_requests(self):
         self.assertEqual(call(self.port, "/api/guide", {"question": ""})[0], 400)
         self.assertEqual(call(self.port, "/api/guide", {"question": "あ" * 201})[0], 400)

@@ -1,0 +1,56 @@
+"""suggest（複数候補・絞り込み）のテスト。通信なし。"""
+import sys
+import unittest
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from jnav.suggest import rank, suggest  # noqa: E402
+
+
+class TestSuggest(unittest.TestCase):
+    def test_地名があれば地域指定できるページが本命(self):
+        r = suggest("沖縄の大雨の見通し")
+        self.assertIn(r["item"], ("early_warning", "warning_timeline_area"))
+        self.assertIn("area_code=471000", r["url"])
+        shown = {r["item"]} | {a["item"] for a in r["alternatives"]}
+        self.assertTrue({"early_warning", "warning_timeline_area"} <= shown)  # どちらも案内に出る
+
+    def test_地名がなければ全国版が本命で地域版は聞き返し(self):
+        r = suggest("大雨の見通し")
+        self.assertEqual(r["item"], "warning_timeline")
+        alt = {a["item"]: a for a in r["alternatives"]}
+        self.assertEqual(alt["warning_timeline_area"]["status"], "need_place")
+        self.assertNotIn("url", alt["warning_timeline_area"])
+
+    def test_話題だけなら本命を決めず選択肢を出す(self):
+        r = suggest("雨が心配")
+        self.assertEqual(r["status"], "choose")
+        self.assertNotIn("item", r)
+        self.assertGreaterEqual(len(r["alternatives"]), 3)
+
+    def test_却下した項目は出ない(self):
+        r = suggest("沖縄の大雨の見通し", exclude=["warning_timeline_area", "warning_timeline"])
+        shown = [r.get("item")] + [a["item"] for a in r["alternatives"]]
+        self.assertNotIn("warning_timeline_area", shown)
+        self.assertNotIn("warning_timeline", shown)
+
+    def test_絞り込みで時間軸が効く(self):
+        past = suggest("気温", refine={"when": "past"})
+        self.assertIn(past["item"], ("past_data_search", "past_data_menu", "record_ranking"))
+
+    def test_今年の冬の今は未来(self):
+        r = suggest("今年の冬は寒い？")
+        self.assertIn(r["item"], ("monthly_forecast", "three_month_forecast"))
+
+    def test_該当なしは選択肢つき(self):
+        r = suggest("ラーメンの作り方")
+        self.assertEqual(r["status"], "no_match")
+        self.assertTrue(r["choices"]["topic"])
+
+    def test_点数の順(self):
+        scores = [s for s, _, _ in rank("明日の那覇の天気")]
+        self.assertEqual(scores, sorted(scores, reverse=True))
+
+
+if __name__ == "__main__":
+    unittest.main()

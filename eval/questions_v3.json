@@ -1,0 +1,134 @@
+[
+ {
+  "q": "沖縄の大雨の見通し",
+  "item": [
+   "warning_timeline_area",
+   "early_warning"
+  ],
+  "status": "ok",
+  "office_code": "471000",
+  "also": [
+   "early_warning",
+   "warning_timeline_area"
+  ]
+ },
+ {
+  "q": "大雨の見通し",
+  "item": [
+   "warning_timeline",
+   "early_warning_map"
+  ],
+  "status": "ok",
+  "also": [
+   "warning_timeline_area",
+   "early_warning"
+  ]
+ },
+ {
+  "q": "台風が来そう",
+  "item": "typhoon",
+  "status": "ok",
+  "also": [
+   "information"
+  ]
+ },
+ {
+  "q": "明日雨降る？東京",
+  "item": "forecast_short",
+  "status": "ok",
+  "office_code": "130000",
+  "also": [
+   "forecast_weekly",
+   "early_warning"
+  ]
+ },
+ {
+  "q": "今すぐ危ない雨かどうか知りたい",
+  "item": [
+   "kikikuru",
+   "nowcast"
+  ],
+  "status": "ok",
+  "also": [
+   "nowcast",
+   "kikikuru"
+  ]
+ },
+ {
+  "q": "地震があったか",
+  "item": "earthquake",
+  "status": "ok",
+  "also": [
+   "tsunami"
+  ]
+ },
+ {
+  "q": "津波が心配",
+  "item": "tsunami",
+  "status": "ok",
+  "also": [
+   "earthquake"
+  ]
+ },
+ {
+  "q": "今年の冬は寒い？",
+  "item": [
+   "three_month_forecast",
+   "monthly_forecast"
+  ],
+  "status": "ok",
+  "also": [
+   "monthly_forecast",
+   "three_month_forecast"
+  ]
+ },
+ {
+  "q": "那覇の今の風",
+  "item": "amedas_now",
+  "status": "ok",
+  "also": [
+   "forecast_short"
+  ]
+ },
+ {
+  "q": "雷が来る？",
+  "item": "nowcast",
+  "status": "ok"
+ },
+ {
+  "q": "来週の大阪の天気",
+  "item": "forecast_weekly",
+  "status": "ok",
+  "office_code": "270000",
+  "also": [
+   "forecast_short"
+  ]
+ },
+ {
+  "q": "大雨警報は出てる？福岡",
+  "item": "warning_map",
+  "status": "ok",
+  "office_code": "400000",
+  "also": [
+   "information"
+  ]
+ },
+ {
+  "q": "天気を知りたい",
+  "item": [
+   "forecast_short",
+   "forecast_weekly",
+   "weather_map"
+  ],
+  "status": "need_place",
+  "also": [
+   "forecast_weekly",
+   "weather_map"
+  ]
+ },
+ {
+  "q": "雨が心配",
+  "item": null,
+  "status": "choose"
+ }
+]

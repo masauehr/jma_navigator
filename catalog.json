@@ -25,7 +25,18 @@
       "note": "",
       "verified": "confirmed",
       "static": false,
-      "verified_date": "2026-10-27"
+      "verified_date": "2026-10-27",
+      "tags": [
+        "weather",
+        "rain",
+        "temp",
+        "wind",
+        "snow"
+      ],
+      "when": [
+        "now",
+        "future"
+      ]
     },
     {
       "id": "forecast_weekly",
@@ -34,7 +45,11 @@
       "intents": [
         "週間予報",
         "来週の天気",
-        "1週間の天気"
+        "1週間の天気",
+        "来週",
+        "来週の",
+        "週間",
+        "週末"
       ],
       "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code={office_code}",
       "params": {
@@ -47,7 +62,17 @@
       "note": "短期と同じページ内の週間欄",
       "verified": "confirmed",
       "static": false,
-      "verified_date": "2026-10-27"
+      "verified_date": "2026-10-27",
+      "tags": [
+        "weather",
+        "rain",
+        "temp",
+        "wind",
+        "snow"
+      ],
+      "when": [
+        "future"
+      ]
     },
     {
       "id": "warning_map",
@@ -69,18 +94,28 @@
       "note": "防災情報は公式ページを先に示す",
       "verified": "confirmed",
       "static": false,
-      "verified_date": "2026-10-27"
+      "verified_date": "2026-10-27",
+      "tags": [
+        "warning",
+        "rain",
+        "wind",
+        "snow",
+        "flood"
+      ],
+      "when": [
+        "now"
+      ]
     },
     {
       "id": "warning_timeline",
       "category": "防災",
       "title": "警報等の時系列（見通し）",
       "intents": [
-        "雨の見通し",
+        "警報はいつまで",
         "警報の見通し",
         "大雨の見通し",
+        "雨の見通し",
         "大雨はいつまで",
-        "警報はいつまで",
         "大雨の時間変化"
       ],
       "url": "https://www.jma.go.jp/bosai/warning_timeline/",
@@ -88,7 +123,50 @@
       "note": "",
       "verified": "confirmed",
       "static": true,
-      "verified_date": "2026-10-27"
+      "verified_date": "2026-10-27",
+      "tags": [
+        "warning",
+        "rain",
+        "wind",
+        "snow"
+      ],
+      "when": [
+        "future"
+      ]
+    },
+    {
+      "id": "warning_timeline_area",
+      "category": "防災",
+      "title": "警報等の時系列（地域を指定）",
+      "intents": [
+        "警報はいつまで",
+        "警報の見通し",
+        "大雨の見通し",
+        "雨の見通し",
+        "大雨はいつまで",
+        "大雨の時間変化"
+      ],
+      "url": "https://www.jma.go.jp/bosai/warning_timeline/#area_type=offices&area_code={office_code}&efilter=all&lfilter=all",
+      "params": {
+        "office_code": {
+          "type": "area_office",
+          "resolver": "area.json:offices",
+          "example": "471000"
+        }
+      },
+      "note": "全国版は warning_timeline。地域の予報区を指定して、明日までの警報等の見通しを時系列で見る",
+      "verified": "confirmed",
+      "static": false,
+      "verified_date": "2026-10-30",
+      "tags": [
+        "warning",
+        "rain",
+        "wind",
+        "snow"
+      ],
+      "when": [
+        "future"
+      ]
     },
     {
       "id": "early_warning",
@@ -97,7 +175,10 @@
       "intents": [
         "警報級の可能性",
         "数日先の大雨の可能性",
-        "早期注意情報"
+        "早期注意情報",
+        "大雨の見通し",
+        "雨の見通し",
+        "数日先の見通し"
       ],
       "url": "https://www.jma.go.jp/bosai/probability/#area_type=offices&area_code={office_code}&lang=ja",
       "params": {
@@ -110,7 +191,16 @@
       "note": "",
       "verified": "confirmed",
       "static": false,
-      "verified_date": "2026-10-27"
+      "verified_date": "2026-10-27",
+      "tags": [
+        "warning",
+        "rain",
+        "wind",
+        "snow"
+      ],
+      "when": [
+        "future"
+      ]
     },
     {
       "id": "early_warning_map",
@@ -126,7 +216,16 @@
       "note": "地域を選ばず全国の地図で見る。地域を決めて見るときは early_warning",
       "verified": "confirmed",
       "static": true,
-      "verified_date": "2026-10-30"
+      "verified_date": "2026-10-30",
+      "tags": [
+        "warning",
+        "rain",
+        "wind",
+        "snow"
+      ],
+      "when": [
+        "future"
+      ]
     },
     {
       "id": "information",
@@ -147,7 +246,17 @@
       "note": "",
       "verified": "confirmed",
       "static": false,
-      "verified_date": "2026-10-27"
+      "verified_date": "2026-10-27",
+      "tags": [
+        "rain",
+        "wind",
+        "typhoon",
+        "warning"
+      ],
+      "when": [
+        "now",
+        "future"
+      ]
     },
     {
       "id": "typhoon",
@@ -165,7 +274,15 @@
       "note": "現在の台風の経路図が開く（台風番号の指定は不要。台風がないときは該当の表示になる）",
       "verified": "confirmed",
       "static": true,
-      "verified_date": "2026-10-30"
+      "verified_date": "2026-10-30",
+      "tags": [
+        "typhoon",
+        "wind"
+      ],
+      "when": [
+        "now",
+        "future"
+      ]
     },
     {
       "id": "tsunami",
@@ -180,7 +297,14 @@
       "note": "",
       "verified": "confirmed",
       "static": true,
-      "verified_date": "2026-10-27"
+      "verified_date": "2026-10-27",
+      "tags": [
+        "tsunami",
+        "quake"
+      ],
+      "when": [
+        "now"
+      ]
     },
     {
       "id": "tide",
@@ -208,7 +332,15 @@
       "note": "パラメータが多い。観測所は検索ツールで引く。トップを開くとURLが東京(class20s=1310200,class30s=13001100)で補完されることを確認",
       "verified": "confirmed",
       "static": false,
-      "verified_date": "2026-10-27"
+      "verified_date": "2026-10-27",
+      "tags": [
+        "tide",
+        "tsunami"
+      ],
+      "when": [
+        "now",
+        "future"
+      ]
     },
     {
       "id": "monthly_forecast",
@@ -222,7 +354,16 @@
       "params": {},
       "note": "ページは「季節予報解説資料」。term指定で1か月/3か月に切り替わることをユーザーが手動確認（2026-10-30）",
       "verified": "confirmed",
-      "static": true
+      "static": true,
+      "tags": [
+        "temp",
+        "rain",
+        "weather"
+      ],
+      "when": [
+        "future",
+        "long"
+      ]
     },
     {
       "id": "three_month_forecast",
@@ -236,7 +377,16 @@
       "params": {},
       "note": "ページは「季節予報解説資料」。term指定で1か月/3か月に切り替わることをユーザーが手動確認（2026-10-30）",
       "verified": "confirmed",
-      "static": true
+      "static": true,
+      "tags": [
+        "temp",
+        "rain",
+        "weather"
+      ],
+      "when": [
+        "future",
+        "long"
+      ]
     },
     {
       "id": "past_data_search",
@@ -271,7 +421,17 @@
       "note": "旧案のindex.php?...&view=は地点選択画面に留まり表が出ない。daily_s1.phpで日ごとの値の表が直接開く(那覇47936/prec_no=91で確認)。アメダス地点はdaily_a1.php。1976年以前を含む検索はview=h0/np0で確認",
       "verified": "confirmed",
       "static": false,
-      "verified_date": "2026-10-27"
+      "verified_date": "2026-10-27",
+      "tags": [
+        "temp",
+        "rain",
+        "wind",
+        "snow",
+        "observe"
+      ],
+      "when": [
+        "past"
+      ]
     },
     {
       "id": "past_data_menu",
@@ -285,7 +445,15 @@
       "params": {},
       "note": "入口。地点が決まらないときの代替",
       "verified": "confirmed",
-      "static": true
+      "static": true,
+      "tags": [
+        "observe",
+        "temp",
+        "rain"
+      ],
+      "when": [
+        "past"
+      ]
     },
     {
       "id": "record_ranking",
@@ -300,7 +468,16 @@
       "params": {},
       "note": "",
       "verified": "confirmed",
-      "static": true
+      "static": true,
+      "tags": [
+        "temp",
+        "rain",
+        "wind",
+        "observe"
+      ],
+      "when": [
+        "past"
+      ]
     },
     {
       "id": "mdrr_latest",
@@ -314,7 +491,15 @@
       "params": {},
       "note": "etrnトップのバナーから確認（相対パス ../data/mdrr/index.html）",
       "verified": "confirmed",
-      "static": true
+      "static": true,
+      "tags": [
+        "temp",
+        "rain",
+        "observe"
+      ],
+      "when": [
+        "now"
+      ]
     },
     {
       "id": "amedas_now",
@@ -341,7 +526,17 @@
       "note": "観測所番号5桁だけで開く（area_codeは自動補完）。伊是名91011・石垣島94081で確認。直近の観測のみ。過去は past_data_search",
       "verified": "confirmed",
       "verified_date": "2026-10-27",
-      "static": false
+      "static": false,
+      "tags": [
+        "temp",
+        "rain",
+        "wind",
+        "snow",
+        "observe"
+      ],
+      "when": [
+        "now"
+      ]
     },
     {
       "id": "nowcast",
@@ -361,7 +556,15 @@
       "note": "1時間先までの雨雲の動き。線状降水帯予測マップも同ページ",
       "verified": "confirmed",
       "verified_date": "2026-10-27",
-      "static": true
+      "static": true,
+      "tags": [
+        "rain",
+        "thunder",
+        "wind"
+      ],
+      "when": [
+        "now"
+      ]
     },
     {
       "id": "kikikuru",
@@ -373,14 +576,23 @@
         "土砂災害の危険度",
         "洪水の危険度",
         "浸水",
-        "避難"
+        "避難",
+        "土砂災害",
+        "増水"
       ],
       "url": "https://www.jma.go.jp/bosai/risk/",
       "params": {},
       "note": "避難の判断は自治体の避難情報と合わせる。断定せず公式ページを示す",
       "verified": "confirmed",
       "verified_date": "2026-10-27",
-      "static": true
+      "static": true,
+      "tags": [
+        "rain",
+        "flood"
+      ],
+      "when": [
+        "now"
+      ]
     },
     {
       "id": "weather_map",
@@ -398,7 +610,15 @@
       "note": "",
       "verified": "confirmed",
       "verified_date": "2026-10-27",
-      "static": true
+      "static": true,
+      "tags": [
+        "weather",
+        "wind",
+        "rain"
+      ],
+      "when": [
+        "now"
+      ]
     },
     {
       "id": "earthquake",
@@ -415,7 +635,14 @@
       "note": "",
       "verified": "confirmed",
       "verified_date": "2026-10-27",
-      "static": true
+      "static": true,
+      "tags": [
+        "quake",
+        "tsunami"
+      ],
+      "when": [
+        "now"
+      ]
     },
     {
       "id": "himawari",
@@ -432,7 +659,14 @@
       "note": "",
       "verified": "confirmed",
       "verified_date": "2026-10-27",
-      "static": true
+      "static": true,
+      "tags": [
+        "weather",
+        "typhoon"
+      ],
+      "when": [
+        "now"
+      ]
     }
   ]
 }

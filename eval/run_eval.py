@@ -1,7 +1,8 @@
 """評価セット(eval/questions.json)で guide() の正答率を測る。標準ライブラリのみ。
 
-使い方: python3 eval/run_eval.py [--engine keyword|llm] [--model haiku|sonnet] [--set questions|questions_v2]
+使い方: python3 eval/run_eval.py [--engine keyword|llm|suggest] [--model haiku|sonnet] [--set questions|questions_v2]
 正解の判定: status が一致し、期待する item / office_code / amdno / block_no / 年月が一致すること。
+"also" がある問は、それらの項目が本命または alternatives（次点以下の候補）に含まれることも求める（suggest エンジン用）。
 """
 import argparse
 import json
@@ -36,14 +37,18 @@ def check(exp, got, today):
             m = re.search(pat, url)
             if not m or m.group(1) != str(want):
                 why.append(f"{key} {m.group(1) if m else None} != {want}")
+    shown = [got.get("item")] + [a["item"] for a in got.get("alternatives", [])]  # 本命＋次点以下
+    for want in exp.get("also", []):
+        if want not in shown:
+            why.append(f"候補に {want} がありません")
     return why
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--engine", default="keyword", choices=["keyword", "llm"])
+    ap.add_argument("--engine", default="keyword", choices=["keyword", "llm", "suggest"])
     ap.add_argument("--model", default="haiku")
-    ap.add_argument("--set", default="questions", help="eval/ 内の評価セット名（questions / questions_v2）")
+    ap.add_argument("--set", default="questions", help="eval/ 内の評価セット名（questions / questions_v2 / questions_v3）")
     ap.add_argument("--limit", type=int, default=0)
     a = ap.parse_args()
     qs = json.loads((ROOT / "eval" / f"{a.set}.json").read_text(encoding="utf-8"))
@@ -52,6 +57,9 @@ def main():
     if a.engine == "llm":
         from jnav.llm import guide_llm
         fn = lambda q: guide_llm(q, model=a.model)  # noqa: E731
+    elif a.engine == "suggest":
+        from jnav.suggest import suggest
+        fn = suggest
     else:
         fn = guide
     ok, today, results = 0, date.today(), []

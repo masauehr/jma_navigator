@@ -105,3 +105,15 @@ a.open {
 
 footer { padding-bottom: 32px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 12px; }
 footer a { color: var(--accent); }
+
+/* 候補一覧・合っていたかの確認・絞り込み */
+.alts ul { list-style: none; margin: 0; padding: 0; }
+.alts li { margin: 8px 0; }
+.alts a { color: var(--accent); font-weight: 600; }
+.alts .plain { font-weight: 600; }
+.alts .place { color: var(--muted); font-size: 0.9rem; margin-left: 4px; }
+.alts .note { margin: 0; }
+.feedback { display: flex; align-items: center; gap: 8px; margin: -4px 0 16px; font-size: 0.95rem; }
+.feedback button { padding: 4px 14px; font-size: 0.9rem; background: #fff; color: var(--accent); border: 1px solid var(--accent); }
+.refine h2 { font-size: 1rem; }
+.candidates button.on { background: var(--accent); color: #fff; }

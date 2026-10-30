@@ -19,7 +19,8 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from jnav.navigate import build_url, guide, load_catalog
+from jnav.navigate import build_url, load_catalog
+from jnav.suggest import suggest
 
 WEB = Path(__file__).resolve().parent / "web"
 MAX_BODY = 2048
@@ -64,19 +65,30 @@ class RateLimiter:
 LIMITER = RateLimiter()
 
 
-def run_guide(question, pick=None):
+def run_guide(question, pick=None, refine=None, exclude=()):
     """pick は聞き返しの候補ボタンで選ばれた {"office_code":..} か {"amdno":..}。
+    refine は「違う」のあとの絞り込み {"when":..,"topic":..}、exclude は却下したページの項目ID。
     元の質問を解き直し、返ってきた候補に含まれる値だけを受け付けてURLを組み立てる。"""
-    if USE_LLM:
+    result = suggest(question, refine=refine, exclude=exclude)
+    if USE_LLM:  # LLMは本命の項目選択だけを差し替える(次点以下はキーワード版のまま)
         from jnav.llm import guide_llm
-        result = guide_llm(question)
-    else:
-        result = guide(question)
+        llm = guide_llm(question)
+        if llm.get("status") != "no_match":
+            llm["alternatives"] = [a for a in result.get("alternatives", []) if a["item"] != llm.get("item")]
+            llm["choices"] = result.get("choices")
+            result = llm
     if pick and result.get("status") == "need_place":
+        alts, choices = result.get("alternatives"), result.get("choices")
         result = apply_pick(question, result, pick)
+        if alts is not None and "alternatives" not in result:
+            result["alternatives"], result["choices"] = alts, choices
     url = result.get("url")
     if url and not url.startswith(ALLOWED_HOSTS):  # カタログ由来なので通常は起きない
         result = {"status": "no_match", "question": question}
+    for a in result.get("alternatives", []):
+        if a.get("url") and not a["url"].startswith(ALLOWED_HOSTS):
+            a.pop("url")
+            a["status"] = "need_place"
     return result
 
 
@@ -166,11 +178,15 @@ class Handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(n))
             question = str(body.get("question", "")).strip()
             pick = body.get("pick") if isinstance(body.get("pick"), dict) else None
+            refine = body.get("refine") if isinstance(body.get("refine"), dict) else None
+            exclude = [str(x) for x in body.get("exclude", [])][:10] if isinstance(body.get("exclude"), list) else []
+            if refine:  # 許可した語彙だけ受け付ける
+                refine = {k: v for k, v in refine.items() if k in ("when", "topic") and isinstance(v, str) and len(v) < 20}
         except (ValueError, AttributeError):
             return self._send(400, {"error": "bad request"})
         if not question or len(question) > MAX_QUESTION:
             return self._send(400, {"error": f"質問は1〜{MAX_QUESTION}文字で入力してください"})
-        self._send(200, run_guide(question, pick))
+        self._send(200, run_guide(question, pick, refine, exclude))
 
     def log_message(self, fmt, *args):  # 質問文をログに残さない
         pass
