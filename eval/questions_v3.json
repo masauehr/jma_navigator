@@ -198,5 +198,26 @@
   "item": "forecaster_comment",
   "status": "ok",
   "office_code": "471000"
+ },
+ {
+  "q": "今日の最高気温ランキングを教えて",
+  "item": "rank_daily",
+  "status": "ok",
+  "also": [
+   "rank_daily_index"
+  ]
+ },
+ {
+  "q": "昨日の最低気温ランキング",
+  "item": "rank_daily",
+  "status": "ok",
+  "also": [
+   "rank_daily_index"
+  ]
+ },
+ {
+  "q": "歴代の最高気温ランキング",
+  "item": "record_ranking",
+  "status": "ok"
  }
 ]

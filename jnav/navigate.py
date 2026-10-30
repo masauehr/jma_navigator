@@ -5,7 +5,7 @@ URLは必ずカタログのテンプレートから組み立て、自由記述�
 """
 import json
 import re
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from .amedas import find_stations, nearest, wanted_element
@@ -14,6 +14,14 @@ from .stations import find_station
 from . import tides
 
 _CATALOG = Path(__file__).resolve().parent.parent / "catalog.json"
+
+
+JST = timezone(timedelta(hours=9))
+
+
+def today_jst():
+    """日本時間の今日。サーバー（Renderなど）のタイムゾーンがUTCでも、日付が最大9時間ずれないようにする。"""
+    return datetime.now(JST).date()
 
 
 def load_catalog():
@@ -76,7 +84,7 @@ def extract_place(question):
 
 def parse_year_month(question, today=None):
     """「去年の8月」「2025年3月」「先月」「今月」などから (year, month) を返す。分からない要素は None。"""
-    today = today or date.today()
+    today = today or today_jst()
     year = month = None
     m = re.search(r"(\d{4})年", question)
     if m:
@@ -99,6 +107,52 @@ def parse_year_month(question, today=None):
     if month and year is None:
         year = today.year if month <= today.month else today.year - 1
     return year, month
+
+
+RANK_DAYS_BACK = 7  # 毎日の全国観測値ランキングは、今日から7日前までの8日分が掲載される
+
+
+def parse_rank_date(question, today=None):
+    """「今日」「昨日」「一昨日」「10月28日」「28日」から対象日を返す。読み取れなければ今日。"""
+    today = today or today_jst()
+    if "一昨日" in question or "おととい" in question:
+        return today - timedelta(days=2)
+    if "昨日" in question or "きのう" in question:
+        return today - timedelta(days=1)
+    m = re.search(r"(\d{1,2})月(\d{1,2})日", question)
+    if m:
+        try:
+            d = date(today.year, int(m.group(1)), int(m.group(2)))
+        except ValueError:
+            return today
+        return d if d <= today else d.replace(year=d.year - 1)
+    m = re.search(r"(?<![\d月])(\d{1,2})日(?!間|前|後|以)", question)
+    if m and 1 <= int(m.group(1)) <= 31:
+        day = int(m.group(1))
+        y, mo = today.year, today.month
+        if day > today.day:  # 今月にまだ来ていない日 → 先月
+            y, mo = (y, mo - 1) if mo > 1 else (y - 1, 12)
+        try:
+            return date(y, mo, day)
+        except ValueError:
+            return today
+    return today
+
+
+def _guide_rank(item, result, question):
+    """全国観測値ランキングは日付ごとのページ。掲載は最近1週間分だけなので、範囲外は一覧ページを案内する。"""
+    today = today_jst()
+    d = parse_rank_date(question, today)
+    age = (today - d).days
+    label = f"{d.month}月{d.day}日"
+    if 0 <= age <= RANK_DAYS_BACK:
+        rel = {0: "今日", 1: "昨日", 2: "一昨日"}.get(age)
+        url, _ = build_url(item, {"mmdd": f"{d.month:02d}{d.day:02d}"})
+        return {**result, "status": "ok", "url": url, "verified": item["verified"],
+                "place": f"{label}（{rel}）" if rel else label}
+    return {**result, "status": "ok", "url": item["fallback_url"], "verified": item["verified"],
+            "note": f"全国観測値ランキングの掲載は最近1週間分（今日から{RANK_DAYS_BACK}日前まで）だけです。{label}のランキングは掲載がないため、一覧ページを開きます。"
+                    "それ以前の記録は「歴代全国ランキング」や過去データ検索で調べられます。"}
 
 
 def build_url(item, values):
@@ -276,6 +330,8 @@ def _guide(question, item_id, place_text, scope=None):
         return _guide_scoped(item, result, place_text or question, scope)
     if "station_code" in item["params"]:
         return _guide_tide(item, result, place_text or question)
+    if "mmdd" in item["params"]:
+        return _guide_rank(item, result, question)
     if "office_code" in item["params"]:
         cands = extract_place(place_q)
         offices = {c["office_code"] for c in cands}

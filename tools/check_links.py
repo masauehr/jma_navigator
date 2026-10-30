@@ -28,10 +28,17 @@ UA = "jma_navigator-linkcheck/0.1 (personal; low-frequency)"
 INTERVAL = 1.5
 TIMEOUT = 20
 
+def _yesterday_mmdd():
+    """日付つきページ(全国観測値ランキング)の代表値。日本時間の昨日なら必ず掲載がある。"""
+    d = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))) - datetime.timedelta(days=1)
+    return f"{d.month:02d}{d.day:02d}"
+
+
 # プレースホルダの代表値(那覇・沖縄本島)。到達確認だけが目的
 SAMPLE = {
     "office_code": "471000", "area_code": "472000", "station_code": "NH", "class30_code": "471010",
     "prec_no": "91", "block_no": "47936", "year": "2026", "month": "9", "amdno": "91197",
+    "mmdd": _yesterday_mmdd(), "class20_code": "4720100", "center_code": "011100",
 }
 
 # 裏のJSON(SPAの中身が生きているかの目安)

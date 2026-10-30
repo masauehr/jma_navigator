@@ -297,12 +297,12 @@
  },
  {
   "q": "今日の全国の気温ランキング",
-  "item": "mdrr_latest",
+  "item": "rank_daily",
   "status": "ok"
  },
  {
   "q": "今日の最高気温ランキングを見たい",
-  "item": "mdrr_latest",
+  "item": "rank_daily",
   "status": "ok"
  },
  {

@@ -101,7 +101,7 @@ def rank(question, refine=None, exclude=(), items=None):
     place = _place_kind(question)
     out = []
     for it in items:
-        if it["id"] in exclude:
+        if it["id"] in exclude or any(w in question for w in it.get("exclude_words", [])):
             continue
         kws = [kw for kw in it["intents"] + [it["title"]] if kw in question]
         matched = max(kws, key=len, default="")
@@ -176,6 +176,13 @@ def suggest(question, refine=None, exclude=(), limit=5, scope=None):
         if len(alts) >= limit - 1 or score < max(MIN_SCORE, top_score * 0.4):
             break
         alts.append(_alt(question, it, reason, scope))
-    primary["alternatives"] = alts
+    # 本命に必ず添える関連ページ（例: 日別ランキング → ランキング一覧）を、次点の先頭に置く
+    by_id = {it["id"]: it for it in load_catalog()}
+    related = []
+    for rid in ranked[0][1].get("related", []):
+        if rid in by_id and rid not in exclude and rid != primary.get("item"):
+            alts = [a for a in alts if a["item"] != rid]
+            related.append(_alt(question, by_id[rid], "関連するページ（一覧）", scope))
+    primary["alternatives"] = (related + alts)[:limit - 1]
     primary["choices"] = choices(question)
     return primary

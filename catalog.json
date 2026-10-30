@@ -591,7 +591,10 @@
       "intents": [
         "歴代1位",
         "記録",
-        "観測史上"
+        "観測史上",
+        "歴代",
+        "歴代ランキング",
+        "歴代全国ランキング"
       ],
       "url": "https://www.data.jma.go.jp/stats/etrn/view/rankall.php",
       "params": {},
@@ -609,12 +612,89 @@
       ]
     },
     {
+      "id": "rank_daily",
+      "category": "過去データ",
+      "title": "今日の全国観測値ランキング（日ごと）",
+      "intents": [
+        "全国観測値ランキング",
+        "観測値ランキング",
+        "今日のランキング",
+        "昨日のランキング",
+        "最高気温ランキング",
+        "最低気温ランキング",
+        "最高気温の高い",
+        "最低気温の低い",
+        "全国の気温",
+        "ランキング一覧を見たい"
+      ],
+      "url": "https://www.data.jma.go.jp/stats/data/mdrr/rank_daily/data{mmdd}.html",
+      "params": {
+        "mmdd": {
+          "type": "date",
+          "resolver": "question（今日・昨日・一昨日・M月D日。日本時間）"
+        }
+      },
+      "fallback_url": "https://www.data.jma.go.jp/stats/data/mdrr/rank_daily/index.html",
+      "note": "日ごとの全国観測値ランキング（日最高気温の高い方・日最低気温の低い方・降水量・風速など）。更新は20分ごと。掲載は最近1週間分（今日〜7日前）。範囲外は一覧(index.html)を案内。実機確認: data1030.html=「今日の全国観測値ランキング（10月30日）14時20分現在」（2026-10-30）。related: 一覧ページを必ず次点に出す",
+      "verified": "confirmed",
+      "static": false,
+      "verified_date": "2026-10-30",
+      "tags": [
+        "temp",
+        "observe"
+      ],
+      "when": [
+        "now",
+        "past"
+      ],
+      "related": [
+        "rank_daily_index"
+      ],
+      "exclude_words": [
+        "歴代",
+        "観測史上",
+        "史上",
+        "平年"
+      ]
+    },
+    {
+      "id": "rank_daily_index",
+      "category": "過去データ",
+      "title": "毎日の全国観測値ランキング（一覧）",
+      "intents": [
+        "ランキングの一覧",
+        "毎日のランキング",
+        "毎日の全国観測値ランキング",
+        "最近1週間のランキング",
+        "ランキング一覧",
+        "ランキング"
+      ],
+      "url": "https://www.data.jma.go.jp/stats/data/mdrr/rank_daily/index.html",
+      "params": {},
+      "note": "今日・昨日・一昨日と最近1週間分の日付リンク、降水量・降雪量の詳細への入口。実機確認（2026-10-30）",
+      "verified": "confirmed",
+      "static": true,
+      "verified_date": "2026-10-30",
+      "tags": [
+        "temp",
+        "observe"
+      ],
+      "when": [
+        "now",
+        "past"
+      ],
+      "exclude_words": [
+        "歴代",
+        "観測史上",
+        "史上",
+        "平年"
+      ]
+    },
+    {
       "id": "mdrr_latest",
       "category": "過去データ",
       "title": "最新の統計データ（現在の気象状況）",
       "intents": [
-        "今日の最高気温ランキング",
-        "今日の全国の気温",
         "最新の統計データ",
         "統計データ",
         "現在の気象状況"
