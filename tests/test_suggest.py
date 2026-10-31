@@ -11,7 +11,7 @@ class TestSuggest(unittest.TestCase):
     def test_地名があれば地域指定できるページが本命(self):
         r = suggest("沖縄の大雨の見通し")
         self.assertIn(r["item"], ("early_warning", "warning_timeline"))
-        self.assertIn("area_code=471000", r["url"])
+        self.assertIn("area_code=011100", r["url"])  # 「沖縄」は沖縄地方（早期注意情報なら府県も出る）
         shown = {r["item"]} | {a["item"] for a in r["alternatives"]}
         self.assertTrue({"early_warning", "warning_timeline"} <= shown)  # どちらも案内に出る
 

@@ -6,7 +6,7 @@
    "early_warning"
   ],
   "status": "ok",
-  "office_code": "471000",
+  "office_code": "011100",
   "also": [
    "early_warning",
    "warning_timeline"
@@ -196,8 +196,7 @@
  {
   "q": "沖縄の気象台のコメントを見たい",
   "item": "forecaster_comment",
-  "status": "ok",
-  "office_code": "471000"
+  "status": "need_place"
  },
  {
   "q": "今日の最高気温ランキングを教えて",
@@ -219,5 +218,17 @@
   "q": "歴代の最高気温ランキング",
   "item": "record_ranking",
   "status": "ok"
+ },
+ {
+  "q": "沖縄の警報は出てる？",
+  "item": "warning_map",
+  "status": "ok",
+  "office_code": "011100"
+ },
+ {
+  "q": "沖縄の石垣島の警報",
+  "item": "warning_map",
+  "status": "ok",
+  "office_code": "474000"
  }
 ]

@@ -14,10 +14,10 @@ class TestScope(unittest.TestCase):
         self.assertIn("area_type=class20s&area_code=4720100", r["url"])
 
     def test_府県の名前なら府県の単位(self):
-        r = guide("沖縄の警報は？", item_id="warning_map")
+        r = guide("東京の警報は？", item_id="warning_map")
         self.assertEqual(r["scope"], "offices")
         # 府県は警報・注意報のページ（予報区の発表状況）。map.html の areaCode は無視され全国の地図になるため使わない
-        self.assertIn("warning/#area_type=offices&area_code=471000", r["url"])
+        self.assertIn("warning/#area_type=offices&area_code=130000", r["url"])
         self.assertNotIn("map.html", r["url"])
 
     def test_地名がなければ全国(self):
@@ -34,10 +34,34 @@ class TestScope(unittest.TestCase):
         self.assertEqual(guide("那覇市の警報", item_id="warning_map", scope="japan")["scope"], "japan")
 
     def test_略称で市町村を選ぶと黙って決めず確認する(self):
-        r = guide("沖縄の警報", item_id="warning_map", scope="class20s")
+        r = guide("那覇の警報", item_id="warning_map", scope="class20s")
         self.assertEqual(r["status"], "need_place")
-        self.assertEqual([c["place"] for c in r["candidates"]], ["沖縄市"])
+        self.assertEqual([c["place"] for c in r["candidates"]], ["那覇市"])
         self.assertIn("class20_code", r["candidates"][0])
+
+    def test_沖縄は既定が沖縄地方(self):
+        # 沖縄県は4予報区＝沖縄地方（地方と県が一致する唯一の例）。「沖縄」を沖縄市の略称や本島の予報区にしない
+        for q in ("沖縄の警報", "沖縄県の警報"):
+            with self.subTest(q=q):
+                r = guide(q, item_id="warning_map")
+                self.assertEqual((r["scope"], r["place"]), ("centers", "沖縄地方"))
+                self.assertIn("area_type=centers&area_code=011100", r["url"])
+        self.assertEqual(guide("沖縄の警報", item_id="warning_map", scope="offices")["status"], "need_place")  # 4予報区から選ぶ
+        r = guide("沖縄の警報", item_id="warning_map", scope="class20s")  # 沖縄市に黙って決めない
+        self.assertEqual((r["status"], "candidates" in r), ("need_place", False))
+
+    def test_沖縄でも具体的な地名があればそちら(self):
+        r = guide("沖縄の石垣島の警報", item_id="warning_map")
+        self.assertEqual((r["scope"], r["place"]), ("offices", "八重山地方"))
+        r = guide("沖縄の那覇市の警報", item_id="warning_map")
+        self.assertEqual(r["scope"], "class20s")
+        self.assertEqual(guide("沖縄市の警報", item_id="warning_map")["scope"], "class20s")   # 沖縄市は市
+        self.assertEqual(guide("沖縄本島の警報", item_id="warning_map")["place"], "沖縄本島地方")
+
+    def test_地方に対応しないページは地方内の予報区から選ぶ(self):
+        r = guide("沖縄の天気", item_id="forecast_short")
+        self.assertEqual(r["status"], "need_place")
+        self.assertEqual([c["place"] for c in r["candidates"]], ["沖縄本島地方", "大東島地方", "宮古島地方", "八重山地方"])
 
     def test_市町村の指定に地名がない(self):
         r = guide("警報は出ている？", item_id="warning_map", scope="class20s")

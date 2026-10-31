@@ -68,7 +68,7 @@ class ServerTest(unittest.TestCase):
     def test_alternatives_and_refine(self):
         d = json.loads(call(self.port, "/api/guide", {"question": "沖縄の大雨の見通し"})[1])
         self.assertEqual(d["status"], "ok")
-        self.assertIn("area_code=471000", d["url"])
+        self.assertIn("area_code=011100", d["url"])  # 沖縄は沖縄地方（既定）
         self.assertGreaterEqual(len(d["alternatives"]), 2)
         self.assertTrue(all(a["url"].startswith(server.ALLOWED_HOSTS) for a in d["alternatives"] if a.get("url")))
         # 「違う」: 却下した項目を除き、話題で絞って探し直す
@@ -119,8 +119,11 @@ class ServerTest(unittest.TestCase):
             self.assertIn("forecaster_comment,panel", d["url"])
             # 取得できないときは unavailable（画面で案内する）
             server.comments.get = lambda code: None
-            d = json.loads(call(self.port, "/api/guide", {"question": "沖縄の気象台のコメント"})[1])
+            d = json.loads(call(self.port, "/api/guide", {"question": "那覇市の気象台のコメント"})[1])
             self.assertTrue(d["comment"]["unavailable"])
+            # コメントは予報区ごと。「沖縄」は4予報区から選んでもらう
+            d = json.loads(call(self.port, "/api/guide", {"question": "沖縄の気象台のコメント"})[1])
+            self.assertEqual((d["status"], len(d["candidates"])), ("need_place", 4))
             # コメント以外の案内には付かない
             d = json.loads(call(self.port, "/api/guide", {"question": "名護市の警報"})[1])
             self.assertNotIn("comment", d)

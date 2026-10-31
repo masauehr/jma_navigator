@@ -199,6 +199,8 @@ def _cities(cands, min_score):
 
 
 # 山口県は、気象庁の地方予報区では「中国地方」ではなく「九州北部地方」。誤解されやすいので注記する
+OKINAWA = re.compile(r"沖縄県?(?!市|本島|地方)")
+
 YAMAGUCHI_NOTE = {
     "010700": "気象庁の地方予報区では、中国地方に山口県は含まれません（山口県は九州北部地方）。",
     "010900": "気象庁の地方予報区では、山口県は中国地方ではなく九州北部地方に含まれます。",
@@ -214,13 +216,24 @@ def _guide_scoped(item, result, place_q, scope):
     """全国・地方・府県・市町村のうち、選んだ（または地名から決めた）単位でURLを組み立てる。"""
     su = item["scope_urls"]
     scopes = scopes_of(item)
-    cands = extract_place(place_q)
+    # 「沖縄」「沖縄県」は沖縄地方全体（沖縄県は4予報区＝沖縄地方で、地方と県が一致する唯一の例）。
+    # 辞書に「沖縄県」の地域はなく、そのままだと沖縄市の略称として解決されてしまう。
+    # 「沖縄の石垣島」のように具体的な地名が続くときは、そちらを優先する。
+    whole_okinawa = False
+    if OKINAWA.search(place_q):
+        rest = OKINAWA.sub("", place_q)
+        cands = extract_place(rest)
+        whole_okinawa = not cands
+    else:
+        cands = extract_place(place_q)
     offices = {c["office_code"] for c in cands}
     office = next(iter(offices)) if len(offices) == 1 else None
     # 質問に市町村名そのもの（「那覇市」）が書かれているか。略称（「那覇」「沖縄」）は別に扱う
     exact_cities = [c for c in _cities(cands, 90) if c["place"] in place_q] if office else []
     loose_cities = _cities(cands, 90) if office else []
     named_centers = find_centers(place_q)  # 「東北地方」のように地方名（正式名）が書かれているか
+    if whole_okinawa and not named_centers:
+        named_centers = [("011100", "沖縄地方")]
     alias_centers = find_centers(place_q, loose=True)  # 「関東」「九州」などの通称も含む
     # 「北海道」のように複数の予報区にまたがる地名でも、すべて同じ地方に属するなら、その地方が決まる
     place_centers = {center_of(o)[0] for o in offices}
@@ -249,6 +262,8 @@ def _guide_scoped(item, result, place_q, scope):
     if want is None:  # 地名の粒度から単位を決める
         if named_centers and "centers" in su:
             want = "centers"
+        elif len(named_centers) == 1 and "offices" in su and "centers" not in su:
+            want = "offices"  # 地方に対応しないページ（天気予報など）は、その地方の予報区から選んでもらう
         elif not cands and alias_centers and "centers" in su:
             want = "centers"  # 地名としては解決できない通称（「関東」「九州」）
         elif not cands:
