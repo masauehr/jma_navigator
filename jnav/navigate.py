@@ -198,6 +198,13 @@ def _cities(cands, min_score):
     return out
 
 
+# 山口県は、気象庁の地方予報区では「中国地方」ではなく「九州北部地方」。誤解されやすいので注記する
+YAMAGUCHI_NOTE = {
+    "010700": "気象庁の地方予報区では、中国地方に山口県は含まれません（山口県は九州北部地方）。",
+    "010900": "気象庁の地方予報区では、山口県は中国地方ではなく九州北部地方に含まれます。",
+}
+
+
 def _guide_scoped(item, result, place_q, scope):
     """全国・地方・府県・市町村のうち、選んだ（または地名から決めた）単位でURLを組み立てる。"""
     su = item["scope_urls"]
@@ -208,7 +215,8 @@ def _guide_scoped(item, result, place_q, scope):
     # 質問に市町村名そのもの（「那覇市」）が書かれているか。略称（「那覇」「沖縄」）は別に扱う
     exact_cities = [c for c in _cities(cands, 90) if c["place"] in place_q] if office else []
     loose_cities = _cities(cands, 90) if office else []
-    named_centers = find_centers(place_q)  # 「東北地方」のように地方名が書かれているか
+    named_centers = find_centers(place_q)  # 「東北地方」のように地方名（正式名）が書かれているか
+    alias_centers = find_centers(place_q, loose=True)  # 「関東」「九州」などの通称も含む
     # 「北海道」のように複数の予報区にまたがる地名でも、すべて同じ地方に属するなら、その地方が決まる
     place_centers = {center_of(o)[0] for o in offices}
     one_center = next(iter(place_centers)) if len(place_centers) == 1 else None
@@ -236,6 +244,8 @@ def _guide_scoped(item, result, place_q, scope):
     if want is None:  # 地名の粒度から単位を決める
         if named_centers and "centers" in su:
             want = "centers"
+        elif not cands and alias_centers and "centers" in su:
+            want = "centers"  # 地名としては解決できない通称（「関東」「九州」）
         elif not cands:
             want = "japan" if "japan" in su else None
         elif office is None and one_center and "centers" in su:
@@ -257,6 +267,10 @@ def _guide_scoped(item, result, place_q, scope):
             code, name = named_centers[0]
         elif office:
             code, name = center_of(office)
+        elif len(alias_centers) > 1:  # 「九州」＝九州北部・九州南部と奄美
+            return ask(candidates=center_candidates(alias_centers))
+        elif alias_centers:
+            code, name = alias_centers[0]
         elif one_center:  # 複数の予報区にまたがるが、同じ地方（例: 北海道）
             code, name = one_center, center_name(one_center)
         elif cands:  # 地名が複数の地方にまたがる: まず地域を決めてもらう
@@ -265,6 +279,8 @@ def _guide_scoped(item, result, place_q, scope):
             return ask(candidates=center_candidates(all_centers()), hint="どの地方ですか？")
         values = {"center_code": code}
         result["place"] = name
+        if code == "010700" or (code == "010900" and ("山口" in place_q or "中国" in place_q)):
+            result["note"] = YAMAGUCHI_NOTE[code]
     elif want == "offices":
         if office is None:
             return ask(candidates=office_candidates() if cands else None,

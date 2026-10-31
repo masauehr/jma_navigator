@@ -112,14 +112,43 @@ def center_of(office_code):
     return code, area["centers"][code]["name"]
 
 
-def find_centers(question):
-    """質問に地方名（「東北地方」など。括弧書きは除く）が書かれていれば [(コード, 名前)] を返す。"""
-    out = []
-    for code, e in _load()["centers"].items():
-        base = e["name"].split("（")[0]
-        if base in question:
-            out.append((code, e["name"]))
-    return out
+# 地方の通称。気象庁の地方予報区は「関東甲信」「九州北部（山口県を含む）」のように名前が長く、
+# 利用者は「関東」「九州」などと呼ぶ。通称 → 地方コード（「九州」は2つの地方にまたがる）
+CENTER_ALIASES = {
+    "北海道": ["010100"], "道内": ["010100"],
+    "東北": ["010200"],
+    "関東甲信": ["010300"], "関東": ["010300"],
+    "東海": ["010400"],
+    "北陸": ["010500"],
+    "近畿": ["010600"], "関西": ["010600"],
+    "中国": ["010700"],
+    "四国": ["010800"],
+    "九州北部": ["010900"], "北部九州": ["010900"],
+    "九州南部": ["011000"], "南部九州": ["011000"], "奄美": ["011000"],
+    "九州": ["010900", "011000"],
+    "沖縄": ["011100"],
+}
+
+
+def find_centers(question, loose=False):
+    """質問に地方名が書かれていれば [(コード, 名前)] を返す。
+
+    loose=False: 正式名（「東北地方」。括弧書きは除く）だけ。
+    loose=True : 通称（「関東」「九州」「近畿」など）も含める。長い通称が短い通称を含むとき
+                （「九州北部」と「九州」）は、長い方だけを採る。
+    """
+    centers = _load()["centers"]
+    found = {}
+    for code, e in centers.items():
+        if e["name"].split("（")[0] in question:
+            found[code] = e["name"]
+    if loose:
+        hits = [a for a in CENTER_ALIASES if a in question]
+        hits = [a for a in hits if not any(a != b and a in b for b in hits)]  # 「九州」は「九州北部」に含まれる
+        for a in hits:
+            for code in CENTER_ALIASES[a]:
+                found.setdefault(code, centers[code]["name"])
+    return list(found.items())
 
 
 def all_centers():
