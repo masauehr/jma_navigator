@@ -124,3 +124,7 @@ def find_centers(question):
 
 def all_centers():
     return [(code, e["name"]) for code, e in _load()["centers"].items()]
+
+
+def center_name(code):
+    return _load()["centers"][code]["name"]

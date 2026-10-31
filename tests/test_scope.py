@@ -75,6 +75,29 @@ class TestScope(unittest.TestCase):
             with self.subTest(iid=iid):
                 self.assertIn(frag, guide("沖縄の" + iid, item_id=iid, scope="centers")["url"])
 
+    def test_北海道は北海道地方になる(self):
+        # 「北海道」は8つの予報区にまたがるが、すべて北海道地方（010100）に属する
+        for scope in (None, "centers"):
+            with self.subTest(scope=scope):
+                r = guide("北海道の警報", item_id="warning_map", scope=scope)
+                self.assertEqual((r["status"], r["scope"], r["place"]), ("ok", "centers", "北海道地方"))
+                self.assertIn("area_type=centers&area_code=010100", r["url"])
+        self.assertEqual(guide("道内の警報", item_id="warning_map", scope="centers")["place"], "北海道地方")
+        self.assertIn("probability/#area_type=centers&area_code=010100", guide("北海道の早期注意情報", item_id="early_warning")["url"])
+
+    def test_北海道の府県は8予報区すべてを選べる(self):
+        for item, scope in (("warning_map", "offices"), ("forecast_short", None)):
+            with self.subTest(item=item):
+                r = guide("北海道の天気", item_id=item, scope=scope)
+                self.assertEqual(r["status"], "need_place")
+                self.assertEqual(len(r["candidates"]), 8)  # 以前は6件で切れて、選べない予報区があった
+                self.assertEqual(len({c["office_code"] for c in r["candidates"]}), 8)
+
+    def test_複数の地方にまたがる地名は地方も聞き返す(self):
+        r = guide("府中の警報", item_id="warning_map", scope="centers")
+        self.assertEqual(r["status"], "need_place")
+        self.assertEqual({c["office_code"] for c in r["candidates"]}, {"130000", "340000"})  # 東京都・広島県
+
     def test_天気予報は地方に対応しない(self):
         r = guide("沖縄の天気", item_id="forecast_short", scope="centers")
         self.assertEqual(r["scope"], "offices")  # 非対応の単位は無視して地名から決める

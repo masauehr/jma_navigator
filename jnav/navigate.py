@@ -9,7 +9,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from .amedas import find_stations, nearest, wanted_element
-from .areas import all_centers, center_of, find_centers, resolve
+from .areas import all_centers, center_name, center_of, find_centers, resolve
 from .stations import find_station
 from . import tides
 
@@ -209,6 +209,9 @@ def _guide_scoped(item, result, place_q, scope):
     exact_cities = [c for c in _cities(cands, 90) if c["place"] in place_q] if office else []
     loose_cities = _cities(cands, 90) if office else []
     named_centers = find_centers(place_q)  # 「東北地方」のように地方名が書かれているか
+    # 「北海道」のように複数の予報区にまたがる地名でも、すべて同じ地方に属するなら、その地方が決まる
+    place_centers = {center_of(o)[0] for o in offices}
+    one_center = next(iter(place_centers)) if len(place_centers) == 1 else None
 
     def ask(hint=None, candidates=None):
         r = {**result, "scopes": scopes, "status": "need_place", "scope": want}
@@ -219,8 +222,12 @@ def _guide_scoped(item, result, place_q, scope):
         return r
 
     def office_candidates():
-        return [{"office_code": c["office_code"], "office_name": c["office_name"], "place": c["place"]}
-                for c in cands[:6]]
+        seen, out = set(), []
+        for c in cands:
+            if c["office_code"] not in seen:
+                seen.add(c["office_code"])
+                out.append({"office_code": c["office_code"], "office_name": c["office_name"], "place": c["place"]})
+        return out[:12]
 
     def center_candidates(pool):
         return [{"center_code": code, "place": name, "office_name": ""} for code, name in pool]
@@ -231,6 +238,8 @@ def _guide_scoped(item, result, place_q, scope):
             want = "centers"
         elif not cands:
             want = "japan" if "japan" in su else None
+        elif office is None and one_center and "centers" in su:
+            want = "centers"  # 「北海道」＝北海道地方
         elif office is None:
             return ask(candidates=office_candidates())
         elif exact_cities and "class20s" in su:
@@ -248,7 +257,9 @@ def _guide_scoped(item, result, place_q, scope):
             code, name = named_centers[0]
         elif office:
             code, name = center_of(office)
-        elif cands:  # 地名が複数の予報区にまたがる: まず地域を決めてもらう
+        elif one_center:  # 複数の予報区にまたがるが、同じ地方（例: 北海道）
+            code, name = one_center, center_name(one_center)
+        elif cands:  # 地名が複数の地方にまたがる: まず地域を決めてもらう
             return ask(candidates=office_candidates())
         else:
             return ask(candidates=center_candidates(all_centers()), hint="どの地方ですか？")
