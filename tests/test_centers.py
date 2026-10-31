@@ -87,6 +87,21 @@ class TestCenterAliases(unittest.TestCase):
         self.assertEqual(guide("関東の警報", item_id="warning_map")["scope"], "centers")
         self.assertEqual(guide("東海市の警報", item_id="warning_map")["scope"], "class20s")  # 市名が書かれていれば市町村
 
+    def test_地方名で府県を選ぶと地方内の予報区から選ぶ(self):
+        r = guide("沖縄地方の警報", item_id="warning_map", scope="offices")
+        self.assertEqual(r["status"], "need_place")
+        self.assertEqual([c["place"] for c in r["candidates"]], ["沖縄本島地方", "大東島地方", "宮古島地方", "八重山地方"])
+        r = guide("北海道地方の警報", item_id="warning_map", scope="offices")
+        self.assertEqual(len(r["candidates"]), 8)
+        # 予報区名も書かれていれば、それに決まる
+        r = guide("沖縄地方の八重山地方の警報", item_id="warning_map", scope="offices")
+        self.assertEqual((r["status"], r["place"]), ("ok", "八重山地方"))
+        self.assertIn("area_type=offices&area_code=474000", r["url"])
+
+    def test_沖縄地方の画面と同じ4予報区(self):
+        # 気象庁「沖縄地方の警報・注意報」（2026-10-31確認）に並ぶ4つ
+        self.assertEqual([n for _, n in areas.center_offices("011100")], ["沖縄本島地方", "大東島地方", "宮古島地方", "八重山地方"])
+
     def test_山口県の注記(self):
         self.assertIn("山口県は含まれません", self.center("中国")[2]["note"])
         self.assertIn("九州北部地方に含まれます", self.center("山口県")[2]["note"])

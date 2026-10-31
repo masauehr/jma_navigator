@@ -157,3 +157,9 @@ def all_centers():
 
 def center_name(code):
     return _load()["centers"][code]["name"]
+
+
+def center_offices(code):
+    """地方に含まれる予報区 [(予報区コード, 名前)]。"""
+    area = _load()
+    return [(o, area["offices"][o]["name"]) for o in area["centers"][code]["children"]]

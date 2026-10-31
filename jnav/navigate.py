@@ -9,7 +9,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from .amedas import find_stations, nearest, wanted_element
-from .areas import all_centers, center_name, center_of, find_centers, resolve
+from .areas import all_centers, center_name, center_of, center_offices, find_centers, resolve
 from .stations import find_station
 from . import tides
 
@@ -205,6 +205,11 @@ YAMAGUCHI_NOTE = {
 }
 
 
+def center_of_office_name(office_code):
+    from .areas import _load
+    return _load()["offices"][office_code]["name"]
+
+
 def _guide_scoped(item, result, place_q, scope):
     """全国・地方・府県・市町村のうち、選んだ（または地名から決めた）単位でURLを組み立てる。"""
     su = item["scope_urls"]
@@ -282,11 +287,19 @@ def _guide_scoped(item, result, place_q, scope):
         if code == "010700" or (code == "010900" and ("山口" in place_q or "中国" in place_q)):
             result["note"] = YAMAGUCHI_NOTE[code]
     elif want == "offices":
+        if len(named_centers) == 1 and not exact_cities:
+            # 「沖縄地方」「北海道地方」のように地方名が書かれているときは、その地方の予報区から選んでもらう
+            kids = center_offices(named_centers[0][0])
+            hit = [k for k in kids if k[1] in place_q]  # 「八重山地方」のように予報区名も書かれていればそれ
+            if len(hit) == 1:
+                office = hit[0][0]
+            else:
+                return ask(candidates=[{"office_code": k[0], "office_name": "", "place": k[1]} for k in kids])
         if office is None:
             return ask(candidates=office_candidates() if cands else None,
                        hint=None if cands else "府県・地方の名前（例: 沖縄、東京）を入れてください")
         values = {"office_code": office}
-        result["place"] = cands[0]["office_name"]
+        result["place"] = next((c["office_name"] for c in cands if c["office_code"] == office), None) or center_of_office_name(office)
         result["office_code"] = office
     else:  # class20s
         if office is None:
